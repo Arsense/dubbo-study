@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>rpc-test</module>
+        <module>rpc-test</module>
     </modules>
 
 
