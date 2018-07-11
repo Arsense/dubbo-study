@@ -11,6 +11,7 @@
     <modules>
         <module>rpc-test</module>
         <module>rpc-test</module>
+        <module>rpc-demo</module>
     </modules>
 
 
