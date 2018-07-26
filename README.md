@@ -10,3 +10,5 @@
 1. 先简单写了一下RMI rpc框架的方法 写了一个调用样例
 
 ### rpc-demo 写的是一个最简单的RPC框架
+
+demo中schema 自定义xml文件
