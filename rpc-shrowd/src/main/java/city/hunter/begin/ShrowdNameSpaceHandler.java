@@ -16,7 +16,7 @@ public class ShrowdNameSpaceHandler extends NamespaceHandlerSupport {
 
     public void init() {
 
-        registerBeanDefinitionParser("monster",  new PeopleBeanDefinationParser());
+        registerBeanDefinitionParser("monster",  new ShrowdBeanDefinationParser());
     }
 
 }

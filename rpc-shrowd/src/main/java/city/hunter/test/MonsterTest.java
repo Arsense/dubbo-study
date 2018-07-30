@@ -1,5 +1,6 @@
-package city.hunter.begin;
+package city.hunter.test;
 
+import city.hunter.begin.Monster;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -15,10 +16,10 @@ public class MonsterTest {
     public static void main(String[] args) {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("application.xml");
 
-        People p = (People) applicationContext.getBean("cutesource");
-        System.out.println(p.getId());
-        System.out.println(p.getAge());
-        System.out.println(p.getName());
+        Monster monster = (Monster) applicationContext.getBean("cutesource");
+        System.out.println(monster.getId());
+        System.out.println(monster.getAge());
+        System.out.println(monster.getName());
     }
 
 }

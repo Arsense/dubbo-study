@@ -9,12 +9,12 @@ import org.w3c.dom.Element;
  * @author tangwei
  * @date 2018/7/30 10:49
  */
-public class PeopleBeanDefinationParser extends AbstractSingleBeanDefinitionParser{
+public class ShrowdBeanDefinationParser extends AbstractSingleBeanDefinitionParser{
 
 
     @Override
     protected Class getBeanClass(Element element){
-        return  People.class;
+        return  Monster.class;
     }
 
     @Override
