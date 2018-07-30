@@ -17,6 +17,8 @@ public class ShrowdNameSpaceHandler extends NamespaceHandlerSupport {
     public void init() {
 
         registerBeanDefinitionParser("monster",  new ShrowdBeanDefinationParser());
+        //这里装载配置类 后面可以直接写死
+        registerBeanDefinitionParser("register",new ShrowdBeanDefinationParser());
     }
 
 }
