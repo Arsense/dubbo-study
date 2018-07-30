@@ -12,7 +12,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class MyNameSpaceHandler extends NamespaceHandlerSupport {
 
     public void init() {
-        registerBeanDefinitionParser("people",  new PeopleBeanDefinationParser());
+        registerBeanDefinitionParser("custom",  new PeopleBeanDefinationParser());
     }
 
 }

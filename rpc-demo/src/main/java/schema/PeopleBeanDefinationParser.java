@@ -2,6 +2,7 @@ package schema;
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
+import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
@@ -10,7 +11,7 @@ import org.w3c.dom.Element;
  * @author tangwei
  * @date 2018/7/30 10:49
  */
-public class PeopleBeanDefinationParser extends AbstractSimpleBeanDefinitionParser{
+public class PeopleBeanDefinationParser extends AbstractSingleBeanDefinitionParser{
 
 
     @Override
