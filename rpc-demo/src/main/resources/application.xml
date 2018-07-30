@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:cutesource="http://blog.csdn.net/cutesource/schema/people"
-       xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-        http://blog.csdn.net/cutesource/schema/people
-        http://blog.csdn.net/cutesource/schema/people.xsd">
+       xmlns:comtest="http://www.tangwei101.com/xml/people"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.tangwei101.com/xml/people
+       http://www.tangwei101.com/xml/people.xsd">
 
-    <cutesource:people id="cutesource" name="袁志俊" age="27"/>
+    <comtest:people id="cutesource" name="一号门" age="1024"/>
+
 </beans>
