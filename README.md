@@ -9,6 +9,16 @@
 ### Rpc-test 工程
 1. 先简单写了一下RMI rpc框架的方法 写了一个调用样例
 
-### rpc-demo 写的是一个最简单的RPC框架
+### rpc-demo 一些基础的功能编写
+1. [+]demo中schema 自定义xml文件 
+2. 其他的是一个简单的RPC框架
 
-demo中schema 自定义xml文件
+如此大的复杂的一个框架即使直接看人家写的攻略也是如此吃力
+要了解的东西远比我了解的多，作为一个比较难得工程学习吧
+
+
+简单运行原工程
+
+https://www.cnblogs.com/bigdataZJ/p/dubbo-hello-world.html
+## rpc-shrowd 正式开始 
+dubbo 全都被替换成 shrowd
