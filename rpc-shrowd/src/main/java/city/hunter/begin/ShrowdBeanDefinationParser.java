@@ -24,6 +24,7 @@ public class ShrowdBeanDefinationParser implements BeanDefinitionParser {
 
         //用来加载我们的配置类
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
+//        beanDefinition.
 
         return beanDefinition;
     }
