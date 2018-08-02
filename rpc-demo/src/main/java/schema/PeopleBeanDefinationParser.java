@@ -1,9 +1,7 @@
 package schema;
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
-import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
