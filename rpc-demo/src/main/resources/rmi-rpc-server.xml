@@ -8,7 +8,7 @@
   <!--将userService暴露为远程服务-->
 
     <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
-        <property name="serviceName" value="userRmiService"></property>
+        <property name="serviceName" value="userRmiService"/>
         <property name="serivce" ref="userService"/>
 
     </bean>
