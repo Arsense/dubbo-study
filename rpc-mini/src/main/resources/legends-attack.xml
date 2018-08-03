@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:attacker="http://www.league-of-legends.com/schema/legends"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.league-of-legends.com/schema/legends
+ http://www.league-of-legends.com/schema/legends.xsd
+">
+    <!-- 发布远程服务 -->
+    <attacker:service id="test" />
+
+
+</beans>
