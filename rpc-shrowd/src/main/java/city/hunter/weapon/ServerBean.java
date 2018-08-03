@@ -4,11 +4,14 @@ package city.hunter.weapon;
 
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.stereotype.Component;
+
 import java.lang.reflect.Method;
 
 
@@ -17,10 +20,11 @@ import java.lang.reflect.Method;
  * @author tangwei
  * @date 2018/7/31 16:17
  */
+@Component
 public class ServerBean implements ApplicationListener<ContextRefreshedEvent>,ApplicationContextAware {
 
 
-
+    @Autowired
     private transient ApplicationContext applicationContext;
     //transient防止不被序列化 和volatile多线程安全
     private transient volatile boolean exported;
