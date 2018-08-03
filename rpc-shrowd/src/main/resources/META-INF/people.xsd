@@ -17,7 +17,10 @@
     <!--</xsd:complexContent>-->
     <!--</xsd:complexType>-->
     <!--</xsd:element>-->
-
+    <xsd:annotation>
+        <xsd:documentation>
+            <![CDATA[ Namespace support for the dubbo services provided by dubbo framework. ]]></xsd:documentation>
+    </xsd:annotation>
 
     <xsd:element name="registry" type="registryType">
         <xsd:annotation>

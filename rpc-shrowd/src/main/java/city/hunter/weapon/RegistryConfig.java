@@ -10,6 +10,18 @@ public class RegistryConfig {
     private  String username;
     private  String password;
     private  int    port;
+    private  String protocol;
+
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+
 
     public String getAddress() {
         return address;
