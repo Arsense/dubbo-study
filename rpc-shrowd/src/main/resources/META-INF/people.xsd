@@ -7,16 +7,16 @@
             elementFormDefault="qualified" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd">
     <xsd:import namespace="http://www.springframework.org/schema/beans" />
-    <xsd:element name="register">
-        <xsd:complexType>
-            <xsd:complexContent>
-                <xsd:extension base="beans:identifiedType">
-                    <xsd:attribute name="name" type="xsd:string"/>
-                    <xsd:attribute name="age" type="xsd:int"/>
-                </xsd:extension>
-            </xsd:complexContent>
-        </xsd:complexType>
-    </xsd:element>
+    <!--<xsd:element name="register">-->
+    <!--<xsd:complexType>-->
+    <!--<xsd:complexContent>-->
+    <!--<xsd:extension base="beans:identifiedType">-->
+    <!--<xsd:attribute name="name" type="xsd:string"/>-->
+    <!--<xsd:attribute name="age" type="xsd:int"/>-->
+    <!--</xsd:extension>-->
+    <!--</xsd:complexContent>-->
+    <!--</xsd:complexType>-->
+    <!--</xsd:element>-->
 
 
     <xsd:element name="registry" type="registryType">
@@ -31,12 +31,34 @@
     </xsd:element>
 
     <xsd:complexType name="registryType">
-        <!--<xsd:sequence minOccurs="0" maxOccurs="unbounded">-->
-            <!--<xsd:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>-->
-        <!--</xsd:sequence>-->
         <xsd:attribute name="id" type="xsd:ID">
             <xsd:annotation>
                 <xsd:documentation><![CDATA[ The unique identifier for a bean. ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="address" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[ The registry address. ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="port" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[ The registry default port. ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="protocol" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[ The registry lookup protocol. ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="username" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[ The registry username. ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="password" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[ The registry password. ]]></xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
     </xsd:complexType>

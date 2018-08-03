@@ -1,8 +1,8 @@
 package city.hunter.weapon;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -27,7 +27,7 @@ public class ServerBean implements ApplicationListener<ContextRefreshedEvent>,Ap
 
     private transient volatile boolean unexported = false;
 
-    protected final static Logger logger = LoggerFactory.getLogger(ServerBean.class);
+//    protected final static Logger logger = LoggerFactory.getLogger(ServerBean.class);
 
     /** //这里我们发布服务 就是相当于公开自己
      * ContextRefreshedEvent 是初始化完成事件 意味着applicationEvent 加载完毕
@@ -36,7 +36,9 @@ public class ServerBean implements ApplicationListener<ContextRefreshedEvent>,Ap
      */
     @Override
     public void onApplicationEvent(ContextRefreshedEvent applicationEvent) {
-        logger.info("onApplicationEvent is start,监听开始");
+        //目前根本没启动
+//        logger.info("onApplicationEvent is start,监听开始");
+        //这里可以加控制开始与结束的钩子
         exportService();
     }
 
@@ -52,10 +54,16 @@ public class ServerBean implements ApplicationListener<ContextRefreshedEvent>,Ap
             return;
         }
         exported = true;
+        String interfaceName = null;
+        try {
+            Class<?> interfaceClass = Class.forName(interfaceName,true,Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    /**
+    /**  这个在onApplication之前加载 这里添加lister
      *  手动获取Bean 因为这是在Spring刚运行完 这里new 不了对象吧
      * @param applicationContext
      * @throws BeansException

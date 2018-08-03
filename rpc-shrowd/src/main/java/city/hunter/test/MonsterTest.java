@@ -1,8 +1,9 @@
 package city.hunter.test;
 
-import city.hunter.begin.Monster;
-import org.springframework.context.ApplicationContext;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.io.IOException;
 
 /**
  * @author tangwei
@@ -13,13 +14,14 @@ public class MonsterTest {
 
 
 
-    public static void main(String[] args) {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("application.xml");
+    public static void main(String[] args) throws IOException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
 
-        Monster monster = (Monster) applicationContext.getBean("cutesource");
-        System.out.println(monster.getId());
-        System.out.println(monster.getAge());
-        System.out.println(monster.getName());
+        context.start();
+
+        //等待读取输入 这样会一直启动着
+        System.in.read();
+
     }
 
 }
