@@ -11,6 +11,6 @@ public class ShopNamespaceHandler  extends NamespaceHandlerSupport {
 
 
     public void init() {
-        registerBeanDefinitionParser("test",new ShopBeanDefinitionParser());
+        registerBeanDefinitionParser("service",new ShopBeanDefinitionParser());
     }
 }
