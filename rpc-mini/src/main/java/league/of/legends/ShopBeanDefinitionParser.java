@@ -30,9 +30,9 @@ public class ShopBeanDefinitionParser extends AbstractSingleBeanDefinitionParser
         String timeout = element.getAttribute("timeout");
 
         try {
-            bean.addPropertyValue("interface",Class.forName(interfaceName));
+            bean.addPropertyValue("serviceInterface",Class.forName(interfaceName));
             bean.addPropertyValue("port",Integer.parseInt(port));
-            bean.addPropertyValue("interface",Integer.parseInt(timeout));
+            bean.addPropertyValue("timeout",Integer.parseInt(timeout));
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

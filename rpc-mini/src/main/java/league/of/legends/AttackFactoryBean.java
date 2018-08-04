@@ -25,9 +25,9 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
     private long timeout;
 
 
-
     public void afterPropertiesSet() throws Exception {
-
+        int a  = 3;
+        //这里开始启动Netty服务端
     }
 
     public Object getObject() throws Exception {
@@ -41,4 +41,49 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
     public boolean isSingleton() {
         return true;
     }
+
+
+    @Override
+    public String toString() {
+        return "AttackFactoryBean{" +
+                "serviceInterface=" + serviceInterface +
+                ", serviceBean=" + serviceBean +
+                ", port='" + port + '\'' +
+                ", timeout=" + timeout +
+                '}';
+    }
+
+    public Class<?> getServiceInterface() {
+        return serviceInterface;
+    }
+
+    public void setServiceInterface(Class<?> serviceInterface) {
+        this.serviceInterface = serviceInterface;
+    }
+
+    public Object getServiceBean() {
+        return serviceBean;
+    }
+
+    public void setServiceBean(Object serviceBean) {
+        this.serviceBean = serviceBean;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
+    }
+
+
 }
