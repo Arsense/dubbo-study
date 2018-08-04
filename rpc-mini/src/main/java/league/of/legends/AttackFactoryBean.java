@@ -1,5 +1,7 @@
 package league.of.legends;
 
+import league.of.legends.jungle.JungleCenter;
+import league.of.legends.jungle.Peanut;
 import league.of.top.NettyServer;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -25,17 +27,6 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
     //设置短时间连接超时
     private long timeout;
 
-
-    public void afterPropertiesSet() throws Exception {
-
-        //这里开始启动Netty服务端
-        NettyServer.singleton().start(Integer.parseInt(port));
-
-        //注册到 zookeeper
-
-
-    }
-
     public Object getObject() throws Exception {
         return null;
     }
@@ -49,15 +40,25 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
     }
 
 
-    @Override
-    public String toString() {
-        return "AttackFactoryBean{" +
-                "serviceInterface=" + serviceInterface +
-                ", serviceBean=" + serviceBean +
-                ", port='" + port + '\'' +
-                ", timeout=" + timeout +
-                '}';
+
+    public void afterPropertiesSet() throws Exception {
+
+        //这里开始启动Netty服务端
+        NettyServer.singleton().start(Integer.parseInt(port));
+
+        //注册到 zookeeper
+
+        //这里要把配置文件的信息传到zookeeper中 读取也是为了此
+        JungleCenter jungle = Peanut.singleton();
+        jungle.registerAttack();
+
+
     }
+
+
+
+
+
 
     public Class<?> getServiceInterface() {
         return serviceInterface;
@@ -91,5 +92,14 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
         this.timeout = timeout;
     }
 
+    @Override
+    public String toString() {
+        return "AttackFactoryBean{" +
+                "serviceInterface=" + serviceInterface +
+                ", serviceBean=" + serviceBean +
+                ", port='" + port + '\'' +
+                ", timeout=" + timeout +
+                '}';
+    }
 
 }

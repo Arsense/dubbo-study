@@ -22,11 +22,23 @@
             <artifactId>spring-context</artifactId>
             <version>5.0.3.BUILD-SNAPSHOT</version>
         </dependency>
-
+        <!--netty 服务-->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>4.1.7.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.8</version>
+        </dependency>
+        <!--zookeeper工具类-->
+        <dependency>
+            <groupId>com.github.sgroschupf</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>0.1</version>
         </dependency>
     </dependencies>
 
