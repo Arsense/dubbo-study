@@ -1,10 +1,7 @@
 package league.of.legends;
 
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
-import org.springframework.beans.factory.xml.BeanDefinitionParser;
-import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
 
@@ -15,18 +12,14 @@ import org.w3c.dom.Element;
 public class ShopBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
 
-
-
     protected  Class getBeanClass(Element element) {
         return AttackFactoryBean.class;
     }
     protected void doParse(Element element, BeanDefinitionBuilder bean) {
 
-
         //为空做什么处理
         String interfaceName = element.getAttribute("interface");
         String port = element.getAttribute("port");
-//        String serviceBean = element.getAttribute("interface");
         String timeout = element.getAttribute("timeout");
 
         try {
