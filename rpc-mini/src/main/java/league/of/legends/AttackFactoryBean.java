@@ -35,10 +35,10 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
     }
 
     public Class<?> getObjectType() {
-        return null;
+        return  serviceInterface;
     }
 
     public boolean isSingleton() {
-        return false;
+        return true;
     }
 }

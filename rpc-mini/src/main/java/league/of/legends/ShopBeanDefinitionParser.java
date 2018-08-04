@@ -1,17 +1,18 @@
 package league.of.legends;
 
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-import java.security.spec.EllipticCurve;
 
 /**
  * @author tangwei
  * @date 2018/8/3 17:04
  */
-public class ShopBeanDefinitionParser implements BeanDefinitionParser {
+public class ShopBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
 
 
@@ -19,10 +20,28 @@ public class ShopBeanDefinitionParser implements BeanDefinitionParser {
     protected  Class getBeanClass(Element element) {
         return AttackFactoryBean.class;
     }
-    public BeanDefinition parse(Element element, ParserContext parserContext) {
+    protected void doParse(Element element, BeanDefinitionBuilder bean) {
 
 
-        return null;
+        //为空做什么处理
+        String interfaceName = element.getAttribute("interface");
+        String port = element.getAttribute("port");
+//        String serviceBean = element.getAttribute("interface");
+        String timeout = element.getAttribute("timeout");
+
+        try {
+            bean.addPropertyValue("interface",Class.forName(interfaceName));
+            bean.addPropertyValue("port",Integer.parseInt(port));
+            bean.addPropertyValue("interface",Integer.parseInt(timeout));
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException("serviceConfig 异常");
+        }
+
+
     }
+
+
 
 }
