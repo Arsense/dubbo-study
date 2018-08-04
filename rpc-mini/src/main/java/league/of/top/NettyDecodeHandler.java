@@ -11,7 +11,8 @@ import java.util.List;
  * @date 2018/8/4 19:18
  */
 public class NettyDecodeHandler  extends ByteToMessageDecoder {
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext channelHandlerContext
+            , ByteBuf byteBuf, List<Object> list) throws Exception {
 
     }
 }

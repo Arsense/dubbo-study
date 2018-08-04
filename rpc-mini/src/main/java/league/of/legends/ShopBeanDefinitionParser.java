@@ -15,8 +15,8 @@ public class ShopBeanDefinitionParser extends AbstractSingleBeanDefinitionParser
     protected  Class getBeanClass(Element element) {
         return AttackFactoryBean.class;
     }
-    protected void doParse(Element element, BeanDefinitionBuilder bean) {
 
+    protected void doParse(Element element, BeanDefinitionBuilder bean) {
         //为空做什么处理
         String interfaceName = element.getAttribute("interface");
         String port = element.getAttribute("port");

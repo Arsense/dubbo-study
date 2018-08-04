@@ -12,9 +12,8 @@ public class AttackTest {
 
 
     public static void main(String[] args) throws IOException {
+
         ClassPathXmlApplicationContext context =  new ClassPathXmlApplicationContext("legends-attack.xml");
-
-
         System.out.println("服务启动");
         System.in.read();
 

@@ -19,13 +19,10 @@ import io.netty.handler.logging.LoggingHandler;
 public class NettyServer {
 
 
-    private static NettyServer  nettyServer = new NettyServer();
-
-
+    private  static NettyServer  nettyServer = new NettyServer();
     private  Channel channel;
     private  EventLoopGroup adminGroup;
     private  EventLoopGroup commonGroup;
-
 
     public static NettyServer singleton() {
         return nettyServer;
@@ -40,7 +37,6 @@ public class NettyServer {
         if (adminGroup !=null || commonGroup != null) {
             return;
         }
-
         adminGroup = new NioEventLoopGroup();
         commonGroup = new NioEventLoopGroup();
 
@@ -62,10 +58,6 @@ public class NettyServer {
                             }
                         });
         channel = serverBootstrap.bind(port).sync().channel();
-
-
-
-
     }
 
     /**

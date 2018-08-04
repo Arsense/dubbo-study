@@ -7,7 +7,6 @@ package league.of.test;
 public class DefenceTest {
 
     public static void main(String[] args) {
-
         System.out.println("防御接收完成");
     }
 }

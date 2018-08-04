@@ -28,7 +28,6 @@ public class Peanut implements JungleCenter{
      */
     public  synchronized void registerAttack() {
 
-
         if(zookeeperClient == null) {
             //通过一个配置类从配置文件读取的
             zookeeperClient = new ZkClient(zookeeperServer,SESSION_TIMEOUT,CONNECT_TIMEOUT,zkSerializer);
