@@ -56,7 +56,6 @@ public class Peanut implements JungleCenter{
 
         }
 
-
         if (zookeeperClient == null) {
             //通过一个配置类从配置文件读取的
             zookeeperClient = new ZkClient(zookeeperServer,SESSION_TIMEOUT,CONNECT_TIMEOUT,new SerializableSerializer());
@@ -68,7 +67,6 @@ public class Peanut implements JungleCenter{
             //不存在则创建节点
             zookeeperClient.createPersistent(ZOOKEEPER_PATH,true);
         }
-
 
         for (Map.Entry<String, List<AttackService>> entry : attackMap.entrySet()) {
             // 节点名 服务分组+节点名+类型
