@@ -6,6 +6,9 @@ import league.of.top.NettyServer;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 开启单例模式
  * attack Bean工厂 服务发布入口
@@ -46,8 +49,9 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
 //        NettyServer.singleton().start(Integer.parseInt(port));
         //注册到 zookeeper
         //这里要把配置文件的信息传到zookeeper中 读取也是为了此
+        List<AttackService> lists = new ArrayList<AttackService>();
         JungleCenter jungle = Peanut.singleton();
-        jungle.registerAttack();
+        jungle.registerAttack(lists);
 
 
     }

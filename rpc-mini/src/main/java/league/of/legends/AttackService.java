@@ -15,6 +15,10 @@ public class AttackService {
     //设置短时间连接超时
     private long timeout;
 
+    private String groupName;
+
+
+
     @Override
     public String toString() {
         return "AttackService{" +
@@ -55,5 +59,13 @@ public class AttackService {
 
     public void setTimeout(long timeout) {
         this.timeout = timeout;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }
