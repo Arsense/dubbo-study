@@ -43,7 +43,7 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
     public void afterPropertiesSet() throws Exception {
 
         //这里开始启动Netty服务端
-        NettyServer.singleton().start(Integer.parseInt(port));
+//        NettyServer.singleton().start(Integer.parseInt(port));
         //注册到 zookeeper
         //这里要把配置文件的信息传到zookeeper中 读取也是为了此
         JungleCenter jungle = Peanut.singleton();
@@ -51,10 +51,6 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
 
 
     }
-
-
-
-
 
 
     public Class<?> getServiceInterface() {

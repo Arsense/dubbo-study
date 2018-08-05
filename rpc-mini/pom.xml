@@ -40,6 +40,13 @@
             <artifactId>zkclient</artifactId>
             <version>0.1</version>
         </dependency>
+
+        <!--GOOGLE工具包-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
     </dependencies>
 
 
