@@ -1,5 +1,7 @@
 package league.of.legends;
 
+import java.lang.reflect.Method;
+
 /**
  * @author tangwei
  * @date 2018/8/4 16:20
@@ -17,6 +19,27 @@ public class AttackService {
 
     private String groupName;
 
+    private String serverIp;
+
+    //服务提交者方法
+    private Method serviceMethod;
+
+
+    public String getServerIp() {
+        return serverIp;
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
+    }
+
+    public Method getServiceMethod() {
+        return serviceMethod;
+    }
+
+    public void setServiceMethod(Method serviceMethod) {
+        this.serviceMethod = serviceMethod;
+    }
 
 
     @Override

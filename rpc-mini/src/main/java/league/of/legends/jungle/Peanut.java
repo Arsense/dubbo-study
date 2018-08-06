@@ -53,7 +53,6 @@ public class Peanut implements JungleCenter{
             }
             attackers.add(attacker);
             attackMap.put(interfaceKey, attackers);
-
         }
 
         if (zookeeperClient == null) {
