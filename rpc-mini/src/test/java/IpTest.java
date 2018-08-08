@@ -1,3 +1,4 @@
+import league.of.tool.IPTool;
 import org.junit.Test;
 
 /**
@@ -11,6 +12,9 @@ public class IpTest {
     @Test
     public void testIp() {
        int a = 1;
+
+        String localIp = IPTool.getLocalIP();
+        String realIp = IPTool.getRealIp();
     }
 
 }

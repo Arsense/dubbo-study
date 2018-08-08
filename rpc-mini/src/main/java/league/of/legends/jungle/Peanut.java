@@ -87,8 +87,13 @@ public class Peanut implements JungleCenter{
             //监听注册服务的变化,同时更新数据到本地缓存
             zookeeperClient.subscribeChildChanges(servicePath, new IZkChildListener(){
 
-                public void handleChildChange(String s, List<String> list) throws Exception {
-                    int test =1 ;
+                public void handleChildChange(String parentPath
+                        , List<String> currentChilds) throws Exception {
+                    if (currentChilds == null) {
+
+                    }
+
+
                 }
             });
 

@@ -66,6 +66,7 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
     public List<AttackService> buildAttackServices() {
 
         List<AttackService> lists = new ArrayList<AttackService>();
+        //这里来自配置文件
         Method[] methods = serviceBean.getClass().getDeclaredMethods();
         for (Method method : methods) {
             AttackService attackService = new AttackService();
@@ -74,8 +75,9 @@ public class AttackFactoryBean implements FactoryBean,InitializingBean{
             attackService.setServiceBean(serviceBean);
             attackService.setServiceMethod(method);
             attackService.setServerIp(IPTool.getLocalIP());
+            attackService.setTimeout(timeout);
+            lists.add(attackService);
         }
-
         return lists;
 
     }
