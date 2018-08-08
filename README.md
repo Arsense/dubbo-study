@@ -14,20 +14,12 @@
 4. 各种序列化学习
 
 
-
-简单运行原工程
-
-https://www.cnblogs.com/bigdataZJ/p/dubbo-hello-world.html
-
 ### 二 rpc-mini工程 RPC分布式框架主体
 
 进度 
 1. 自定义xml配置文件读取解析
 2. Netty的启动配置(部分)
 3. zookeeper 完成注册 
-
-
-
 
 ### 三 学习笔记
 - 一、自定义xml读取到配置文件
@@ -42,4 +34,8 @@ BeanNameAware 通过这个Bean可以获取到自己在容器中的名字
 
 ### 四 参考资料
 
-https://blog.csdn.net/lz710117239/article/details/74996915 服务注册
+- 服务注册 
+https://blog.csdn.net/lz710117239/article/details/74996915
+
+- 简单运行dubbo原工程
+https://www.cnblogs.com/bigdataZJ/p/dubbo-hello-world.html
