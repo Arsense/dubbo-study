@@ -12,10 +12,10 @@
 #### (2)最简单的RPC实现
 #### (3)各种输入流学习
 目录在 stream 下
-1. BufferWriter流
-2. DataStream 流  原生数据的读写，用与网络数据传输
-3. FileStream
-4. ObjectStream 常用于Java对象的序列化或者网络数据的读写
+- BufferWriter流
+- DataStream 流  原生数据的读写，用与网络数据传输
+- FileStream
+- ObjectStream 常用于Java对象的序列化或者网络数据的读写
 
 #### (4)各种序列化学习
 serializer 序列化demo
