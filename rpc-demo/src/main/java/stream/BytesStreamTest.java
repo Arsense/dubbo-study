@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
  * @author tangwei
  * @date 2018/8/8 9:55
  */
-public class StreamTest {
+public class BytesStreamTest {
 
 
     public static void main(String[] args) throws IOException {
