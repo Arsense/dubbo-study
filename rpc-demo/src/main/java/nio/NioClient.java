@@ -9,8 +9,6 @@ public class NioClient {
     public static void main(String[] args) {
 
         int port = 8081;
-        NioClientHandler client = new NioClientHandler(port);
-
-        new Thread(client).start();
+        new Thread(new NioClientHandler("127.0.0.1",port)).start();
     }
 }

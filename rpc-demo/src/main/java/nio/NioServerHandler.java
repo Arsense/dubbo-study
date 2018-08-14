@@ -2,9 +2,13 @@ package nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author tangwei
@@ -40,6 +44,54 @@ public class NioServerHandler implements Runnable {
 
     @Override
     public void run() {
+        while (!stop) {
+            try {
+                selector.select(1000);
+                Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                Iterator<SelectionKey> it =  selectionKeys.iterator();
+                SelectionKey key;
+                while (it.hasNext()) {
+                    key = it.next();
+                    it.remove();
+                    handlerKey(key);
+                }
+                //多路复用器关闭后 注册在其上的channel和Pipe等资源都会被关闭
+                if (selector != null) {
+                    selector.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void handlerKey(SelectionKey key) throws IOException {
+
+        if (key.isValid()) {
+            //处理新请求
+            if (key.isAcceptable()) {
+                 ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
+                SocketChannel socketChannel = serverSocketChannel.accept();
+                socketChannel.configureBlocking(false);
+                socketChannel.register(selector,SelectionKey.OP_READ);
+            }
+            if (key.isReadable()) {
+                SocketChannel socketChannel = (SocketChannel) key.channel();
+                ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+                int readBytes = socketChannel.read(byteBuffer);
+                //对字节进行编码
+                if (readBytes >= 0) {
+                    byteBuffer.flip();
+
+                } else {
+                    key.cancel();
+                    socketChannel.close();
+                    socketChannel.write(byteBuffer);
+                }
+
+
+            }
+        }
 
     }
 }
