@@ -1,4 +1,4 @@
-package nio;
+package nio.channel;
 
 import java.nio.CharBuffer;
 

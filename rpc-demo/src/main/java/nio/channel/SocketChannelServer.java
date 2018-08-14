@@ -29,7 +29,6 @@ public class SocketChannelServer {
             serverSocketChannel.setOption(StandardSocketOptions.SO_REUSEADDR,true);
             serverSocketChannel.bind(new InetSocketAddress("127.0.0.1" , 8085));
 
-
             while (true) {
                 SocketChannel socketChannel = serverSocketChannel.accept();
                 //提交给线程池处理
