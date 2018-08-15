@@ -50,25 +50,25 @@ public class NioServerHandler implements Runnable {
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 Iterator<SelectionKey> it =  selectionKeys.iterator();
                 SelectionKey key;
+
                 while (it.hasNext()) {
                     key = it.next();
                     it.remove();
                     handlerKey(key);
                 }
-
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //多路复用器关闭后 注册在其上的channel和Pipe等资源都会被关闭
-            if (selector != null) {
-                try {
-                    selector.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        }
+        //多路复用器关闭后 注册在其上的channel和Pipe等资源都会被关闭
+        if (selector != null) {
+            try {
+                selector.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+
     }
 
     public void handlerKey(SelectionKey key) throws IOException {
