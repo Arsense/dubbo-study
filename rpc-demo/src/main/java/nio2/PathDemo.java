@@ -1,12 +1,11 @@
 package nio2;
 
 import java.net.URI;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/** nio2是JDK7后的新特性
+/** nio2是JDK7后的新特性 Path和Files两个不错的工具类
  * @author tangwei
  * @date 2018/8/15 10:27
  */
