@@ -26,7 +26,6 @@ public class WatchServiceDemo {
             //检索并删除此监视键的所有待处理事件，并返回 pollEvents
             for ( WatchEvent<?> watchEvent : key.pollEvents()) {
                 final WatchEvent.Kind<?> kind = watchEvent.kind();
-
                 //忽略覆盖事件
                 if (kind == StandardWatchEventKinds.OVERFLOW) {
                     continue;

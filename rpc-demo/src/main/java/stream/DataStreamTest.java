@@ -13,7 +13,6 @@ public class DataStreamTest {
     public static void main(String[] args) throws IOException {
         String filePath = "E:\\test\\source.txt";
 
-
         FileOutputStream outputStream = new FileOutputStream(filePath);
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeInt(2018);
@@ -25,7 +24,6 @@ public class DataStreamTest {
 
         FileInputStream inputStream = new FileInputStream(filePath);
         DataInputStream dataInputStream = new DataInputStream(inputStream);
-
 
         System.out.println(dataInputStream.readInt());
         System.out.println(dataInputStream.readUTF());
