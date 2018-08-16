@@ -37,13 +37,14 @@ public class NettyClient {
                     });
             //发起异步连接操作
             ChannelFuture future = bootstrap.connect(host,port).sync();
+            for (int i = 0;i < 1000; i++){
+                byte[] request = ("你好 Server Netty").getBytes();
 
-            byte[] request = "你好 Server Netty".getBytes();
-            ByteBuf buffer = Unpooled.buffer(request.length);
-            buffer.writeBytes(request);
-
-            ChannelFuture channelFuture = future.channel().writeAndFlush(buffer);
-            channelFuture.syncUninterruptibly();
+                ByteBuf buffer = Unpooled.buffer(request.length);
+                buffer.writeBytes(request);
+                ChannelFuture channelFuture = future.channel().writeAndFlush(buffer);
+                channelFuture.syncUninterruptibly();
+            }
             future.channel().closeFuture().sync();
 
         } catch (Exception e) {
