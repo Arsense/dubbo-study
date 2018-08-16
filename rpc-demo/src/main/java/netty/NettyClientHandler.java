@@ -1,5 +1,6 @@
 package netty;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -9,9 +10,13 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class NettyClientHandler extends SimpleChannelInboundHandler {
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object message) throws Exception {
+        System.out.println("client channelRead0 in");
+        ByteBuf buffer = (ByteBuf) message;
+        byte[] request = new byte[buffer.readableBytes()];
+        buffer.readBytes(request);
 
-
+        System.out.println("receive data from server:" +  new String(request));
 
     }
 

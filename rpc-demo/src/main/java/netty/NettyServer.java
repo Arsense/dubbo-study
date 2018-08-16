@@ -16,7 +16,6 @@ public class NettyServer {
         new NettyServer().bind(8081);
     }
 
-
     /**
      * Netty服务启动函数
      * @param port

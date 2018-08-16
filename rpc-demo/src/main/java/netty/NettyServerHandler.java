@@ -14,6 +14,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler{
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object message) throws Exception {
+        System.out.println("server channelRead0 in");
         //接收处理数据 ByteBuf
         ByteBuf buffer  = (ByteBuf) message;
         byte[] request = new byte[buffer.readableBytes()];
