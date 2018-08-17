@@ -20,12 +20,12 @@
 #### (4)各种序列化学习
 serializer 序列化demo
 
-### (5) NIO 
+#### (5) NIO 
 - CharBuffer
 - Channel 通道
 - nio B/C实现
 - nio2 Path特性
-
+- netty demoOK
 ### 二、rpc-mini工程 RPC分布式框架主体
 
 进度 
