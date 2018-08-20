@@ -5,24 +5,32 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author tangwei
  * @date 2018/8/17 18:04
  */
 public class DelimilterBaseServerHandler extends SimpleChannelInboundHandler {
+
+
+    private final static String delimiterTag = "@#";
+
+
+    private static final AtomicInteger counter = new AtomicInteger();
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object message) throws Exception {
-        System.out.println("server channelRead0 in");
-        //接收处理数据 ByteBuf
-        ByteBuf buffer  = (ByteBuf) message;
-        byte[] request = new byte[buffer.readableBytes()];
-        buffer.readBytes(request);
 
-        String msg = new String(request);
-        System.out.println("receive data from client:" + msg);
+        //接收客户端发送的字符串 并打印到控制台
+        String content = (String) message;
+        System.out.println("recevice data from client" + content
+                        +"counter:" + counter.addAndGet(1));
+        //加入分隔符 将数据重新发送到客户端
+        content += delimiterTag;
+        ByteBuf echo = Unpooled.copiedBuffer(content.getBytes());
+        channelHandlerContext.writeAndFlush(echo);
 
-        ByteBuf response = Unpooled.copiedBuffer(msg.getBytes());
-        channelHandlerContext.write(response);
     }
 
 

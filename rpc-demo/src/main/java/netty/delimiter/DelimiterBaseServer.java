@@ -47,9 +47,6 @@ public class DelimiterBaseServer {
                         @Override
                         protected void initChannel(NioSocketChannel socketChannel) throws Exception {
 
-                            //这里设置分隔符
-                            socketChannel.pipeline().addLast(new NettyServerHandler());
-
 
                             //设置解码处理器
                             socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.copiedBuffer(delimiterTag.getBytes())));
