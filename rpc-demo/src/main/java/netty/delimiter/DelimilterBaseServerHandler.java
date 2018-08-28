@@ -17,11 +17,11 @@ public class DelimilterBaseServerHandler extends SimpleChannelInboundHandler {
     private final static String delimiterTag = "@#";
 
 
-    private static final AtomicInteger counter = new AtomicInteger();
+    private static final AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object message) throws Exception {
-
+        System.out.println("server channelRead0 in");
         //接收客户端发送的字符串 并打印到控制台
         String content = (String) message;
         System.out.println("recevice data from client" + content
@@ -30,7 +30,6 @@ public class DelimilterBaseServerHandler extends SimpleChannelInboundHandler {
         content += delimiterTag;
         ByteBuf echo = Unpooled.copiedBuffer(content.getBytes());
         channelHandlerContext.writeAndFlush(echo);
-
     }
 
 

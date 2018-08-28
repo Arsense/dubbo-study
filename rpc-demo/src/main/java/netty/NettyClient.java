@@ -18,7 +18,7 @@ public class NettyClient {
 
 
     public static void main(String[] args) {
-        new NettyClient().connectServer("127.0.0.1",8081);
+        new NettyClient().connectServer("127.0.0.1",8080);
     }
     public void connectServer(String host , int port) {
         EventLoopGroup clientGroup = new NioEventLoopGroup();

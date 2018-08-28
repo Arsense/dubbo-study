@@ -11,7 +11,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import netty.NettyServerHandler;
 
 /**
  * @author tangwei
@@ -23,7 +22,7 @@ public class DelimiterBaseServer {
 
 
     public static void main(String[] args) {
-        new DelimiterBaseServer().bind(8081);
+        new DelimiterBaseServer().bind(8082);
     }
 
     /**
@@ -46,8 +45,6 @@ public class DelimiterBaseServer {
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel socketChannel) throws Exception {
-
-
                             //设置解码处理器
                             socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.copiedBuffer(delimiterTag.getBytes())));
                             //设置StringDecoder处理器

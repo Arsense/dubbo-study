@@ -1,8 +1,9 @@
 package netty.delimiter;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author tangwei
@@ -12,15 +13,13 @@ public class DelimilterBaseClientHandler  extends SimpleChannelInboundHandler {
 
 
     private final static String delimiterTag = "@#";
+
+    private static final AtomicInteger counter = new AtomicInteger(0);
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object message) throws Exception {
-        System.out.println("client channelRead0 in");
-        ByteBuf buffer = (ByteBuf) message;
-        byte[] request = new byte[buffer.readableBytes()];
-        buffer.readBytes(request);
+        String context = (String) message;
 
-        System.out.println("receive data from server:" +  new String(request));
-
+        System.out.println("receive data from server:" + message + counter.addAndGet(1));
     }
 
 

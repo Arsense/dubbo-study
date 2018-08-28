@@ -25,7 +25,7 @@ public class DelimilterBaseClient {
 
     public static void main(String[] args) {
 
-    new DelimilterBaseClient().connectServer("127.0.0.1",8081);
+    new DelimilterBaseClient().connectServer("127.0.0.1",8082);
 
 }
     public void connectServer(String host , int port) {
