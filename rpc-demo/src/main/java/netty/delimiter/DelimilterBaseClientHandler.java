@@ -1,8 +1,10 @@
 package netty.delimiter;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -12,14 +14,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DelimilterBaseClientHandler  extends SimpleChannelInboundHandler {
 
 
-    private final static String delimiterTag = "@#";
 
     private static final AtomicInteger counter = new AtomicInteger(0);
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object message) throws Exception {
-        String context = (String) message;
+        ByteBuf buffer = (ByteBuf) message;
+        byte[] request = new byte[buffer.readableBytes()];
+        buffer.readBytes(request);
 
-        System.out.println("receive data from server:" + message + counter.addAndGet(1));
+        System.out.println("receive data from server:" + Arrays.toString(request) + counter.addAndGet(1));
     }
 
 
@@ -33,5 +36,10 @@ public class DelimilterBaseClientHandler  extends SimpleChannelInboundHandler {
     @Override
     public void exceptionCaught(ChannelHandlerContext channelHandlerContext, Throwable cause) {
         channelHandlerContext.close();
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext channelHandlerContext){
+        channelHandlerContext.flush();
     }
 }

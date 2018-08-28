@@ -1,10 +1,13 @@
 package netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 
 /**
  * @author tangwei
@@ -13,9 +16,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 public class NettyServer {
 
     public static void main(String[] args) {
-        new NettyServer().bind(8081);
+        new NettyServer().bind(8082);
     }
-
+    private final static String delimiterTag = "@#";
     /**
      * Netty服务启动函数
      * @param port
@@ -37,6 +40,9 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline().addLast(new NettyServerHandler());
+                        socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.copiedBuffer(delimiterTag.getBytes())));
+                        //设置StringDecoder处理器
+                        socketChannel.pipeline().addLast(new StringDecoder());
                     }
                 });
                 //绑定端口 等待同步

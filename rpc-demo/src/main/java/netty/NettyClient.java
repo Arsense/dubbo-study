@@ -9,6 +9,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 
 /**
  * @author tangwei
@@ -16,9 +18,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class NettyClient {
 
-
+    private final static String delimiterTag = "@#";
     public static void main(String[] args) {
-        new NettyClient().connectServer("127.0.0.1",8080);
+        new NettyClient().connectServer("127.0.0.1",8082);
     }
     public void connectServer(String host , int port) {
         EventLoopGroup clientGroup = new NioEventLoopGroup();
@@ -33,6 +35,10 @@ public class NettyClient {
                         protected void initChannel(NioSocketChannel socketChannel) throws Exception {
                             //配置客户端处理网络IO事件的类
                             socketChannel.pipeline().addLast(new NettyClientHandler());
+
+                            socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.copiedBuffer(delimiterTag.getBytes())));
+                            //设置StringDecoder处理器
+                            socketChannel.pipeline().addLast(new StringDecoder());
                         }
                     });
             //发起异步连接操作
