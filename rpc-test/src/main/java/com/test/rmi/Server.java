@@ -16,11 +16,11 @@ public class Server {
     public static void main(String[] args) throws RemoteException, AlreadyBoundException, MalformedURLException {
         //创建注册服务
 
-        HelloService helloService = new HelloServiceImpl();
-        LocateRegistry.createRegistry(8801);
-
-        Naming.bind("rmi://localhost:8801/helloService",helloService);
-        System.out.println("Server provide RPC serivce now");
+//        HelloService helloService = new HelloServiceImpl();
+//        LocateRegistry.createRegistry(8801);
+//
+//        Naming.bind("rmi://localhost:8801/helloService",helloService);
+//        System.out.println("Server provide RPC serivce now");
 
     }
 }
