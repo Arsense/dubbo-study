@@ -11,11 +11,5 @@
 
     <AresServer:service id="testServiceRegister"
                         interface="com.remote.test.TestService"
-                        ref="testService"
-                        groupName="default"
-                        weight="2"
-                        appKey="ares"
-                        workerThreads="100"
-                        serverPort="8081"
-                        timeout="600"/>
+                        serverPort="8081"/>
 </beans>

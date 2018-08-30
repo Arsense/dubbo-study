@@ -18,6 +18,14 @@ public class ProviderBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
     protected void doParse(Element element, BeanDefinitionBuilder builder) {
         //配置属性的读取
 
+        try {
+            String interfaceName = element.getAttribute("interface");
+            String port = element.getAttribute("port");
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
