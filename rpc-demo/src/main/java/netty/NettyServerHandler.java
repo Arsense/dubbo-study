@@ -19,14 +19,13 @@ public class NettyServerHandler extends SimpleChannelInboundHandler{
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object message) throws Exception {
         //接收处理数据 ByteBuf
-        ByteBuf buffer  = (ByteBuf) message;
-        byte[] request = new byte[buffer.readableBytes()];
-        buffer.readBytes(request);
+//        ByteBuf buffer  = (ByteBuf) message;
+//        byte[] request = new byte[buffer.readableBytes()];
+//        buffer.readBytes(request);
 
-        String msg = new String(request);
-        System.out.println("receive data from client:" + msg + counter.addAndGet(1));
-        msg += delimiterTag;
-        ByteBuf response = Unpooled.copiedBuffer(msg.getBytes());
+        System.out.println("receive data from client:" + message + counter.addAndGet(1));
+        message += delimiterTag;
+        ByteBuf response = Unpooled.copiedBuffer((byte[]) message);
         channelHandlerContext.write(response);
 
 

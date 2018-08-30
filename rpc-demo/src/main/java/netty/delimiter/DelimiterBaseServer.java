@@ -1,25 +1,30 @@
-package netty;
+package netty.delimiter;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import netty.delimiter.DelimilterBaseServerHandler;
 
 /**
  * @author tangwei
- * @date 2018/8/16 9:01
+ * @date 2018/8/16 14:50
  */
-public class DelimilterBaseServer {
+public class DelimiterBaseServer {
+
+    private final static String delimiterTag = "@#";
+
 
     public static void main(String[] args) {
-        new DelimilterBaseServer().bind(8081);
+        new DelimiterBaseServer().bind(8888);
     }
-    private final static String delimiterTag = "@#";
+
     /**
      * Netty服务启动函数
      * @param port
@@ -27,7 +32,7 @@ public class DelimilterBaseServer {
     private void bind(int port){
 
         //创建两个专门处理网络事件的线程组
-        EventLoopGroup  adminGroups = new NioEventLoopGroup();
+        EventLoopGroup adminGroups = new NioEventLoopGroup();
         EventLoopGroup  guestGroups = new NioEventLoopGroup();
 
         ServerBootstrap bootstrapServer = new ServerBootstrap();
@@ -40,10 +45,13 @@ public class DelimilterBaseServer {
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new DelimilterBaseServerHandler());
+                            //设置解码处理器
+                            //socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.copiedBuffer(delimiterTag.getBytes())));
                             socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.copiedBuffer(delimiterTag.getBytes())));
+
                             //设置StringDecoder处理器
                             socketChannel.pipeline().addLast(new StringDecoder());
+                            socketChannel.pipeline().addLast(new DelimilterBaseServerHandler());
                         }
                     });
             //绑定端口 等待同步
@@ -62,5 +70,4 @@ public class DelimilterBaseServer {
         //
 
     }
-
 }

@@ -21,16 +21,15 @@ public class DelimilterBaseServerHandler extends SimpleChannelInboundHandler {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object message) throws Exception {
-//        //接收处理数据 ByteBuf
-//        ByteBuf buffer  = (ByteBuf) message;
-//        byte[] request = new byte[buffer.readableBytes()];
-//        buffer.readBytes(request);
-//
-//        String msg = new String(request);
-//        System.out.println("receive data from client:" + msg + counter.addAndGet(1));
-//        msg += delimiterTag;
-//        ByteBuf response = Unpooled.copiedBuffer(msg.getBytes());
-//        channelHandlerContext.write(response);
+        System.out.println("server channelRead0 in");
+        //接收客户端发送的字符串 并打印到控制台
+        String content = (String) message;
+        System.out.println("recevice data from client" + content
+                        +"counter:" + counter.addAndGet(1));
+        //加入分隔符 将数据重新发送到客户端
+        content += delimiterTag;
+        ByteBuf echo = Unpooled.copiedBuffer(content.getBytes());
+        channelHandlerContext.writeAndFlush(echo);
     }
 
 
