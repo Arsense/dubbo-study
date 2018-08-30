@@ -7,10 +7,10 @@
 
 
 
-    <bean id="testService" class="ares.remoting.test.TestServiceImpl"/>
+    <bean id="testService" class="com.remote.test.TestService"/>
 
     <AresServer:service id="testServiceRegister"
-                        interface="ares.remoting.test.TestService"
+                        interface="com.remote.test.TestService"
                         ref="testService"
                         groupName="default"
                         weight="2"
