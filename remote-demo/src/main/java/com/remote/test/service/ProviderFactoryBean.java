@@ -1,5 +1,8 @@
 package com.remote.test.service;
 
+import com.remote.test.netty.NettyServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.InitializingBean;
 public class ProviderFactoryBean implements FactoryBean, InitializingBean {
 //    InitializingBean接口为bean提供了初始化方法的方式，它只包括afterPropertiesSet方法，凡是继承该接口的类，在初始化bean的时候会执行该方法
 
+    private final static Logger LOG = LoggerFactory.getLogger(ProviderFactoryBean.class);
     //服务接口
     private Class<?> serviceInterface;
 
@@ -21,7 +25,9 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
 
 
     public void afterPropertiesSet() throws Exception {
-            //这里启动Netty
+            //这里启动Netty服务端
+        NettyServer.singleton().start(Integer.parseInt(port));
+
     }
 
 
