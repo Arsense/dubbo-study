@@ -1,10 +1,12 @@
 package com.test.rmi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
+
 
 /** 原因在于需要继承UnicastRemoteObject
  * @author tangwei
@@ -12,6 +14,8 @@ import java.rmi.registry.LocateRegistry;
  */
 public class Server {
 
+
+    private final static Logger LOG =  LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) throws RemoteException, AlreadyBoundException, MalformedURLException {
         //创建注册服务
@@ -21,6 +25,9 @@ public class Server {
 //
 //        Naming.bind("rmi://localhost:8801/helloService",helloService);
 //        System.out.println("Server provide RPC serivce now");
+
+        final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("rpc-server.xml");
+        LOG.info("服务发布");
 
     }
 }
