@@ -1,5 +1,7 @@
 package com.remote.test.service;
 
+import java.lang.reflect.Method;
+
 /**
  * @author tangwei
  * @date 2018/8/31 10:08
@@ -16,6 +18,32 @@ public class ProviderService {
     private int timeout;
     //设置线程数
     private int workThreads;
+
+    private  Method serviceMethod;
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
+    public int getWorkThreads() {
+        return workThreads;
+    }
+
+    public void setWorkThreads(int workThreads) {
+        this.workThreads = workThreads;
+    }
+
+    public Method getServiceMethod() {
+        return serviceMethod;
+    }
+
+    public void setServiceMethod(Method serviceMethod) {
+        this.serviceMethod = serviceMethod;
+    }
 
     public Class<?> getServiceInterface() {
         return serviceInterface;
