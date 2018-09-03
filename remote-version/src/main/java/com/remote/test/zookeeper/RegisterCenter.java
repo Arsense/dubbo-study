@@ -2,6 +2,7 @@ package com.remote.test.zookeeper;
 
 import com.remote.test.service.ProviderService;
 import org.I0Itec.zkclient.ZkClient;
+import org.I0Itec.zkclient.serialize.SerializableSerializer;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -22,8 +23,13 @@ public class RegisterCenter implements ServiceRegistryCenter {
     public static RegisterCenter singleton() {
         return registerCenter;
     }
-    private static ZkClient zookeeperClient = null;
+    private static ZkClient zooKeeperClient = null;
 
+
+    private String ZK_SERVICE ="localhost:2181";
+
+    private static final int SESSION_TIMEOUT = 500;
+    private static final int CONNECTION_TIMEOUT = 500;
     /**
      * zk注册函数 用户现在只有我一个 先不加锁 看会出现什么错？
      * @param serviceList
@@ -46,7 +52,9 @@ public class RegisterCenter implements ServiceRegistryCenter {
             serviceProviderMap.put(interfaceName , providers);
         }
 
-
+        if (zooKeeperClient == null) {
+            zooKeeperClient = new ZkClient(ZK_SERVICE , SESSION_TIMEOUT , CONNECTION_TIMEOUT , new SerializableSerializer());
+        }
 
 
     }
