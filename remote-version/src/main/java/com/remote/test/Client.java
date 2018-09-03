@@ -20,7 +20,7 @@ public class Client {
 //        System.out.println("RMI服务器返回的结果是:"+helloService.sayHello("Clay"));
 
 
-        final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("rpc-server.xml");
+        final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("rpc-client.xml");
         LOG.info("Client 开始工作");
 
     }
