@@ -28,6 +28,8 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
     private Object serviceObject;
     //服务端口
     private String port;
+    //用户凭证
+    private String appKey;
 
 
     @Override
@@ -60,6 +62,7 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
             providerService.setServiceInterface(serviceInterface);
             providerService.setServiceObject(serviceObject);
             providerService.setTimeout(1000);
+            providerService.setAppKey(appKey);
             serviceList.add(providerService);
         }
         //注册中心work
@@ -94,5 +97,11 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
         this.port = port;
     }
 
+    public String getAppKey() {
+        return appKey;
+    }
 
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
+    }
 }

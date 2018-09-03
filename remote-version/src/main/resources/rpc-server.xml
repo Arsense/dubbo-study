@@ -12,5 +12,6 @@
     <AresServer:service id="testServiceRegister"
                         interface="com.remote.test.TestService"
                         ref = "testService"
+                        appKey = "clay"
                         port="8081"/>
 </beans>

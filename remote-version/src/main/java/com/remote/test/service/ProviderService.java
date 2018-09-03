@@ -20,6 +20,8 @@ public class ProviderService {
     private int workThreads;
 
     private  Method serviceMethod;
+    //用户凭证
+    private  String appKey;
 
     public int getTimeout() {
         return timeout;
@@ -67,5 +69,26 @@ public class ProviderService {
 
     public void setPort(String port) {
         this.port = port;
+    }
+
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
+    }
+
+    @Override
+    public String toString() {
+        return "ProviderService{" +
+                "serviceInterface=" + serviceInterface +
+                ", serviceObject=" + serviceObject +
+                ", port='" + port + '\'' +
+                ", timeout=" + timeout +
+                ", workThreads=" + workThreads +
+                ", serviceMethod=" + serviceMethod +
+                ", appKey='" + appKey + '\'' +
+                '}';
     }
 }

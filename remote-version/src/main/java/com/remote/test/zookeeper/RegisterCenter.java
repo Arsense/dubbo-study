@@ -56,6 +56,9 @@ public class RegisterCenter implements ServiceRegistryCenter {
             zooKeeperClient = new ZkClient(ZK_SERVICE , SESSION_TIMEOUT , CONNECTION_TIMEOUT , new SerializableSerializer());
         }
 
+        //创建 ZK命名空间/当前部署应用APP命名空间/
+        String appKey = serviceList.get(0).getAppKey();
+
 
     }
 
