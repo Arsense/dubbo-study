@@ -1,9 +1,15 @@
 package com.remote.test.zookeeper;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.remote.test.service.ProviderService;
+import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.serialize.SerializableSerializer;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -58,9 +64,80 @@ public class RegisterCenter implements ServiceRegistryCenter {
 
         //创建 ZK命名空间/当前部署应用APP命名空间/
         String appKey = serviceList.get(0).getAppKey();
+        String path = "/register" + "/" + appKey;
+
+        if (!zooKeeperClient.exists(path)) {
+            zooKeeperClient.createPersistent(path,true);
+        }
+
+        for (Map.Entry<String , List<ProviderService>> entry : serviceProviderMap.entrySet()) {
+            //服务分组
+            String groupName = "/default";
+            String serivePath = path + groupName + "/provider";
+
+            if (!zooKeeperClient.exists(serivePath)) {
+                zooKeeperClient.createPersistent(serivePath,true);
+            }
+            //然后创建当前服务节点
+            String port = entry.getValue().get(0).getPort();
+            String currentServiceIpPort = serivePath + "/127.0.0.1" + "|" + port + "|10";
+            if (zooKeeperClient.exists(currentServiceIpPort)) {
+                zooKeeperClient.createEphemeral(currentServiceIpPort);
+            }
+            //监听注册服务的变化,同时更新数据到本地缓存
+            zooKeeperClient.subscribeChildChanges(serivePath, new IZkChildListener() {
+                @Override
+                public void handleChildChange(String parentPath, List<String> currentChilds) throws Exception {
+
+                    if (currentChilds == null) {
+                        currentChilds = new ArrayList<String>();
+                    }
+
+                    //获取存活的IP列表
+                    List<String> aliveServiceIpList =  Lists.newArrayList(Lists.transform(currentChilds, new Function<String, String>() {
+                        @Override
+                        public String apply(String input) {
+                            return StringUtils.split(input, "|")[0];
+                        }
+                    }));
+                    refreshAliveService(aliveServiceIpList);
+                }
+            });
+
+        }
 
 
     }
+
+    //利用ZK自动刷新当前存活的服务提供者列表数据
+    private void refreshAliveService(List<String> aliveServices) {
+        if (aliveServices == null) {
+            aliveServices = Lists.newArrayList();
+        }
+
+        Map<String, List<ProviderService>> currentServiceMetaDataMap = Maps.newHashMap();
+        for (Map.Entry<String, List<ProviderService>> entry : serviceProviderMap.entrySet()) {
+            String key = entry.getKey();
+            List<ProviderService> providerServices = entry.getValue();
+
+            List<ProviderService> serviceMetaDataModelList = currentServiceMetaDataMap.get(key);
+            if (serviceMetaDataModelList == null) {
+                serviceMetaDataModelList = Lists.newArrayList();
+            }
+
+            for (ProviderService serviceMetaData : providerServices) {
+                if (aliveServices.contains("127.0.0.1")) {
+                    serviceMetaDataModelList.add(serviceMetaData);
+                }
+            }
+            currentServiceMetaDataMap.put(key, serviceMetaDataModelList);
+        }
+        aliveServices.clear();
+        System.out.println("currentServiceMetaDataMap,"+ JSON.toJSONString(currentServiceMetaDataMap));
+
+        serviceProviderMap.putAll(currentServiceMetaDataMap);
+    }
+
 
     public Map<String, List<ProviderService>> getRegisterProviderMap() {
         return registerProviderMap;
