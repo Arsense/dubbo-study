@@ -1,15 +1,18 @@
 package com.remote.test.netty;
 
+
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.remote.test.service.ProviderService;
 import com.remote.test.utils.Request;
 import com.remote.test.utils.Response;
 import com.remote.test.zookeeper.RegisterCenter;
 import com.remote.test.zookeeper.ServerRegisterCenter;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.util.List;
+
 
 /**
  * @author tangwei
@@ -36,7 +39,7 @@ public class NettyServerHandler  extends SimpleChannelInboundHandler<Request>{
 //            if (semaphore == null) {
 //                //先不加锁 看会怎么样
 //                semaphore = new Semaphore(20);
-//                serviceKeySemaphoreMap.put(serviceKey,semaphore);
+//                serviceKeySemaphoreMap.put(serviceKe`y,semaphore);
 //            }
 
             //获取注册服务中心

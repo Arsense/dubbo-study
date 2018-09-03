@@ -9,12 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rpc-test</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>../rpc-mini</module>
-    </modules>
+    <artifactId>remote-version</artifactId>
+
+
     <dependencies>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -31,6 +30,5 @@
             <version>18.0</version>
         </dependency>
     </dependencies>
-
 
 </project>

@@ -10,6 +10,6 @@
     <bean id="testService" class="com.remote.test.TestService"/>
 
     <AresServer:service id="testServiceRegister"
-                        interface="com.remote.test.TestService"
+                        interface="com.remote.com.remote.test.TestService"
                         serverPort="8081"/>
 </beans>
