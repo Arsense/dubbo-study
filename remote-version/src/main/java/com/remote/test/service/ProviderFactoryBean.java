@@ -24,25 +24,27 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
 
 
 
-    public void afterPropertiesSet() throws Exception {
-            //这里启动Netty服务端
-        NettyServer.singleton().start(Integer.parseInt(port));
 
+    @Override
+    public Class<?> getObjectType() {
+        return serviceInterface;
     }
-
-
-    public Object getObject() throws Exception {
-        return serviceObject;
-    }
-
 
     public boolean isSingleton() {
         return true;
     }
-
-    public Class<?> getObjectType() {
-        return serviceInterface;
+    @Override
+    public Object getObject() throws Exception{
+        return serviceObject;
     }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        //这里启动Netty服务端
+        NettyServer.singleton().start(Integer.parseInt(port));
+
+    }
+
 
     public Object getServiceObject() {
         return serviceObject;
@@ -67,17 +69,6 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
     public void setPort(String port) {
         this.port = port;
     }
-
-
-
-    @Override
-    public String toString() {
-        return "ProviderFactoryBean{" +
-                "serviceInterface=" + serviceInterface +
-                ", port='" + port + '\'' +
-                '}';
-    }
-
 
 
 }

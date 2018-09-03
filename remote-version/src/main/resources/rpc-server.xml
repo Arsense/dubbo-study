@@ -7,9 +7,10 @@
 
 
 
-    <bean id="testService" class="com.remote.test.TestService"/>
+    <bean id="testService" class="com.remote.test.TestServiceImpl"/>
 
     <AresServer:service id="testServiceRegister"
                         interface="com.remote.com.remote.test.TestService"
-                        serverPort="8081"/>
+                        ref = "testService"
+                        port="8081"/>
 </beans>

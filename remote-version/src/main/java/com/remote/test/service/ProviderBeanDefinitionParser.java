@@ -31,8 +31,10 @@ public class ProviderBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         try {
             String serviceInterface = element.getAttribute("interface");
             String port = element.getAttribute("port");
+            String ref = element.getAttribute("ref");
             bean.addPropertyValue("interface", serviceInterface);
             bean.addPropertyValue("port", port);
+            bean.addPropertyReference("serviceObject", ref);
         } catch (Exception e){
             LOG.error("xml 读取配置失败");
             e.printStackTrace();
