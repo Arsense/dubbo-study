@@ -1,6 +1,7 @@
 package com.remote.test.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -21,6 +22,7 @@ public class NettyServer {
     public static NettyServer singleton() {
         return nettyServer;
     }
+    private Channel channel;
 
     //服务端boss线程组
     private EventLoopGroup bossGroup;
@@ -54,6 +56,10 @@ public class NettyServer {
                     }
                     //配置接收处理消息的Handler
                 });
-
+        try {
+            channel = serverBootstrap.bind(port).sync().channel();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

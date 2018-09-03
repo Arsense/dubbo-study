@@ -25,6 +25,7 @@ public class Server {
 
         final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("rpc-server.xml");
         LOG.info("服务发布");
+        System.out.println(" 服务发布完成");
 
     }
 }
