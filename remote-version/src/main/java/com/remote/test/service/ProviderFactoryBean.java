@@ -1,10 +1,17 @@
 package com.remote.test.service;
 
 import com.remote.test.netty.NettyServer;
+import com.remote.test.zookeeper.RegisterCenter;
+import com.remote.test.zookeeper.ServiceRegistryCenter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
+
+import javax.imageio.spi.ServiceRegistry;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /** FactoryBean 工厂Bean定义
  * @author tangwei
@@ -21,8 +28,6 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
     private Object serviceObject;
     //服务端口
     private String port;
-
-
 
 
     @Override
@@ -42,6 +47,25 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         //这里启动Netty服务端
         NettyServer.singleton().start(Integer.parseInt(port));
+
+        //注册到zk,元数据注册中心 这里的类来自配置编写
+
+        List<ProviderService> serviceList =  new ArrayList<ProviderService>();
+
+        Method[] methods  = serviceObject.getClass().getDeclaredMethods();
+
+        for(Method method : methods) {
+            ProviderService providerService = new ProviderService();
+            providerService.setPort(port);
+            providerService.setServiceInterface(serviceInterface);
+            providerService.setServiceObject(serviceObject);
+            providerService.setTimeout(1000);
+            serviceList.add(providerService);
+        }
+        //注册中心work
+        ServiceRegistryCenter registryCenter = RegisterCenter.singleton();
+        registryCenter.registerProvider(serviceList);
+
 
     }
 

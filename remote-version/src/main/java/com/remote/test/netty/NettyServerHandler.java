@@ -9,7 +9,7 @@ import com.remote.test.service.ProviderService;
 import com.remote.test.utils.Request;
 import com.remote.test.utils.Response;
 import com.remote.test.zookeeper.RegisterCenter;
-import com.remote.test.zookeeper.ServerRegisterCenter;
+import com.remote.test.zookeeper.ServiceRegistryCenter;
 
 import java.util.List;
 
@@ -44,9 +44,8 @@ public class NettyServerHandler  extends SimpleChannelInboundHandler<Request>{
 
             //获取注册服务中心
 
-            ServerRegisterCenter serverRegisterCenter = RegisterCenter.singleton();
+            ServiceRegistryCenter serverRegisterCenter = RegisterCenter.singleton();
             List<ProviderService> localProviderCaches = serverRegisterCenter.getRegisterProviderMap().get(serviceKey);
-            Object serviceObject;
             ProviderService localProvider = new ProviderService();
             for(ProviderService localProviderCache : localProviderCaches) {
                 if ( localProviderCache.getServiceMethod().getName().equals(methodName)){

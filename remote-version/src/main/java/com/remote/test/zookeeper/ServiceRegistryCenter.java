@@ -8,7 +8,7 @@ import java.util.Map;
  * @author tangwei
  * @date 2018/8/31 14:32
  */
-public interface ServerRegisterCenter {
+public interface ServiceRegistryCenter {
 
     /**
      *  服务端将服务提供者信息注册到zk对应的节点下
