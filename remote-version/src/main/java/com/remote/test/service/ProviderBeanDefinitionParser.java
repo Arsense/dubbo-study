@@ -32,7 +32,8 @@ public class ProviderBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
             String serviceInterface = element.getAttribute("interface");
             String port = element.getAttribute("port");
             String ref = element.getAttribute("ref");
-            bean.addPropertyValue("interface", serviceInterface);
+            //这里要与ProviderFactoryBean中变量名一一对应
+            bean.addPropertyValue("serviceInterface", serviceInterface);
             bean.addPropertyValue("port", port);
             bean.addPropertyReference("serviceObject", ref);
         } catch (Exception e){
