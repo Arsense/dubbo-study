@@ -4,7 +4,7 @@ package com.remote.test.zookeeper;
  * @author tangwei
  * @date 2018/9/4 14:58
  */
-public interface ClientRegistryCenter {
+public interface ConsumeRegistryCenter {
 
     /**
      * 消费端初始化服务提供者消息到本地

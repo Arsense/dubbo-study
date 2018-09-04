@@ -1,5 +1,6 @@
 package com.remote.test.service;
 
+import com.remote.test.zookeeper.ConsumeRegistryCenter;
 import com.remote.test.zookeeper.RegisterCenter;
 import com.remote.test.zookeeper.ServiceRegistryCenter;
 import org.springframework.beans.factory.FactoryBean;
@@ -40,9 +41,9 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         //获取服务注册中心
 
-        ServiceRegistryCenter registryCenter = RegisterCenter.singleton();
+        ConsumeRegistryCenter registryCenter = RegisterCenter.singleton();
         //初始化服务提供者列表到本地
-
+        registryCenter.initProviderServiceMap(appKey , groupName);
 
     }
 

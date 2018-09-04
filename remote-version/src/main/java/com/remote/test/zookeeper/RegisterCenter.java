@@ -12,12 +12,12 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-
+import org.apache.commons.collections.MapUtils;
 /**
  * @author tangwei
  * @date 2018/8/31 14:36
  */
-public class RegisterCenter implements ServiceRegistryCenter {
+public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCenter {
 
     //服务提供者列表,Key:服务提供者接口  value:服务提供者服务方法列表
     private static final Map<String,List<ProviderService>> serviceProviderMap  = new HashMap<String, List<ProviderService>>();
@@ -64,8 +64,8 @@ public class RegisterCenter implements ServiceRegistryCenter {
 
         //创建 ZK命名空间/当前部署应用APP命名空间/
         String appKey = serviceList.get(0).getAppKey();
-        String path = "/register" + "/" + appKey;
-
+//        String path = "/register/" + appKey;
+        String path = "/Clay";
         if (!zooKeeperClient.exists(path)) {
             zooKeeperClient.createPersistent(path,true);
         }
@@ -73,7 +73,8 @@ public class RegisterCenter implements ServiceRegistryCenter {
         for (Map.Entry<String , List<ProviderService>> entry : serviceProviderMap.entrySet()) {
             //服务分组
             String groupName = "/default";
-            String serivePath = path + groupName + "/provider";
+            String serviceNode = entry.getKey();
+            String serivePath = path + groupName + "/" + serviceNode;
 
             if (!zooKeeperClient.exists(serivePath)) {
                 zooKeeperClient.createPersistent(serivePath,true);
@@ -144,6 +145,33 @@ public class RegisterCenter implements ServiceRegistryCenter {
     }
 
 
+    @Override
+    public void initProviderServiceMap(String appKey, String groupName) {
+        if (MapUtils.isNotEmpty(serviceProviderMap)) {
+            return;
+        }
+        if (zooKeeperClient == null) {
+            zooKeeperClient = new ZkClient(ZK_SERVICE , SESSION_TIMEOUT , CONNECTION_TIMEOUT , new SerializableSerializer());
+        }
 
+//        String path = "/register" + "/" + appKey;
 
+        String providerPath = "/Clay/default";
+        List<String> serivceList = zooKeeperClient.getChildren(providerPath);
+        if (serivceList == null) {
+            throw new RuntimeException("获取服务失败");
+        }
+        //构建service路径
+        for (String service : serivceList) {
+         String servicePath = providerPath + "/";
+         //统一取出各种变量
+
+         //从map中获取各种值
+        }
+    }
+
+    @Override
+    public void getProviderServicesToConsume() {
+
+    }
 }
