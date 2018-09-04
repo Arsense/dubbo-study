@@ -9,5 +9,6 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class RemoteServiceNamespaceHandler extends NamespaceHandlerSupport{
     public void init() {
         registerBeanDefinitionParser("service",  new ProviderBeanDefinitionParser());
+        registerBeanDefinitionParser("client", new ConsumerBeanDefinitionParser());
     }
 }
