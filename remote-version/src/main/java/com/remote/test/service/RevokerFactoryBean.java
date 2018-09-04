@@ -1,5 +1,7 @@
 package com.remote.test.service;
 
+import com.remote.test.zookeeper.RegisterCenter;
+import com.remote.test.zookeeper.ServiceRegistryCenter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -9,36 +11,47 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
 
-
-    private String targetInterface;
-
+    //目标服务接口
+    private Class<?> targetInterface;
+    //唯一标识
     private String appKey;
-
+    //服务Bean
+    private Object serviceObject;
+    //服务分组名
+    private String groupName=  "default";
 
 
     @Override
     public Object getObject() throws Exception {
-        return null;
+        return serviceObject;
     }
 
     @Override
     public Class<?> getObjectType() {
-        return null;
+        return targetInterface;
+    }
+
+    @Override
+    public boolean isSingleton() {
+        return true;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        //获取服务注册中心
+
+        ServiceRegistryCenter registryCenter = RegisterCenter.singleton();
+        //初始化服务提供者列表到本地
+
 
     }
 
 
-
-
-    public String getTargetInterface() {
+    public Class<?> getTargetInterface() {
         return targetInterface;
     }
 
-    public void setTargetInterface(String targetInterface) {
+    public void setTargetInterface(Class<?> targetInterface) {
         this.targetInterface = targetInterface;
     }
 
@@ -48,5 +61,21 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
 
     public void setAppKey(String appKey) {
         this.appKey = appKey;
+    }
+
+    public Object getServiceObject() {
+        return serviceObject;
+    }
+
+    public void setServiceObject(Object serviceObject) {
+        this.serviceObject = serviceObject;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

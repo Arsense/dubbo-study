@@ -142,4 +142,8 @@ public class RegisterCenter implements ServiceRegistryCenter {
     public Map<String, List<ProviderService>> getRegisterProviderMap() {
         return registerProviderMap;
     }
+
+
+
+
 }
