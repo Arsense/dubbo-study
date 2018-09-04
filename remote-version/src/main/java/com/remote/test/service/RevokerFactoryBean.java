@@ -10,6 +10,12 @@ import org.springframework.beans.factory.InitializingBean;
 public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
 
 
+    private String targetInterface;
+
+    private String appKey;
+
+
+
     @Override
     public Object getObject() throws Exception {
         return null;
@@ -23,5 +29,24 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
 
+    }
+
+
+
+
+    public String getTargetInterface() {
+        return targetInterface;
+    }
+
+    public void setTargetInterface(String targetInterface) {
+        this.targetInterface = targetInterface;
+    }
+
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
     }
 }

@@ -13,8 +13,11 @@ public class ConsumerBeanDefinitionParser  extends AbstractSingleBeanDefinitionP
     @Override
     protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
 
+        String interfaceName = element.getAttribute("interface");
+        String appKey = element.getAttribute("appKey");
 
-
+        builder.addPropertyValue("targetInterface" , interfaceName);
+        builder.addPropertyValue("appKey" , appKey);
     }
     @Override
     protected Class<?> getBeanClass(Element element) {
