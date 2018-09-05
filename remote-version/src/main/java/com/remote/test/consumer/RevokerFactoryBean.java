@@ -1,5 +1,6 @@
 package com.remote.test.consumer;
 
+import com.remote.test.netty.NettyCosumeChannelQueue;
 import com.remote.test.provider.ProviderService;
 import com.remote.test.zookeeper.ConsumeRegistryCenter;
 import com.remote.test.zookeeper.RegisterCenter;
@@ -48,6 +49,7 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
         registryCenter.initProviderServiceMap(appKey , groupName);
         Map<String, List<ProviderService>> providerMap = registryCenter.getProviderServicesToConsume();
         //初始化Netty Channel
+        NettyCosumeChannelQueue.singleton().initChannelPoolFactory(providerMap);
 
     }
 
