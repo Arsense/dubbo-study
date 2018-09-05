@@ -5,6 +5,9 @@ import com.remote.test.zookeeper.RegisterCenter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author tangwei
  * @date 2018/9/4 12:36
@@ -43,6 +46,8 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
         ConsumeRegistryCenter registryCenter = RegisterCenter.singleton();
         //初始化服务提供者列表到本地
         registryCenter.initProviderServiceMap(appKey , groupName);
+        Map<String, List<ProviderService>> providerMap = registryCenter.getProviderServicesToConsume();
+        //初始化Netty Channel
 
     }
 

@@ -1,5 +1,10 @@
 package com.remote.test.zookeeper;
 
+import com.remote.test.service.ProviderService;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author tangwei
  * @date 2018/9/4 14:58
@@ -17,6 +22,6 @@ public interface ConsumeRegistryCenter {
     /**
      * 获取服务到本地
      */
-    public void getProviderServicesToConsume ();
+    public Map<String, List<ProviderService>>  getProviderServicesToConsume ();
 
 }

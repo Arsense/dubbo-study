@@ -69,8 +69,6 @@ public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCent
 
         //创建 ZK命名空间/当前部署应用APP命名空间/
         String appKey = serviceList.get(0).getAppKey();
-//        String path = "/register/" + appKey;
-        //第一节点 "/Clay"
         String path = "/Clay";
         if (!zooKeeperClient.exists(path)) {
             zooKeeperClient.createPersistent(path,true);
@@ -196,7 +194,7 @@ public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCent
              providerService.setWorkThreads(workThreads);
              providerServices.add(providerService);
 
-             serviceProviderMap.put(serviceName , providerServices);
+             zooKeeperServiceProviderMap.put(serviceName , providerServices);
          }
             //监听注册服务的变化,同时更新数据到本地缓存
             zooKeeperClient.subscribeChildChanges(servicePath, new IZkChildListener() {
@@ -220,7 +218,8 @@ public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCent
     }
 
     @Override
-    public void getProviderServicesToConsume() {
-
+    public Map<String, List<ProviderService>> getProviderServicesToConsume() {
+        return zooKeeperServiceProviderMap;
     }
+
 }
