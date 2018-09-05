@@ -10,6 +10,7 @@ import java.util.Map;
  */
 public interface ServiceRegistryCenter {
 
+
     /**
      *  服务端将服务提供者信息注册到zk对应的节点下
      * @param serviceList

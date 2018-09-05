@@ -8,16 +8,21 @@ import com.remote.test.service.ProviderService;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.serialize.SerializableSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.ClassUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
 import java.util.*;
+
 import org.apache.commons.collections.MapUtils;
 /**
  * @author tangwei
  * @date 2018/8/31 14:36
  */
 public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCenter {
+
+    private final static Logger LOG = LoggerFactory.getLogger(RegisterCenter.class);
 
     //服务提供者列表,Key:服务提供者接口  value:服务提供者服务方法列表
     private static final Map<String,List<ProviderService>> serviceProviderMap  = new HashMap<String, List<ProviderService>>();
@@ -65,6 +70,7 @@ public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCent
         //创建 ZK命名空间/当前部署应用APP命名空间/
         String appKey = serviceList.get(0).getAppKey();
 //        String path = "/register/" + appKey;
+        //第一节点 "/Clay"
         String path = "/Clay";
         if (!zooKeeperClient.exists(path)) {
             zooKeeperClient.createPersistent(path,true);
@@ -75,14 +81,15 @@ public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCent
             String groupName = "/default";
             String serviceNode = entry.getKey();
             String serivePath = path + groupName + "/" + serviceNode;
-
+            // Clay/default/com.remote.test.TestService
             if (!zooKeeperClient.exists(serivePath)) {
                 zooKeeperClient.createPersistent(serivePath,true);
             }
             //然后创建当前服务节点
             String port = entry.getValue().get(0).getPort();
             String currentServiceIpPort = serivePath + "/127.0.0.1" + "|" + port + "|10";
-            if (zooKeeperClient.exists(currentServiceIpPort)) {
+            // /Clay/default/com.remote.test.TestService/127.0.0.1|8081|10
+            if (!zooKeeperClient.exists(currentServiceIpPort)) {
                 zooKeeperClient.createEphemeral(currentServiceIpPort);
             }
             //监听注册服务的变化,同时更新数据到本地缓存
@@ -153,20 +160,62 @@ public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCent
         if (zooKeeperClient == null) {
             zooKeeperClient = new ZkClient(ZK_SERVICE , SESSION_TIMEOUT , CONNECTION_TIMEOUT , new SerializableSerializer());
         }
-
-//        String path = "/register" + "/" + appKey;
-
         String providerPath = "/Clay/default";
         List<String> serivceList = zooKeeperClient.getChildren(providerPath);
-        if (serivceList == null) {
+        if (CollectionUtils.isEmpty(serivceList)) {
             throw new RuntimeException("获取服务失败");
         }
         //构建service路径
-        for (String service : serivceList) {
-         String servicePath = providerPath + "/";
-         //统一取出各种变量
+        for (String serviceName : serivceList) {
+         String servicePath = providerPath + "/" + serviceName;
 
-         //从map中获取各种值
+         List<String>  serviceConfig = zooKeeperClient.getChildren(servicePath);
+
+         if (CollectionUtils.isEmpty(serviceConfig)) {
+             LOG.error("获取该节点service失败 {}" ,servicePath);
+             continue;
+         }
+         for(String receiveData : serviceConfig ) {
+             String serverIp = receiveData.split("\\|")[0];
+             String port = receiveData.split("\\|")[1];
+             int workThreads = Integer.parseInt(receiveData.split("\\|")[2]);
+
+             List<ProviderService> providerServices = serviceProviderMap.get(receiveData);
+             if (CollectionUtils.isEmpty(providerServices)) {
+                 providerServices = new ArrayList<ProviderService>();
+             }
+             ProviderService providerService = new ProviderService();
+             try {
+                 providerService.setServiceInterface(ClassUtils.getClass(serviceName));
+             } catch (ClassNotFoundException e) {
+                 e.printStackTrace();
+             }
+             providerService.setServerIp(serverIp);
+             providerService.setTimeout(500);
+             providerService.setPort(port);
+             providerService.setWorkThreads(workThreads);
+             providerServices.add(providerService);
+
+             serviceProviderMap.put(serviceName , providerServices);
+         }
+            //监听注册服务的变化,同时更新数据到本地缓存
+            zooKeeperClient.subscribeChildChanges(servicePath, new IZkChildListener() {
+                @Override
+                public void handleChildChange(String parentPath, List<String> currentChilds) throws Exception {
+                    if (currentChilds == null) {
+                        currentChilds = Lists.newArrayList();
+                    }
+                    currentChilds = Lists.newArrayList(Lists.transform(currentChilds, new Function<String, String>() {
+                        @Override
+                        public String apply(String input) {
+                            return org.apache.commons.lang3.StringUtils.split(input, "|")[0];
+                        }
+                    }));
+                    refreshAliveService(currentChilds);
+                }
+            });
+
+
         }
     }
 

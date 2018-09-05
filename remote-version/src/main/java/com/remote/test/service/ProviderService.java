@@ -22,6 +22,15 @@ public class ProviderService {
     private  Method serviceMethod;
     //用户凭证
     private  String appKey;
+    private String serverIp;
+
+    public String getServerIp() {
+        return serverIp;
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
+    }
 
     public int getTimeout() {
         return timeout;

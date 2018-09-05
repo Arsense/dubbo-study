@@ -2,7 +2,6 @@ package com.remote.test.service;
 
 import com.remote.test.zookeeper.ConsumeRegistryCenter;
 import com.remote.test.zookeeper.RegisterCenter;
-import com.remote.test.zookeeper.ServiceRegistryCenter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
