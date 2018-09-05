@@ -4,7 +4,6 @@ import com.remote.test.zookeeper.ConsumeRegistryCenter;
 import com.remote.test.zookeeper.RegisterCenter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-
 import java.util.List;
 import java.util.Map;
 
