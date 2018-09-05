@@ -1,5 +1,6 @@
 package com.remote.test.service;
 
+import com.remote.test.consumer.RevokerFactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;

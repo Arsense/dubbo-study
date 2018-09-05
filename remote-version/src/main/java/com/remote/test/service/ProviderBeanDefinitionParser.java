@@ -1,5 +1,6 @@
 package com.remote.test.service;
 
+import com.remote.test.provider.ProviderFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

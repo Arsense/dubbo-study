@@ -1,7 +1,7 @@
 package com.remote.test.utils;
 
 
-import com.remote.test.service.ProviderService;
+import com.remote.test.provider.ProviderService;
 
 /**
  * @author tangwei

@@ -1,6 +1,6 @@
 package com.remote.test.zookeeper;
 
-import com.remote.test.service.ProviderService;
+import com.remote.test.provider.ProviderService;
 
 import java.util.List;
 import java.util.Map;

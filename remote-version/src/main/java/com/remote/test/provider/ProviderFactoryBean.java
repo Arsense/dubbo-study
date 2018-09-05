@@ -1,4 +1,4 @@
-package com.remote.test.service;
+package com.remote.test.provider;
 
 import com.remote.test.netty.NettyServer;
 import com.remote.test.zookeeper.RegisterCenter;

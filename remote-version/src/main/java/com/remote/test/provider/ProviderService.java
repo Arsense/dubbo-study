@@ -1,4 +1,4 @@
-package com.remote.test.service;
+package com.remote.test.provider;
 
 import java.lang.reflect.Method;
 

@@ -1,5 +1,6 @@
-package com.remote.test.service;
+package com.remote.test.consumer;
 
+import com.remote.test.provider.ProviderService;
 import com.remote.test.zookeeper.ConsumeRegistryCenter;
 import com.remote.test.zookeeper.RegisterCenter;
 import org.springframework.beans.factory.FactoryBean;

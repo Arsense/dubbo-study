@@ -1,4 +1,4 @@
-package com.remote.test.service;
+package com.remote.test.consumer;
 
 /**
  * @author tangwei

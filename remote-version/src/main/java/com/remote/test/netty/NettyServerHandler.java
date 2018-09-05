@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.remote.test.service.ProviderService;
+import com.remote.test.provider.ProviderService;
 import com.remote.test.utils.Request;
 import com.remote.test.utils.Response;
 import com.remote.test.zookeeper.RegisterCenter;
