@@ -55,14 +55,14 @@ public class NettyCosumeChannelQueue {
             InetSocketAddress socketAddress = new InetSocketAddress(providerService.getServerIp()
                     , Integer.parseInt(providerService.getPort()));
             try {
-                int channelConnetionCount = 0;
+                int channelConnectionCount = 0;
                 //最多先设置连接20个
-                while(channelConnetionCount < 20) {
+                while(channelConnectionCount < 20) {
                     Channel channel = null;
                     while (channel == null) {
                         channel = registerChannel(socketAddress);
                     }
-                    channelConnetionCount++;
+                    channelConnectionCount++;
                     //将新注册的Netty Channel存入阻塞队列channelArrayBlockingQueue
                     // 并将阻塞队列channelArrayBlockingQueue作为value存入channelPoolMap
                     ArrayBlockingQueue<Channel> channelArrayBlockingQueue = channelQueueMap.get(socketAddress);
@@ -84,7 +84,7 @@ public class NettyCosumeChannelQueue {
     }
 
 
-    public Channel registerChannel(InetSocketAddress socketAddress) throws InterruptedException {
+    private Channel registerChannel(InetSocketAddress socketAddress) throws InterruptedException {
 
         EventLoopGroup group = new NioEventLoopGroup(10);
         Bootstrap bootstrap = new Bootstrap();
@@ -102,6 +102,10 @@ public class NettyCosumeChannelQueue {
                 });
 
         ChannelFuture channelFuture = bootstrap.connect().sync();
+        if (channelFuture.isSuccess()) {
+            return channelFuture.channel();
+        }
+        return null;
 
     }
 }
