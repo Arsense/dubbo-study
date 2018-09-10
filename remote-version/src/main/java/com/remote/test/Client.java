@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.List;
+
 /**
  * @author tangwei
  * @date 2018/7/11 23:39
@@ -21,7 +23,15 @@ public class Client {
 
 
         final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("rpc-client.xml");
-        LOG.info("Client 开始工作");
 
+        TestService testService = (TestService) context.getBean("testService");
+        List list = testService.genericTest();
+
+        LOG.info("Client 开始工作");
+        for(Object s :  list){
+            System.out.println("list return ==>" + s);
+        }
+        //关闭jvm
+        System.exit(0);
     }
 }

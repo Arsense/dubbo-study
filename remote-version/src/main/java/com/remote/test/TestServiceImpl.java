@@ -1,5 +1,7 @@
 package com.remote.test;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -7,11 +9,16 @@ import java.util.List;
  * @date 2018/9/3 14:48
  */
 public class TestServiceImpl implements TestService {
-    public String test(String name) {
-        return null;
+    @Override
+    public String test(String name){
+        return "back==>" + name;
     }
 
-    public List<String> genericTest() {
-        return null;
+    @Override
+    public List<String> genericTest(){
+        List list = new ArrayList();
+        list.add("abc");
+        list.add(new Date());
+        return list;
     }
 }
