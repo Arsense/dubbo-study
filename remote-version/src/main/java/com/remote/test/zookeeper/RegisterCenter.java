@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.remote.test.consumer.ConsumeService;
 import com.remote.test.provider.ProviderService;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
@@ -220,6 +221,11 @@ public class RegisterCenter implements ServiceRegistryCenter,ConsumeRegistryCent
     @Override
     public Map<String, List<ProviderService>> getProviderServicesToConsume() {
         return zooKeeperServiceProviderMap;
+    }
+
+    @Override
+    public void registerConsumer(ConsumeService consumeService) {
+
     }
 
 }

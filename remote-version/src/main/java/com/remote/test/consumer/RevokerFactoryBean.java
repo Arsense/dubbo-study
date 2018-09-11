@@ -24,6 +24,9 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
     //服务分组名
     private String groupName=  "default";
 
+    //负载均衡策略
+    private String clusterStrategy;
+
 
     @Override
     public Object getObject() throws Exception {
@@ -50,6 +53,16 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
         Map<String, List<ProviderService>> providerMap = registryCenter.getProviderServicesToConsume();
         //初始化Netty Channel
         NettyCosumeChannelQueue.singleton().initChannelPoolFactory(providerMap);
+        RevokerProxyBeanFactory proxyBeanFactory = new RevokerProxyBeanFactory(targetInterface , clusterStrategy);
+        this.serviceObject = proxyBeanFactory.getProxy();
+
+
+        //将消费者信息注册到注册中心
+        ConsumeService consume =  new ConsumeService();
+        consume.setServiceInterface(targetInterface);
+        registryCenter.registerConsumer(consume);
+
+
 
     }
 

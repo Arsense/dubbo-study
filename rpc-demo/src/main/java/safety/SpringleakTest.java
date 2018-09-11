@@ -1,3 +1,5 @@
+package safety;
+
 import java.io.*;
 
 /**
