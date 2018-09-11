@@ -12,7 +12,7 @@ import java.util.TreeMap;
  * @author tangwei
  * @date 2018/9/10 15:14
  */
-public class ApiTest {
+public class KplApiTest {
 
 
 //         access_token:faf6e422fe32439d96f5bb469e98b08b8
