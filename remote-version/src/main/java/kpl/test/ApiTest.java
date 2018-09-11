@@ -40,7 +40,7 @@ public class ApiTest {
         String paramJson1 = "{\"cityId\":2454}" ;
 
         System.out.println("方法" + methodGetcounties + "开始");
-        initKpiApi(methodGetcounties , paramJson1);
+        initKplApi(methodGetcounties , paramJson1);
         System.out.println();
 
 
@@ -48,7 +48,7 @@ public class ApiTest {
         String paramJson2 = "{}";
 
         System.out.println("方法" + methodGetprovinces + "开始");
-        initKpiApi(methodGetprovinces , paramJson2);
+        initKplApi(methodGetprovinces , paramJson2);
         System.out.println();
 
 
@@ -56,25 +56,25 @@ public class ApiTest {
         String paramJson3 = "{\"countyId\":1300}" ;
 
         System.out.println("方法" + methodGettowns + "开始");
-        initKpiApi(methodGettowns , paramJson3);
+        initKplApi(methodGettowns , paramJson3);
         System.out.println();
 
         String methodGetcities = BASE_METHOD + "getcities";
         String paramJson4 = "{\"provinceId\":1}" ;
 
         System.out.println("方法" + methodGetcities + "开始");
-        initKpiApi(methodGetcities , paramJson4);
+        initKplApi(methodGetcities , paramJson4);
         System.out.println();
 
         String methodGetSelfPick = BASE_METHOD + "getselfpick";
         String paramJson5 = "{\"provinceId\":2,\"uid\":\"939c32083arU\",\"cityId\":2837,\"townId\":0,\"countyId\":51928}" ;
         System.out.println("方法" + methodGetSelfPick + "开始");
 
-        initKpiApi(methodGetSelfPick , paramJson5);
+        initKplApi(methodGetSelfPick , paramJson5);
 
 
     }
-    private static void initKpiApi(String method , String paramJson) throws Exception {
+    private static void initKplApi(String method , String paramJson) throws Exception {
         if(!areNotEmpty(new String[]{method , paramJson})){
             throw  new Exception("method ,paramJson 不能为空");
         }
@@ -94,6 +94,10 @@ public class ApiTest {
         sendMessage(url);
     }
 
+    /**
+     * 拼接URL
+     * @return
+     */
     private static String buildUrl(){
         StringBuilder url =  new StringBuilder("https://router.jd.com/api?");
 
@@ -115,7 +119,11 @@ public class ApiTest {
         return url.toString();
     }
 
-
+    /**
+     * 发送请求 调用接口
+     * @param request
+     * @throws Exception
+     */
     private static void sendMessage(String request) throws Exception {
         URL url = new URL(request);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -150,24 +158,23 @@ public class ApiTest {
     }
 
 
-
-
-
-
+    /**
+     * 构造签名
+     * @param method
+     * @param paramJson
+     * @return
+     * @throws Exception
+     */
     private static String buildSign(String method , String paramJson) throws Exception {
-
         String timestamp = String.valueOf(System.currentTimeMillis());
-
         String appSecret = "9f47ad8376e1451296b15607dcfd280f";
-        Map<String, String> map = new TreeMap();
+        StringBuilder sb = new StringBuilder(appSecret);
 
+        Map<String, String> map = new TreeMap();
         urlParamMap.put("timestamp", timestamp);
         urlParamMap.put("method", method);
         urlParamMap.put("param_json", paramJson);
-
         map = urlParamMap;
-
-        StringBuilder sb = new StringBuilder(appSecret);
 
         //按照规则拼成字符串
         for (Map.Entry entry : map.entrySet()) {
@@ -182,6 +189,12 @@ public class ApiTest {
         return md5(sb.toString());
     }
 
+    /**
+     * md5加密
+     * @param source
+     * @return
+     * @throws Exception
+     */
     private static String md5(String source) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] bytes = md.digest(source.getBytes("utf-8"));
