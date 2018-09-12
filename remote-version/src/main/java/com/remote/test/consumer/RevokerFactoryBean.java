@@ -23,9 +23,8 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
     private Object serviceObject;
     //服务分组名
     private String groupName=  "default";
-
     //负载均衡策略
-    private String clusterStrategy;
+    private String clusterStrategy = "WeightRandom";
 
 
     @Override
@@ -46,7 +45,6 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         //获取服务注册中心
-
         ConsumeRegistryCenter registryCenter = RegisterCenter.singleton();
         //初始化服务提供者列表到本地
         registryCenter.initProviderServiceMap(appKey , groupName);

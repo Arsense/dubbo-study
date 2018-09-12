@@ -1,5 +1,7 @@
 package com.remote.test.consumer;
 
+import com.remote.test.cluster.ClusterChooseService;
+import com.remote.test.cluster.ClusterStrategy;
 import com.remote.test.provider.ProviderService;
 import com.remote.test.zookeeper.RegisterCenter;
 
@@ -54,8 +56,13 @@ public class RevokerProxyBeanFactory implements InvocationHandler {
 
         RegisterCenter registerCenter = RegisterCenter.singleton();
         //获取接口列表
-        List<ProviderService> providerServices = (List<ProviderService>) registerCenter.getProviderServicesToConsume();
+        List<ProviderService> providerServices = (List<ProviderService>) registerCenter.getProviderServicesToConsume().get(interfaceName);
         //根据软负载策略,从服务提供者列表选取本次调用的服务提供者
+        ClusterStrategy strategy = ClusterChooseService.matchClusterStrategy(clusterStrategy);
+        ProviderService providerService = strategy.select(providerServices);
+        //复制一份服务提供者信息
+        ProviderService newProvider = providerService.copy();
+
 
 
         return null;
