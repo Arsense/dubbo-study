@@ -61,7 +61,7 @@ public class RevokerProxyBeanFactory implements InvocationHandler {
 
         RegisterCenter registerCenter = RegisterCenter.singleton();
         //获取接口列表
-        List<ProviderService> providerServices = (List<ProviderService>) registerCenter.getProviderServicesToConsume().get(interfaceName);
+        List<ProviderService> providerServices = (List<ProviderService>) registerCenter.getProviderServicesToConsume();
         //根据软负载策略,从服务提供者列表选取本次调用的服务提供者
         ClusterStrategy strategy = ClusterChooseService.matchClusterStrategy(clusterStrategy);
         ProviderService providerService = strategy.select(providerServices);
