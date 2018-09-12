@@ -8,6 +8,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import jdk.nashorn.internal.ir.IdentNode;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,12 @@ public class NettyCosumeChannelQueue {
         return channelPoolFactory;
     }
 
+
+
+
+    public ArrayBlockingQueue<Channel> acquire(InetSocketAddress inetSocketAddress){
+        return channelQueueMap.get(inetSocketAddress);
+    }
     /**
      * 初始化Netty channel 连接队列Map
      * @param providerMap
@@ -84,7 +91,7 @@ public class NettyCosumeChannelQueue {
     }
 
 
-    private Channel registerChannel(InetSocketAddress socketAddress) throws InterruptedException {
+    public Channel registerChannel(InetSocketAddress socketAddress) throws InterruptedException {
 
         EventLoopGroup group = new NioEventLoopGroup(10);
         Bootstrap bootstrap = new Bootstrap();

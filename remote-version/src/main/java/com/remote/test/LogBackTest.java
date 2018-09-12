@@ -16,4 +16,5 @@ public class LogBackTest {
         logger.info("INFO test 这个地方输出INFO级别的日志");
         logger.error("ERROR test 这个地方输出ERROR级别的日志");
     }
+
 }

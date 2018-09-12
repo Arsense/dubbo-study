@@ -15,8 +15,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<Response>{
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Response response) throws Exception {
         //将Netty异步返回的结果存入阻塞队列,以便调用端同步获取
-        System.out.println("when read  . channel ===>" + channelHandlerContext.channel());//15个channel会被重复使用
-        LOG.info("when read  . channel ===> {}" + channelHandlerContext.channel());
+        System.out.println("client when read  . channel ===>" + channelHandlerContext.channel());//15个channel会被重复使用
 
     }
 

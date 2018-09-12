@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author tangwei
@@ -64,7 +65,7 @@ public class RevokerProxyBeanFactory implements InvocationHandler {
 
         RegisterCenter registerCenter = RegisterCenter.singleton();
         //获取接口列表
-        List<ProviderService> providerServices = (List<ProviderService>) registerCenter.getProviderServicesToConsume();
+        List<ProviderService> providerServices = registerCenter.getProviderServicesToConsume().get(interfaceName);
         //根据软负载策略,从服务提供者列表选取本次调用的服务提供者
         ClusterStrategy strategy = ClusterChooseService.matchClusterStrategy(clusterStrategy);
         ProviderService providerService = strategy.select(providerServices);
@@ -94,8 +95,13 @@ public class RevokerProxyBeanFactory implements InvocationHandler {
             String serverPort = request.getProviderService().getPort();
             InetSocketAddress inetSocketAddress = new InetSocketAddress(serverIp, Integer.parseInt(serverPort));
             //提交本次调用信息到线程池fixedThreadPool,发起调用
+            //Future表示一个可能还没有完成的异步任务的结果，针对这个结果可以添加Callback以便在任务执行成功或失败后作出相应的操作。
+            //做多等待timeout的时间就会返回结果
             Future<Response> responseFuture = fixedThreadPool.submit(RevokerServiceCallable.of(inetSocketAddress , request));
-
+            Response response = responseFuture.get(request.getTimeout() , TimeUnit.MILLISECONDS);
+            if(response != null) {
+                return response.getResult();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

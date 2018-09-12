@@ -26,20 +26,13 @@ public class NettyServerHandler  extends SimpleChannelInboundHandler<Request>{
 
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Request request) {
         LOG.info("server 收到信息");
+        System.out.println("server 收到信息");
         if( channelHandlerContext.channel().isWritable()) {
             //从服务器调用对象里获取服务提供者信息
             //先设置好线程数  线程先不会怎么样
             ProviderService providerService = request.getProviderService();
             String serviceKey = providerService.getServiceInterface().getName();
             String methodName = request.getInvokeMethodName();
-//            //信号量控制线程数
-//            Semaphore semaphore = serviceKeySemaphoreMap.get(serviceKey);
-//
-//            if (semaphore == null) {
-//                //先不加锁 看会怎么样
-//                semaphore = new Semaphore(20);
-//                serviceKeySemaphoreMap.put(serviceKe`y,semaphore);
-//            }
 
             //获取注册服务中心
 
