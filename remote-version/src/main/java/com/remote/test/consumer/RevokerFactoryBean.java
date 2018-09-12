@@ -59,8 +59,6 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
         consume.setServiceInterface(targetInterface);
         registryCenter.registerConsumer(consume);
 
-
-
     }
 
 

@@ -17,6 +17,16 @@ public class Request {
     private int timeout;
 
     private String invokeMethodName;
+    //传递参数
+    private Object[] args;
+
+    public Object[] getArgs() {
+        return args;
+    }
+
+    public void setArgs(Object[] args) {
+        this.args = args;
+    }
 
     public String getUniqueKey() {
         return uniqueKey;

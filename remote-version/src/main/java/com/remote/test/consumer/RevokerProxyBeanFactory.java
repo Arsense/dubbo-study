@@ -3,12 +3,16 @@ package com.remote.test.consumer;
 import com.remote.test.cluster.ClusterChooseService;
 import com.remote.test.cluster.ClusterStrategy;
 import com.remote.test.provider.ProviderService;
+import com.remote.test.utils.Request;
 import com.remote.test.zookeeper.RegisterCenter;
 
+import javax.print.DocFlavor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author tangwei
@@ -24,6 +28,7 @@ public class RevokerProxyBeanFactory implements InvocationHandler {
     //负载均衡策略
     private String clusterStrategy = "WeightRandom";
 
+    private ExecutorService fixedThreadPool = null;
 
     /**
      * 实现代理
@@ -62,10 +67,33 @@ public class RevokerProxyBeanFactory implements InvocationHandler {
         ProviderService providerService = strategy.select(providerServices);
         //复制一份服务提供者信息
         ProviderService newProvider = providerService.copy();
+        newProvider.setServiceMethod(method);
+        newProvider.setServiceInterface(targetInterface);
 
+        final Request request  = new Request();
+        request.setProviderService(providerService);
+        request.setTimeout(consumeTimeout);
+        request.setInvokeMethodName(method.getName());
+        //传递参数
+        request.setArgs(args);
+        //设置本次调用方法信息 然后这个放送给netty 远程开始调用
+        try {
+            //构建用来发起调用的线程池
+            if (fixedThreadPool == null) {
+                synchronized (RevokerProxyBeanFactory.class) {
+                    if (null == fixedThreadPool) {
+                        fixedThreadPool = Executors.newFixedThreadPool(threadWorkerNumber);
+                    }
+                }
+            }
+            //根据服务提供者的ip,port,构建InetSocketAddress对象,标识服务提供者地址
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("invoke 调用失败");
+        }
 
+        return  null;
 
-        return null;
     }
 
 
