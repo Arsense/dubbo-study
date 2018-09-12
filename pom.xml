@@ -11,6 +11,7 @@
     <modules>
         <module>rpc-demo</module>
         <module>remote-version</module>
+        <module>awt-learn</module>
     </modules>
     <dependencies>
         <dependency>

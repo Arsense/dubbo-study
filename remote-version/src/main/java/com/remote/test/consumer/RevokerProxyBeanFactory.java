@@ -4,15 +4,18 @@ import com.remote.test.cluster.ClusterChooseService;
 import com.remote.test.cluster.ClusterStrategy;
 import com.remote.test.provider.ProviderService;
 import com.remote.test.utils.Request;
+import com.remote.test.utils.Response;
 import com.remote.test.zookeeper.RegisterCenter;
 
 import javax.print.DocFlavor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author tangwei
@@ -87,6 +90,13 @@ public class RevokerProxyBeanFactory implements InvocationHandler {
                 }
             }
             //根据服务提供者的ip,port,构建InetSocketAddress对象,标识服务提供者地址
+            String serverIp = request.getProviderService().getServerIp();
+            String serverPort = request.getProviderService().getPort();
+            InetSocketAddress inetSocketAddress = new InetSocketAddress(serverIp, Integer.parseInt(serverPort));
+            //提交本次调用信息到线程池fixedThreadPool,发起调用
+            Future<Response> responseFuture = fixedThreadPool.submit(RevokerServiceCallable.of(inetSocketAddress , request));
+
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("invoke 调用失败");
