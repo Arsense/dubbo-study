@@ -56,7 +56,6 @@ public class RevokerFactoryBean  implements FactoryBean, InitializingBean {
         RevokerProxyBeanFactory proxyBeanFactory = new RevokerProxyBeanFactory(targetInterface , clusterStrategy);
         this.serviceObject = proxyBeanFactory.getProxy();
 
-
         //将消费者信息注册到注册中心
         ConsumeService consume =  new ConsumeService();
         consume.setServiceInterface(targetInterface);

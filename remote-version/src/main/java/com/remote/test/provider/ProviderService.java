@@ -24,6 +24,21 @@ public class ProviderService {
     private  String appKey;
     private String serverIp;
 
+    public ProviderService copy(){
+        ProviderService providerService = new ProviderService();
+        providerService.setPort(port);
+        providerService.setServerIp(serverIp);
+        providerService.setServiceInterface(serviceInterface);
+        providerService.setServiceMethod(serviceMethod);
+        providerService.setServiceObject(serviceObject);
+        providerService.setAppKey(appKey);
+        providerService.setServerIp(serverIp);
+        providerService.setTimeout(timeout);
+        providerService.setWorkThreads(workThreads);
+        return providerService;
+    }
+
+
     public String getServerIp() {
         return serverIp;
     }
