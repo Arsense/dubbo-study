@@ -29,7 +29,6 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
     //用户凭证
     private String appKey;
 
-
     @Override
     public Class<?> getObjectType() {
         return serviceInterface;
@@ -47,9 +46,7 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         //这里启动Netty服务端
         NettyServer.singleton().start(Integer.parseInt(port));
-
         //注册到zk,元数据注册中心 这里的类来自配置编写
-
         List<ProviderService> serviceList =  new ArrayList<ProviderService>();
 
         Method[] methods  = serviceObject.getClass().getDeclaredMethods();
@@ -69,7 +66,6 @@ public class ProviderFactoryBean implements FactoryBean, InitializingBean {
 
 
     }
-
 
     public Object getServiceObject() {
         return serviceObject;

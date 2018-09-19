@@ -22,7 +22,7 @@ serializer 序列化demo
 
 #### (5) NIO 
 - CharBuffer
-- Channel 通道
+- Channel 通道 
 - nio B/C实现
 - nio2 Path特性
 - netty demoOK
@@ -31,7 +31,9 @@ serializer 序列化demo
 进度 
 1. 自定义xml配置文件读取解析
 2. Netty的启动配置(部分)
-3. zookeeper 完成注册 
+3. zookeeper 完成注册 1
++
+4. 基本完功 没序列化 传输不了
 
 ### 三 学习笔记
 - 一、自定义xml读取到配置文件
