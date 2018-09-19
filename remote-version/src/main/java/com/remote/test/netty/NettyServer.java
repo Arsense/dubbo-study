@@ -1,5 +1,6 @@
 package com.remote.test.netty;
 
+import com.remote.test.utils.Request;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -51,7 +52,7 @@ public class NettyServer {
 
                         //三个 序列化编码和解码 处理函数 不然消息收发不到
                         socketChannel.pipeline().addLast(new NettyServerHandler());
-                      socketChannel.pipeline().addLast();
+                        socketChannel.pipeline().addLast(new NettyDecodeHandler(Request.class));
                         socketChannel.pipeline().addLast();
                     }
                     //配置接收处理消息的Handler

@@ -3,6 +3,7 @@ package com.remote.test.netty;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.remote.test.provider.ProviderService;
+import com.remote.test.utils.Request;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -101,9 +102,11 @@ public class NettyCosumeChannelQueue {
                 .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    public void initChannel(SocketChannel ch) throws Exception {
+                    public void initChannel(SocketChannel socketChannel) throws Exception {
                         //注册客户端业务逻辑处理handler
-                        ch.pipeline().addLast(new NettyClientHandler());
+                        socketChannel.pipeline().addLast(new NettyServerHandler());
+                        socketChannel.pipeline().addLast(new NettyDecodeHandler(Request.class));
+                        socketChannel.pipeline().addLast(new NettyClientHandler());
                     }
                 });
 
