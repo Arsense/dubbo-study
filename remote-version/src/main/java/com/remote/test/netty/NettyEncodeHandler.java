@@ -1,5 +1,6 @@
 package com.remote.test.netty;
 
+import com.remote.test.serialize.JsonSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -10,22 +11,20 @@ import io.netty.handler.codec.MessageToByteEncoder;
  */
 public class NettyEncodeHandler extends MessageToByteEncoder {
 
-    //解码对象class
-    private Class<?> genericClass;
 
-    NettyEncodeHandler(Class<?> genericClass ){
-        this.genericClass = genericClass;
+    NettyEncodeHandler(){
+
     }
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, Object o, ByteBuf byteBuf) throws Exception {
-
+    protected void encode(ChannelHandlerContext channelHandlerContext, Object object, ByteBuf byteBuf) throws Exception {
+        JsonSerializer serializer = new JsonSerializer();
+        //将对象序列化为字节数组
+        byte[] data = serializer.serialize(object);
+        //将字节数组(消息体)的长度作为消息头写入,解决半包/粘包问题
+        byteBuf.writeInt(data.length);
+        //写入序列化后得到的字节数组
+        byteBuf.writeBytes(data);
     }
 
-    public Class<?> getGenericClass() {
-        return genericClass;
-    }
 
-    public void setGenericClass(Class<?> genericClass) {
-        this.genericClass = genericClass;
-    }
 }

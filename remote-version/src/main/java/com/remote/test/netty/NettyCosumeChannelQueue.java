@@ -104,7 +104,7 @@ public class NettyCosumeChannelQueue {
                     @Override
                     public void initChannel(SocketChannel socketChannel) throws Exception {
                         //注册客户端业务逻辑处理handler
-                        socketChannel.pipeline().addLast(new NettyServerHandler());
+                        socketChannel.pipeline().addLast(new NettyEncodeHandler());
                         socketChannel.pipeline().addLast(new NettyDecodeHandler(Request.class));
                         socketChannel.pipeline().addLast(new NettyClientHandler());
                     }

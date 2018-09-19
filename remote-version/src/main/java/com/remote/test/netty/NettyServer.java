@@ -49,11 +49,10 @@ public class NettyServer {
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-
                         //三个 序列化编码和解码 处理函数 不然消息收发不到
                         socketChannel.pipeline().addLast(new NettyServerHandler());
                         socketChannel.pipeline().addLast(new NettyDecodeHandler(Request.class));
-                        socketChannel.pipeline().addLast();
+                        socketChannel.pipeline().addLast(new NettyEncodeHandler());
                     }
                     //配置接收处理消息的Handler
                 });
