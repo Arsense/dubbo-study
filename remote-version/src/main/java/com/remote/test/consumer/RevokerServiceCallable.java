@@ -59,7 +59,7 @@ public class RevokerServiceCallable implements Callable<Response> {
             }
 
             //将本次调用的信息写入Netty通道,发起异步调用
-            System.out.println("client when write, channel ===>" + channel);
+            System.out.println("call   client when write, channel ===>" + channel);
             ChannelFuture channelFuture = channel.writeAndFlush(request);
             channelFuture.syncUninterruptibly();
 
