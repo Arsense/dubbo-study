@@ -52,7 +52,6 @@ public class RevokerServiceCallable implements Callable<Response> {
                     //若队列中没有可用的Channel,则重新注册一个Channel
                     channel = NettyCosumeChannelQueue.singleton().registerChannel(inetSocketAddress);
                 }
-
                 //从返回结果容器中获取返回结果,同时设置等待超时时间为invokeTimeout
                 long invokeTimeout = request.getTimeout();
                 return null;
