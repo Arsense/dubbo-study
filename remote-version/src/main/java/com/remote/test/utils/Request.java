@@ -10,7 +10,7 @@ import com.remote.test.provider.ProviderService;
 public class Request {
 
     //UUID,唯一标识一次返回值
-    private String uniqueKey;
+    private String uniqueKey="Clay";
     //服务提供者信息
     private ProviderService providerService;
 

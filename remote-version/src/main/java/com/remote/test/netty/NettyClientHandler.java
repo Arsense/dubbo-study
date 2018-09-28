@@ -1,5 +1,6 @@
 package com.remote.test.netty;
 
+import com.remote.test.consumer.ResponseHelper;
 import com.remote.test.utils.Response;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -16,7 +17,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<Response>{
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Response response) throws Exception {
         //将Netty异步返回的结果存入阻塞队列,以便调用端同步获取
         System.out.println("Client channelRead0 when read  . channel ===>" + channelHandlerContext.channel());//15个channel会被重复使用
-
+        ResponseHelper.putResultValue(response);
     }
 
 

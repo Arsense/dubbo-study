@@ -36,7 +36,10 @@ public class RevokerServiceCallable implements Callable<Response> {
     }
     @Override
     public Response call() throws Exception {
+        //初始化返回结果容器,将本次调用的唯一标识作为Key存入返回结果的Map
+        ResponseHelper.initResponseData(request.getUniqueKey());
         //根据本地调用服务提供者地址获取对应的Netty通道channel队列
+
         ArrayBlockingQueue<Channel> blockingQueue = NettyCosumeChannelQueue.singleton().acquire(inetSocketAddress);
         try {
 
@@ -52,19 +55,20 @@ public class RevokerServiceCallable implements Callable<Response> {
                     //若队列中没有可用的Channel,则重新注册一个Channel
                     channel = NettyCosumeChannelQueue.singleton().registerChannel(inetSocketAddress);
                 }
-                //从返回结果容器中获取返回结果,同时设置等待超时时间为invokeTimeout
-                long invokeTimeout = request.getTimeout();
-                return null;
-//                return RevokerResponseHolder.getValue(request.getUniqueKey(), invokeTimeout);
+
             }
 
             //将本次调用的信息写入Netty通道,发起异步调用
             System.out.println("call   client when write, channel ===>" + channel);
             ChannelFuture channelFuture = channel.writeAndFlush(request);
             channelFuture.syncUninterruptibly();
+            //从返回结果容器中获取返回结果,同时设置等待超时时间为invokeTimeout
+            return ResponseHelper.getValue(request.getUniqueKey());
 
         } catch (Exception e) {
             LOG.error("service invoke error.", e);
+        }finally {
+            //本次调用完毕后,将Netty的通道channel重新释放到队列中,以便下次调用复用
         }
 
 
