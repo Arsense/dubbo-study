@@ -16,6 +16,8 @@ public class ResponseHelper {
     //服务返回结果Map
     private static final Map<String, BlockingQueue<Response>> responseMap = Maps.newConcurrentMap();
 
+    +
+
     //存储返回结果的阻塞队列
     private BlockingQueue<Response> responseQueue = new ArrayBlockingQueue<Response>(1);
 
