@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>shrowd</artifactId>
+    <packaging>pom</packaging>
     <build>
         <plugins>
             <plugin>
@@ -23,6 +24,11 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>../dubbo-demo-consumer</module>
+        <module>../dubbo-demo-provider</module>
+        <module>../dubbo-demo-api</module>
+    </modules>
     <dependencies>
         <!--<dependency>-->
             <!--<groupId>log4j</groupId>-->
