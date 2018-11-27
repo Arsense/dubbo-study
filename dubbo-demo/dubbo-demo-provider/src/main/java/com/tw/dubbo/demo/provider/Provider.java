@@ -7,6 +7,6 @@ package com.tw.dubbo.demo.provider;
 public class Provider {
 
     public static void main(String[] args) {
-
+        System.out.println("provider ok");
     }
 }
