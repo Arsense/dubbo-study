@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>dubbo-demo</module>
+        <module>dubbo-config</module>
     </modules>
     <dependencies>
         <dependency>

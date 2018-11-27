@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://www.ares-remoting.com/schema/ares-service"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.ares-remoting.com/schema/ares-service http://www.ares-remoting.com/schema/ares-service.xsd">
+
+
+
+    <bean id="testService" class="com.remote.test.TestServiceImpl"/>
+
+    <dubbo:service id = "testServiceRegister"
+                        interface="com.remote.test.TestService"
+                        ref = "testService"
+                        appKey = "clay"
+                        port="8081"/>
+</beans>
