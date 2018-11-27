@@ -5,9 +5,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
  http://www.ares-remoting.com/schema/ares-service http://www.ares-remoting.com/schema/ares-service.xsd">
 
-
-
-
     <dubbo:service id = "testServiceRegister"
                         interface="com.remote.test.TestService"
                         ref = "testService"

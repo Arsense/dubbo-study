@@ -27,7 +27,6 @@
         <!--</xsd:complexType>-->
     <!--</xsd:element>-->
 
-
     <!--<xsd:element name="client">-->
         <!--<xsd:complexType>-->
             <!--<xsd:complexContent>-->
@@ -43,7 +42,7 @@
             <xsd:documentation><![CDATA[ Export service config ]]></xsd:documentation>
             <xsd:appinfo>
                 <tool:annotation>
-                    <tool:exports type="org.apache.dubbo.config.ServiceConfig"/>
+                    <tool:exports type="com.tw.dubbo.config.ServiceConfig"/>
                 </tool:annotation>
             </xsd:appinfo>
         </xsd:annotation>
@@ -51,7 +50,24 @@
 
 
     <xsd:complexType name="serviceType">
+        <xsd:attribute name="interface" type="xsd:token" use="required">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <![CDATA[ Defines the interface to advertise for this service in the service registry. ]]></xsd:documentation>
+                <xsd:appinfo>
+                    <tool:annotation>
+                        <tool:expected-type type="java.lang.Class"/>
+                    </tool:annotation>
+                </xsd:appinfo>
+            </xsd:annotation>
+        </xsd:attribute>
 
+        <xsd:attribute name="ref" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <![CDATA[ The service implementation instance bean id. ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
 
     </xsd:complexType>
 </xsd:schema>
