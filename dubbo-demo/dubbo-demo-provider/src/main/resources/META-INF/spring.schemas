@@ -1,1 +1,1 @@
-http\://www.ares-remoting.com/schema/ares-service.xsd=dubbo-provider.xsd
+http\://www.ares-remoting.com/schema/ares-service.xsd=/META-INF/dubbo-provider.xsd

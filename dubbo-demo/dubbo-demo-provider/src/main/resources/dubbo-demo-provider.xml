@@ -6,12 +6,15 @@
  http://www.ares-remoting.com/schema/ares-service http://www.ares-remoting.com/schema/ares-service.xsd">
 
 
-
-    <bean id="testService" class="com.remote.test.TestServiceImpl"/>
+    <!--提供服务的Bean-->
+    <bean id="demoService" class="com.tw.dubbo.demo.provider.DemoServiceImpl"/>
 
     <dubbo:service id = "testServiceRegister"
                         interface="com.remote.test.TestService"
                         ref = "testService"
                         appKey = "clay"
                         port="8081"/>
+
+
+    <dubbo:service interface="org.apache.dubbo.demo.DemoService" ref="demoService"/>
 </beans>

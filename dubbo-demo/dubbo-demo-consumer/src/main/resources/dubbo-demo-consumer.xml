@@ -7,7 +7,6 @@
 
 
 
-    <bean id="testService" class="com.remote.test.TestServiceImpl"/>
 
     <dubbo:service id = "testServiceRegister"
                         interface="com.remote.test.TestService"

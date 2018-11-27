@@ -1,1 +1,1 @@
-http\://www.ares-remoting.com/schema/ares-service=com.remote.test.service.RemoteServiceNamespaceHandler
+http\://www.ares-remoting.com/schema/ares-service=com.tw.dubbo.config.spring.DubboNamespaceHandler

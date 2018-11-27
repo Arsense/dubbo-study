@@ -2,34 +2,56 @@
 <xsd:schema xmlns="http://www.ares-remoting.com/schema/ares-service"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:beans="http://www.springframework.org/schema/beans"
+            xmlns:tool="http://www.springframework.org/schema/tool"
             targetNamespace="http://www.ares-remoting.com/schema/ares-service"
             elementFormDefault="qualified"
-            attributeFormDefault="unqualified">
+            attributeFormDefault="unqualified" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd">
 
+    <!--相当于库的引入吗-->
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+    <xsd:import namespace="http://www.springframework.org/schema/tool"/>
 
-    <xsd:element name="service">
-        <xsd:complexType>
-            <xsd:complexContent>
-                <xsd:extension base="beans:identifiedType">
-                    <xsd:attribute name="interface" type="xsd:string" use="required"/>
-                    <xsd:attribute name="port" type="xsd:int" use="required"/>
-                    <xsd:attribute name="ref" type="xsd:string" use="required"/>
-                    <xsd:attribute name="appKey" type="xsd:string" use="required"/>
-                </xsd:extension>
-            </xsd:complexContent>
-        </xsd:complexType>
+    <!--原先的配置-->
+    <!--<xsd:element name="service">-->
+        <!--<xsd:complexType>-->
+            <!--<xsd:complexContent>-->
+                <!--<xsd:extension base="beans:identifiedType">-->
+                    <!--<xsd:attribute name="interface" type="xsd:string" use="required"/>-->
+                    <!--<xsd:attribute name="port" type="xsd:int" use="required"/>-->
+                    <!--<xsd:attribute name="ref" type="xsd:string" use="required"/>-->
+                    <!--<xsd:attribute name="appKey" type="xsd:string" use="required"/>-->
+                <!--</xsd:extension>-->
+            <!--</xsd:complexContent>-->
+        <!--</xsd:complexType>-->
+    <!--</xsd:element>-->
+
+
+    <!--<xsd:element name="client">-->
+        <!--<xsd:complexType>-->
+            <!--<xsd:complexContent>-->
+                <!--<xsd:extension base="beans:identifiedType">-->
+                    <!--<xsd:attribute name="interface" type="xsd:string" use="required"/>-->
+                    <!--<xsd:attribute name="appKey" type="xsd:string" use="required"/>-->
+                <!--</xsd:extension>-->
+            <!--</xsd:complexContent>-->
+        <!--</xsd:complexType>-->
+    <!--</xsd:element>-->
+    <xsd:element name="service" type="serviceType">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[ Export service config ]]></xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="org.apache.dubbo.config.ServiceConfig"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
     </xsd:element>
 
-    <xsd:element name="client">
-        <xsd:complexType>
-            <xsd:complexContent>
-                <xsd:extension base="beans:identifiedType">
-                    <xsd:attribute name="interface" type="xsd:string" use="required"/>
-                    <xsd:attribute name="appKey" type="xsd:string" use="required"/>
-                </xsd:extension>
-            </xsd:complexContent>
-        </xsd:complexType>
-    </xsd:element>
 
+    <xsd:complexType name="serviceType">
+
+
+    </xsd:complexType>
 </xsd:schema>
