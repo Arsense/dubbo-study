@@ -11,6 +11,7 @@
     <modules>
         <module>dubbo-demo</module>
         <module>dubbo-config</module>
+        <module>dubbo-common</module>
     </modules>
     <dependencies>
         <dependency>

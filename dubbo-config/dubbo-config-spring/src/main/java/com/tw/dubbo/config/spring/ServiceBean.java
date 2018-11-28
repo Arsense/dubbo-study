@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +41,20 @@ public class ServiceBean<T> implements InitializingBean,ApplicationContextAware,
 
     // registry centers
     protected List<RegistryConfig> registries;
+    //接口类型
+    protected Class<?> interfaceClass;
+    //接口名
+    private String interfaceName;
 
 
+
+    public Class<?> getInterfaceClass() {
+        return interfaceClass;
+    }
+
+    public void setInterfaceClass(Class<?> interfaceClass) {
+        this.interfaceClass = interfaceClass;
+    }
 
     /**
      * Spring 上下背景文设置 主要是版本的兼容问题
@@ -159,6 +172,9 @@ public class ServiceBean<T> implements InitializingBean,ApplicationContextAware,
         if (exported) {
             return;
         }
+        exported = true;
+//        checkDefault();
+
         if (provider != null) {
             //
             if (application == null) {
@@ -173,6 +189,24 @@ public class ServiceBean<T> implements InitializingBean,ApplicationContextAware,
             }
         }
 
+        if (interfaceName == null || interfaceName.length() == 0) {
+            throw new IllegalStateException("<dubbo:service interface=\"\" /> interface not allow null!");
+        }
+        try {
+            //三参类加载器 JVM会执行该类的静态代码段 先加载类
+            interfaceClass = Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+//        检查接口的方法 不检查会怎样
+//        checkInterfaceAndMethods(interfaceClass, methods);
+//        checkRef();  检查ref 与我们的bean的interface匹配不
+        doExportUrls();
+
+    }
+
+    private void doExportUrls() {
+//        List<URL> registryURLs = loadRegistries(true);
     }
 
 
