@@ -1,8 +1,14 @@
 package com.tw.dubbo.config;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.tw.dubbo.common.util.Constants;
+import com.tw.dubbo.common.util.UrlUtils;
+import com.tw.dubbo.common.util.Version;
 /**
  * @author tangwei
  * @date 2018/11/27 14:25
@@ -83,10 +89,43 @@ public class ServiceConfig<T>  {
     }
 
     private void doExportUrls() {
-//        List<URL> registryURLs = loadRegistries(true);
+        List<URL> registryURLs = loadRegistries(true);
+
     }
 
+    protected List<URL> loadRegistries(boolean provider) {
+        //把各种配置放到map 然后拼接成URL
+        List<URL> registryList = new ArrayList<URL>();
+        if (registries == null || registries.isEmpty()) {
+            return null;
+        }
+        for (RegistryConfig config : registries) {
+            //zookeeper://127.0.0.1:2181
+            String address = config.getAddress();
+            if (address == null || address.length() == 0) {
+                address = "0.0.0.0";
+            }
+            //文件配置权限优先级高
+            String sysaddress = System.getProperty("dubbo.registry.address");
+            if (sysaddress != null && sysaddress.length() > 0) {
+                address = sysaddress;
+            }
+            if (address.length() > 0){
+                Map<String, String> map = new HashMap<String, String>();
+//                map.put("path", RegistryService.class.getName());
+                //dubbo版本
+                map.put("dubbo", Version.getProtocolVersion());
+                //时间粗
+                map.put(Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
+                List<URL> urls = UrlUtils.parseURLs(address, map);
+            }
 
+
+        }
+
+        return registryList;
+
+    }
 
     public List<ProviderConfig> getProviders() {
         return convertProtocolToProvider(protocols);

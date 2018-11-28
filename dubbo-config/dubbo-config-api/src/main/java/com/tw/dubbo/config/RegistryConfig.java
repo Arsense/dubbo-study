@@ -6,13 +6,29 @@ package com.tw.dubbo.config;
  */
 public class RegistryConfig {
 
+    //注册中心IP地址
+    private String address;
+
     private Boolean isDefault;
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
+    }
 
     public Boolean isDefault() {
         return isDefault;
     }
 
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
-    }
+
 }
