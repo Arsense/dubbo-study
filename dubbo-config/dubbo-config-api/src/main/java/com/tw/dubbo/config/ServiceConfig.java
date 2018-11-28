@@ -29,6 +29,9 @@ public class ServiceConfig<T>  {
 
     // service monitor
     protected MonitorConfig monitor;
+    //包路径
+    private String path;
+
 
 
     public synchronized void export() {
@@ -38,7 +41,6 @@ public class ServiceConfig<T>  {
                 export = provider.getExport();
             }
         }
-
         doExport();
     }
 
@@ -83,15 +85,6 @@ public class ServiceConfig<T>  {
     private void doExportUrls() {
 //        List<URL> registryURLs = loadRegistries(true);
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -153,6 +146,15 @@ public class ServiceConfig<T>  {
     private static ProviderConfig convertProtocolToProvider(ProtocolConfig protocol) {
         ProviderConfig provider = new ProviderConfig();
         return provider;
+    }
+
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public Boolean getDefault() {
@@ -219,11 +221,11 @@ public class ServiceConfig<T>  {
         this.interfaceClass = interfaceClass;
     }
 
-    public String getInterfaceName() {
+    public String getInterface() {
         return interfaceName;
     }
 
-    public void setInterfaceName(String interfaceName) {
+    public void setInterface(String interfaceName) {
         this.interfaceName = interfaceName;
     }
 

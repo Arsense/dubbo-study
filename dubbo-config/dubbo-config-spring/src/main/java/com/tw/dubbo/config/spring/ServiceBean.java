@@ -26,6 +26,7 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
 
     private transient ApplicationContext applicationContext;
 
+    private  String beanName;
 
 
     /**
@@ -159,16 +160,16 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
                 }
             }
         }
+        //设置包路径
+        if (getPath() == null || getPath().length() == 0) {
+            if (beanName != null && beanName.length() > 0
+                    && getInterface() != null && getInterface().length() > 0
+                    && beanName.startsWith(getInterface())) {
+                setPath(beanName);
+            }
+        }
 
-//        if (getMonitor() == null) {
-//
-//        }
-//        //配置协议
-
-//
-//        if (!isDelay()) {
-//            export();
-//        }
+        export();
 
     }
 
