@@ -3,11 +3,14 @@ package com.tw.dubbo.config.spring;
 import com.tw.dubbo.config.ApplicationConfig;
 import com.tw.dubbo.config.ProtocolConfig;
 import com.tw.dubbo.config.ProviderConfig;
+import com.tw.dubbo.config.RegistryConfig;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,26 +20,38 @@ import java.util.Map;
  * @author tangwei
  * @date 2018/11/27 14:53
  */
-public class ServiceBean<T> implements InitializingBean,ApplicationContextAware {
+public class ServiceBean<T> implements InitializingBean,ApplicationContextAware,
+        ApplicationListener<ContextRefreshedEvent>{
 
     //Spring上下背景文
     private static transient ApplicationContext SPRING_CONTEXT;
 
     private transient ApplicationContext applicationContext;
-
+    //集群协议列表
     protected List<ProtocolConfig> protocols;
-
+    //提供者
     private ProviderConfig provider;
+    //是否发布接口
+    protected Boolean export;
 
-    public ApplicationConfig getApplication() {
-        return application;
-    }
-
-    public void setApplication(ApplicationConfig application) {
-        this.application = application;
-    }
+    protected Boolean exported;
 
     protected ApplicationConfig application;
+
+    // registry centers
+    protected List<RegistryConfig> registries;
+
+
+
+    /**
+     * Spring 上下背景文设置 主要是版本的兼容问题
+     * @param applicationContext
+     * @throws BeansException
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
+    }
 
 
     /**
@@ -116,10 +131,50 @@ public class ServiceBean<T> implements InitializingBean,ApplicationContextAware 
 
     }
 
+
+    /**
+     * ContextRefreshedEvent Spring加载完后触发该事件
+     * @param contextRefreshedEvent
+     */
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+//        logger.info("The service ready on spring started. service: " + getInterface());
+        //Spring对所配置文件的配置和Bean准备装载OK 继续到下一步
+          export();
+    }
+
+    public synchronized void export() {
+        //判断是否发布
+        if (provider != null) {
+            if (export == null) {
+                export = provider.getExport();
+            }
+        }
+
+        doExport();
+    }
+
+    protected synchronized void doExport() {
+        //是否已经发布 防止多次发布
+        if (exported) {
+            return;
+        }
+        if (provider != null) {
+            //
+            if (application == null) {
+                application = provider.getApplication();
+            }
+            if (registries == null) {
+                registries = provider.getRegistries();
+            }
+
+            if (protocols == null) {
+                protocols = provider.getProtocols();
+            }
+        }
 
     }
+
 
 
     public List<ProviderConfig> getProviders() {
@@ -185,5 +240,22 @@ public class ServiceBean<T> implements InitializingBean,ApplicationContextAware 
     private static ProviderConfig convertProtocolToProvider(ProtocolConfig protocol) {
         ProviderConfig provider = new ProviderConfig();
         return provider;
+    }
+
+
+    public Boolean getExport() {
+        return export;
+    }
+
+    public void setExport(Boolean export) {
+        this.export = export;
+    }
+
+    public ApplicationConfig getApplication() {
+        return application;
+    }
+
+    public void setApplication(ApplicationConfig application) {
+        this.application = application;
     }
 }
