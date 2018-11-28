@@ -1,5 +1,6 @@
 package com.tw.dubbo.config.spring;
 
+import com.tw.dubbo.config.ProtocolConfig;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
@@ -65,7 +66,11 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         if (id != null && id.length() > 0) {
 
         }
-
+        if (ProtocolConfig.class.equals(beanClass)) {
+            //如果是协议配置
+        } else if(ServiceBean.class.equals(beanClass)){
+            //ServiceBean如果指定了类就加载注册 没有就是接口不处理
+        }
 
             return null;
     }
