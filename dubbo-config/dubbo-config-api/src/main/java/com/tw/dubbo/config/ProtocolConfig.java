@@ -6,6 +6,8 @@ package com.tw.dubbo.config;
  */
 public class ProtocolConfig {
 
+    //协议名称
+    private String name;
     //服务的IP地址
     private String host;
     private Boolean isDefault;
@@ -25,4 +27,14 @@ public class ProtocolConfig {
     public void setHost(String host) {
         this.host = host;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
 }

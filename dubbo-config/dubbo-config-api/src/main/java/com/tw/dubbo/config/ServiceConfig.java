@@ -117,6 +117,11 @@ public class ServiceConfig<T>  {
      * @param registryURLs
      */
     private void doExportUrlsForProtocol(ProtocolConfig protocolConfig, List<URL> registryURLs) {
+
+        String name = protocolConfig.getName();
+        if (name == null || name.length() == 0) {
+            name = "dubbo";
+        }
         Map<String, String> map = new HashMap<String, String>();
         map.put("side", "provider");
         map.put("dubbo", Version.getProtocolVersion());
@@ -131,7 +136,7 @@ public class ServiceConfig<T>  {
             //把数组处理成一个字符串
             map.put("methods", StringUtils.join(new HashSet<String>(Arrays.asList(methods)), ","));
         }
-
+        String contextPath = null;
 
         //准备好数据可以开始请求 之前在干嘛啊 搞了那么多乱七八糟的没用的
         String host = this.findConfigedHosts(protocolConfig, registryURLs, map);

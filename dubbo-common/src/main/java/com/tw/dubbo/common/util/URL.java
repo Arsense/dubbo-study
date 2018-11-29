@@ -79,6 +79,10 @@ public class URL implements Serializable {
         this.parameters = Collections.unmodifiableMap(parameters);
     }
 
+    public URL(String protocol, String host, int port, String path, Map<String, String> parameters) {
+        this(protocol, null, null, host, port, path, parameters);
+    }
+
     public static URL valueOf(String url) {
         return new URL();
     }
