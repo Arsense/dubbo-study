@@ -12,6 +12,7 @@
         <module>dubbo-demo</module>
         <module>dubbo-config</module>
         <module>dubbo-common</module>
+        <module>dubbo-rpc</module>
     </modules>
     <dependencies>
         <dependency>

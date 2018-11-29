@@ -5,6 +5,9 @@ package com.tw.dubbo.config;
  * @date 2018/11/28 0:08
  */
 public class ProtocolConfig {
+
+    //服务的IP地址
+    private String host;
     private Boolean isDefault;
 
     public Boolean isDefault() {
@@ -13,5 +16,13 @@ public class ProtocolConfig {
 
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 }

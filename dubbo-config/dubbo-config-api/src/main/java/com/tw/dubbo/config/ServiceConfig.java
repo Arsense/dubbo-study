@@ -1,19 +1,26 @@
 package com.tw.dubbo.config;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.*;
 
-import com.tw.dubbo.common.util.Constants;
-import com.tw.dubbo.common.util.UrlUtils;
-import com.tw.dubbo.common.util.Version;
+import com.tw.dubbo.common.bytecode.Wrapper;
+import com.tw.dubbo.common.extension.ExtensionLoader;
+import com.tw.dubbo.common.util.*;
+import com.tw.dubbo.rpc.Protocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static com.tw.dubbo.common.util.NetUtils.isInvalidLocalHost;
+
 /**
  * @author tangwei
  * @date 2018/11/27 14:25
  */
 public class ServiceConfig<T>  {
+
+    protected static final Logger logger = LoggerFactory.getLogger(ServiceConfig.class);
+
     private Boolean isDefault;
     //集群协议列表
     protected List<ProtocolConfig> protocols;
@@ -38,7 +45,15 @@ public class ServiceConfig<T>  {
     //包路径
     private String path;
 
+    private String host;
 
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
 
     public synchronized void export() {
         //判断是否发布
@@ -90,11 +105,45 @@ public class ServiceConfig<T>  {
 
     private void doExportUrls() {
         List<URL> registryURLs = loadRegistries(true);
+        //因为可能有多个接口 所以是protocols
+        for (ProtocolConfig protocolConfig : protocols) {
+            doExportUrlsForProtocol(protocolConfig, registryURLs);
+        }
+    }
+
+    /**
+     * 开始发布
+     * @param protocolConfig
+     * @param registryURLs
+     */
+    private void doExportUrlsForProtocol(ProtocolConfig protocolConfig, List<URL> registryURLs) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("side", "provider");
+        map.put("dubbo", Version.getProtocolVersion());
+        map.put(Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
+
+        //这里已经获取到了DemoService的 sayHello函数
+        String[] methods = Wrapper.getWrapper(interfaceClass).getMethodNames();
+        if (methods.length == 0) {
+            logger.warn("NO method found in service interface " + interfaceClass.getName());
+            map.put("methods", "*");
+        } else {
+            //把数组处理成一个字符串
+            map.put("methods", StringUtils.join(new HashSet<String>(Arrays.asList(methods)), ","));
+        }
+
+
+        //准备好数据可以开始请求 之前在干嘛啊 搞了那么多乱七八糟的没用的
+        String host = this.findConfigedHosts(protocolConfig, registryURLs, map);
+        Integer port = this.findConfigedPorts(protocolConfig, name, map);
+        //这里构建的URL  前面构造好的数据
+        URL url = new URL(name, host, port, (contextPath == null || contextPath.length() == 0 ? "" : contextPath + "/") + path, map);
+
 
     }
 
-    protected List<URL> loadRegistries(boolean provider) {
-        //把各种配置放到map 然后拼接成URL
+        protected List<URL> loadRegistries(boolean provider) {
+        //把各种配置放到map 生成相应的URL类
         List<URL> registryList = new ArrayList<URL>();
         if (registries == null || registries.isEmpty()) {
             return null;
@@ -118,9 +167,14 @@ public class ServiceConfig<T>  {
                 //时间粗
                 map.put(Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
                 List<URL> urls = UrlUtils.parseURLs(address, map);
+                for (URL url : urls) {
+//                    url = url.addParameter(Constants.REGISTRY_KEY, url.getProtocol());
+//                    url = url.setProtocol(Constants.REGISTRY_PROTOCOL);
+//                    if ((provider && url.getParameter(Constants.REGISTER_KEY, true)){
+                        registryList.add(url);
+//                    }
+                }
             }
-
-
         }
 
         return registryList;
@@ -141,6 +195,17 @@ public class ServiceConfig<T>  {
     }
 
 
+    private Integer findConfigedPorts(ProtocolConfig protocolConfig, String name, Map<String, String> map) {
+        Integer portToBind = null;
+        //Protocol 配置的端口 用类加载器之类的
+        final int defaultPort = ExtensionLoader.getExtensionLoader(Protocol.class).getExtension(name).getDefaultPort();
+        if (portToBind == null || portToBind == 0) {
+            portToBind = defaultPort;
+        }
+        map.put("bind.port", String.valueOf(portToBind));
+
+        return portToBind;
+    }
 
     /**
      *  Protocol 转换成Provider
@@ -160,10 +225,45 @@ public class ServiceConfig<T>  {
     }
 
     /**
-     * Provider 中配置到Protocol里面
-     * @param providers
+     * *为服务提供商注册和绑定IP地址，可以单独配置。
+           *配置优先级：环境变量 - > java系统属性 - >配置文件中的主机属性 - >
+           * / etc / hosts  - >默认网络地址 - >第一个可用的网络地址
+     * @param protocolConfig
+     * @param registryURLs
+     * @param map
      * @return
      */
+    private String findConfigedHosts(ProtocolConfig protocolConfig, List<URL> registryURLs, Map<String, String> map) {
+        boolean anyhost = false;
+
+        String hostToBind = null;
+        hostToBind = protocolConfig.getHost();
+        //protocol找不到就去provider找
+        if (provider != null && (hostToBind == null || hostToBind.length() == 0)) {
+            hostToBind = provider.getHost();
+        }
+        if (isInvalidLocalHost(hostToBind)) {
+            anyhost = true;
+            try {
+                hostToBind = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                logger.warn(e.getMessage(), e);
+            }
+            if (isInvalidLocalHost(hostToBind)) {
+
+            }
+        }
+        map.put("bind.ip", hostToBind);
+        String hostToRegistry = hostToBind;
+        map.put("anyhost", String.valueOf(anyhost));
+        return hostToRegistry;
+    }
+
+        /**
+         * Provider 中配置到Protocol里面
+         * @param providers
+         * @return
+         */
     private static List<ProtocolConfig> convertProviderToProtocol(List<ProviderConfig> providers) {
         if (providers == null || providers.isEmpty()) {
             return null;

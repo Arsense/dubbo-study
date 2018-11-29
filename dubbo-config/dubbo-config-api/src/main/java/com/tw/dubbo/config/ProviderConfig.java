@@ -20,6 +20,15 @@ public class ProviderConfig {
 
     protected List<ProtocolConfig> protocols;
 
+    private String host;
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
 
     public ApplicationConfig getApplication() {
         return application;
