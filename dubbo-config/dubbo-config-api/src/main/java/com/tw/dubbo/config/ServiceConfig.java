@@ -9,6 +9,7 @@ import com.tw.dubbo.common.extension.ExtensionLoader;
 import com.tw.dubbo.common.util.*;
 import com.tw.dubbo.rpc.Exporter;
 import com.tw.dubbo.rpc.Protocol;
+import com.tw.dubbo.rpc.ProxyFactory;
 import com.tw.dubbo.rpc.ServiceClassContain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +24,11 @@ public class ServiceConfig<T>  {
 
     protected static final Logger logger = LoggerFactory.getLogger(ServiceConfig.class);
     private static final Protocol protocol =  ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
-
+    private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
     // 接口实现
     private T ref;
+    //发布接口集合
+    private final List<Exporter<?>> exporters = new ArrayList<Exporter<?>>();
 
 
     private Boolean isDefault;
@@ -151,7 +154,13 @@ public class ServiceConfig<T>  {
         //这里构建的URL  前面构造好的数据
         URL url = new URL(name, host, port, (contextPath == null || contextPath.length() == 0 ? "" : contextPath + "/") + path, map);
         exportLocal(url);
+        String scope = null;
+        if (!"local".equalsIgnoreCase(scope)){
+            if (registryURLs != null && !registryURLs.isEmpty()) {
 
+            }
+
+        }
 
 
 

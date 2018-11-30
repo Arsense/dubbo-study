@@ -13,4 +13,6 @@ public interface Protocol {
      * @return
      */
     int getDefaultPort();
+
+    <T> Exporter<T> export(Invoker<T> invoker) throws RpcException;
 }
