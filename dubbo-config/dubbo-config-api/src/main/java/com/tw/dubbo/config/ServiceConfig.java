@@ -7,7 +7,9 @@ import java.util.*;
 import com.tw.dubbo.common.bytecode.Wrapper;
 import com.tw.dubbo.common.extension.ExtensionLoader;
 import com.tw.dubbo.common.util.*;
+import com.tw.dubbo.rpc.Exporter;
 import com.tw.dubbo.rpc.Protocol;
+import com.tw.dubbo.rpc.ServiceClassContain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +22,11 @@ import static com.tw.dubbo.common.util.NetUtils.isInvalidLocalHost;
 public class ServiceConfig<T>  {
 
     protected static final Logger logger = LoggerFactory.getLogger(ServiceConfig.class);
+    private static final Protocol protocol =  ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
+
+    // 接口实现
+    private T ref;
+
 
     private Boolean isDefault;
     //集群协议列表
@@ -143,10 +150,33 @@ public class ServiceConfig<T>  {
         Integer port = this.findConfigedPorts(protocolConfig, name, map);
         //这里构建的URL  前面构造好的数据
         URL url = new URL(name, host, port, (contextPath == null || contextPath.length() == 0 ? "" : contextPath + "/") + path, map);
+        exportLocal(url);
+
+
 
 
     }
 
+    protected Class getServiceClass(T ref) {
+        return ref.getClass();
+    }
+
+    private void exportLocal(URL url) {
+        //equalsIgnoreCase 忽略大小写
+        if (!"injvm".equalsIgnoreCase(url.getProtocol())) {
+            //将URL的协议与IP等设置成本地
+            URL local = URL.valueOf(url.toFullString())
+                    .setProtocol("injvm")
+                    .setHost("127.0.0.1")
+                    .setPort(0);
+            ServiceClassContain.getInstance().pushServiceClass(getServiceClass(ref));
+            //本地发布的关键代码
+            Exporter<?> exporter = protocol.export(
+                    proxyFactory.getInvoker(ref, (Class) interfaceClass, local));
+            exporters.add(exporter);
+            logger.info("发布DUBBO接口 " + interfaceClass.getName() + " 道本地注册中心");
+        }
+    }
         protected List<URL> loadRegistries(boolean provider) {
         //把各种配置放到map 生成相应的URL类
         List<URL> registryList = new ArrayList<URL>();
@@ -388,4 +418,13 @@ public class ServiceConfig<T>  {
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
     }
+
+    public T getRef() {
+        return ref;
+    }
+
+    public void setRef(T ref) {
+        this.ref = ref;
+    }
+
 }

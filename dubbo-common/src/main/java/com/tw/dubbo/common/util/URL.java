@@ -11,6 +11,7 @@ import java.util.Map;
  */
 public class URL implements Serializable {
 
+    private   String full;
 
     private final String protocol;
 
@@ -36,7 +37,6 @@ public class URL implements Serializable {
 
     private volatile transient String ip;
 
-    private volatile transient String full;
 
     private volatile transient String identity;
 
@@ -53,6 +53,60 @@ public class URL implements Serializable {
         this.path = null;
         this.parameters = null;
     }
+
+    public String toFullString() {
+        if (full != null) {
+            return full;
+        }
+        return full = buildString(true, true);
+    }
+
+
+    public URL setHost(String host) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+    private String buildString(boolean appendUser, boolean appendParameter, String... parameters) {
+        return buildString(appendUser, appendParameter, false, false, parameters);
+    }
+
+    public URL setProtocol(String protocol) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+    public URL setPort(int port) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+    //后面不定参的形式
+    private String buildString(boolean appendUser, boolean appendParameter, boolean useIP, boolean useService, String... parameters) {
+        StringBuilder buf = new StringBuilder();
+        if (protocol != null && protocol.length() > 0) {
+            buf.append(protocol);
+            buf.append("://");
+        }
+        String host;
+        if (useIP) {
+            host = getIp();
+        } else {
+            host = getHost();
+        }
+        if (host != null && host.length() > 0) {
+            buf.append(host);
+            if (port > 0) {
+                buf.append(":");
+                buf.append(port);
+            }
+        }
+        String path;
+        if (useService) {
+//            path = getServiceKey();
+        } else {
+            path = getPath();
+        }
+        return buf.toString();
+    }
+
 
     public URL(String protocol, String username, String password, String host, int port, String path, Map<String, String> parameters) {
 

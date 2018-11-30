@@ -32,7 +32,9 @@ public class ExtensionLoader<T>  {
         return loader;
 
     }
-
+    public T getAdaptiveExtension() {
+        return null;
+    }
 
     public T getExtension(String name) {
         if (name == null || name.length() == 0)
