@@ -10,12 +10,28 @@ import java.net.InetSocketAddress;
  * @author tangwei
  * @date 2018/12/3 12:20
  */
-public class AbstractServer {
+public abstract class AbstractServer {
 
+
+    protected abstract void doOpen() throws Throwable;
+
+    protected abstract void doClose() throws Throwable;
 
     private InetSocketAddress localAddress;
     private InetSocketAddress bindAddress;
     public AbstractServer(URL url, ChannelHandler handler) throws RemotingException {
         localAddress = url.toInetSocketAddress();
+        String bindIp = url.getParameter("bind.ip", url.getHost());
+        int bindPort = url.getParameter("bind.port", url.getPort());
+        bindAddress = new InetSocketAddress(bindIp, bindPort);
+        try {
+            doOpen();
+
+        } catch (Throwable t) {
+            throw new RemotingException("open error");
+        }
+
+
+        // fixme用更好的方法替换它
     }
 }

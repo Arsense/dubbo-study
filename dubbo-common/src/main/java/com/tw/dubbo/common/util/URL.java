@@ -70,6 +70,16 @@ public class URL implements Serializable {
         return value;
     }
 
+    public int getPositiveParameter(String key, int defaultValue) {
+        if (defaultValue <= 0) {
+            throw new IllegalArgumentException("defaultValue <= 0");
+        }
+        int value = getParameter(key, defaultValue);
+        if (value <= 0) {
+            return defaultValue;
+        }
+        return value;
+    }
 
     public String getParameter(String key, String defaultValue) {
         String value = getParameter(key);
@@ -77,6 +87,20 @@ public class URL implements Serializable {
             return defaultValue;
         }
         return value;
+    }
+
+    public int getParameter(String key, int defaultValue) {
+        Number n = getNumbers().get(key);
+        if (n != null) {
+            return n.intValue();
+        }
+        String value = getParameter(key);
+        if (value == null || value.length() == 0) {
+            return defaultValue;
+        }
+        int i = Integer.parseInt(value);
+        getNumbers().put(key, i);
+        return i;
     }
 
     public URL setHost(String host) {
