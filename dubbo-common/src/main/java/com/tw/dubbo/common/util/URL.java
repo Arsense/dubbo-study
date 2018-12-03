@@ -61,6 +61,22 @@ public class URL implements Serializable {
         return full = buildString(true, true);
     }
 
+    public String getParameter(String key) {
+        String value = parameters.get(key);
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        return value;
+    }
+
+
+    public String getParameter(String key, String defaultValue) {
+        String value = getParameter(key);
+        if (value == null || value.length() == 0) {
+            return defaultValue;
+        }
+        return value;
+    }
 
     public URL setHost(String host) {
         return new URL(protocol, username, password, host, port, path, getParameters());
@@ -141,14 +157,9 @@ public class URL implements Serializable {
         return new URL();
     }
 
-
-
-
-
-
-
-
-
+    public String getAddress() {
+        return  host + ":" + port;
+    }
 
     public String getProtocol() {
         return protocol;

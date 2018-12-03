@@ -9,4 +9,7 @@ public class RpcException extends RuntimeException{
         super();
     }
 
+    public RpcException(String message) {
+        super(message);
+    }
 }

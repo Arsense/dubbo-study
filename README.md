@@ -8,10 +8,13 @@
 - 11.27  260/161409 0%
 - 11.28  885/161409 0%
 - 11.29  1609/161409 0.9%
+- 11.30  1984/161409
+- 12.3   2200/161409
 ### 
 - dubbo-config-spring 启动通过Spring加载的配置
 - dubbo-demo 就是简单的接口配置使用
-
+- dubbo-rpc 远程调用协议
+- dubbo-remoting 分布式集群的类型
 
 ## 项目学习步骤
 - step1 创建demo 有provider和 consumer

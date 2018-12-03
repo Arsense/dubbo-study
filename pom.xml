@@ -22,6 +22,7 @@
         <module>dubbo-config</module>
         <module>dubbo-common</module>
         <module>dubbo-rpc</module>
+        <module>dubbo-remoting</module>
     </modules>
     <dependencies>
         <dependency>

@@ -1,5 +1,7 @@
 package com.tw.dubbo.rpc;
 
+import com.tw.dubbo.common.util.URL;
+
 /**
  * 反射类
  *
@@ -23,4 +25,13 @@ public interface Invoker<T>  {
      * @throws RpcException
      */
     Result invoke(Invocation invocation) throws RpcException;
+
+
+
+    /**
+     * 协议的URL地址
+     *
+     * @return url.
+     */
+    URL getUrl();
 }

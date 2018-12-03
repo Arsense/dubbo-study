@@ -2,6 +2,7 @@ package com.tw.dubbo.common.extension;
 
 import com.tw.dubbo.common.util.Holder;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -13,9 +14,15 @@ public class ExtensionLoader<T>  {
 
     private final ConcurrentMap<String, Holder<Object>> cachedInstances = new ConcurrentHashMap<String, Holder<Object>>();
 
+    private final Class<?> type;
+
+    private final Holder<Map<String, Class<?>>> cachedClasses = new Holder<>();
+
+
     private static final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
 
     public ExtensionLoader(Class<T> type) {
+        this.type = type;
     }
 
     public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> type) {
@@ -49,4 +56,44 @@ public class ExtensionLoader<T>  {
         Object instance = holder.get();
         return (T) instance;
     }
+
+
+    public boolean hasExtension(String name) {
+        if (name == null || name.length() == 0)
+            throw new IllegalArgumentException("Extension name == null");
+        try {
+            this.getExtensionClass(name);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+
+    private Class<?> getExtensionClass(String name) {
+        if (type == null)
+            throw new IllegalArgumentException("Extension type == null");
+        if (name == null)
+            throw new IllegalArgumentException("Extension name == null");
+        Class<?> clazz = getExtensionClasses().get(name);
+        if (clazz == null)
+            throw new IllegalStateException("No such extension \"" + name + "\" for " + type.getName() + "!");
+        return clazz;
+    }
+
+    private Map<String, Class<?>> getExtensionClasses() {
+
+        Map<String, Class<?>> classes = cachedClasses.get();
+        if (classes == null) {
+            synchronized (cachedClasses) {
+                classes = cachedClasses.get();
+//                if (classes == null) {
+//                    classes = loadExtensionClasses();
+//                    cachedClasses.set(classes);
+//                }
+            }
+        }
+        return classes;
+    }
+
 }
