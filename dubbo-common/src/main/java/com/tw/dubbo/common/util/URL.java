@@ -1,6 +1,7 @@
 package com.tw.dubbo.common.util;
 
 import java.io.Serializable;
+import java.net.InetSocketAddress;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -122,6 +123,10 @@ public class URL implements Serializable {
         }
         return buf.toString();
     }
+    public InetSocketAddress toInetSocketAddress() {
+        return new InetSocketAddress(host, port);
+    }
+
 
 
     public URL(String protocol, String username, String password, String host, int port, String path, Map<String, String> parameters) {

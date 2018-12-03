@@ -1,6 +1,6 @@
 package com.tw.dubbo.rpc;
 
-import com.tw.dubbo.remoting.RemotingException;
+import com.tw.dubbo.remoting.exception.RemotingException;
 
 /**
  * @author tangwei
