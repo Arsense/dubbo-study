@@ -1,4 +1,7 @@
-package com.tw.dubbo.remoting;
+package com.tw.dubbo.remoting.exchange;
+
+import com.tw.dubbo.remoting.Server;
+import com.tw.dubbo.remoting.exchange.ExchangeChannel;
 
 import java.util.Collection;
 

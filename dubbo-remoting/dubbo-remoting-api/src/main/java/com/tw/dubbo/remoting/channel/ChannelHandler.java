@@ -1,4 +1,4 @@
-package com.tw.dubbo.remoting;
+package com.tw.dubbo.remoting.channel;
 
 /**
  * @author tangwei

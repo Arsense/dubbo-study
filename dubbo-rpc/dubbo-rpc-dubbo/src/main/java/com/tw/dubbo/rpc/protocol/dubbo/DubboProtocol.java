@@ -2,9 +2,11 @@ package com.tw.dubbo.rpc.protocol.dubbo;
 
 import com.tw.dubbo.common.extension.ExtensionLoader;
 import com.tw.dubbo.common.util.URL;
-import com.tw.dubbo.remoting.ExchangeServer;
-import com.tw.dubbo.remoting.Exchangers;
-import com.tw.dubbo.remoting.Transporter;
+import com.tw.dubbo.remoting.*;
+import com.tw.dubbo.remoting.exchange.ExchangeHandler;
+import com.tw.dubbo.remoting.exchange.ExchangeHandlerAdapter;
+import com.tw.dubbo.remoting.exchange.ExchangeServer;
+import com.tw.dubbo.remoting.exchange.Exchangers;
 import com.tw.dubbo.rpc.Exporter;
 import com.tw.dubbo.rpc.Invoker;
 import com.tw.dubbo.rpc.RpcException;
@@ -22,12 +24,14 @@ public class DubboProtocol extends AbstractProtocol {
     //server存放map
     private final Map<String, ExchangeServer> serverMap = new ConcurrentHashMap<>();
 
+    private ExchangeHandler requestHandler = new ExchangeHandlerAdapter();
+
+    protected final Map<String, Exporter<?>> exporterMap = new ConcurrentHashMap<String, Exporter<?>>();
+
     @Override
     public int getDefaultPort() {
         return 0;
     }
-
-    protected final Map<String, Exporter<?>> exporterMap = new ConcurrentHashMap<String, Exporter<?>>();
     /**
      * 发布相关的service
      * @param invoker

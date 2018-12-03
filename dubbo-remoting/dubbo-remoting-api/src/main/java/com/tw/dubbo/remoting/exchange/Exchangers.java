@@ -1,8 +1,9 @@
-package com.tw.dubbo.remoting;
+package com.tw.dubbo.remoting.exchange;
 
 
 import com.tw.dubbo.common.extension.ExtensionLoader;
 import com.tw.dubbo.common.util.URL;
+import com.tw.dubbo.remoting.RemotingException;
 
 /**
  * @author tangwei

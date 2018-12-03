@@ -1,5 +1,7 @@
 package com.tw.dubbo.remoting;
 
+import com.tw.dubbo.remoting.channel.Channel;
+
 import java.util.Collection;
 
 /**
