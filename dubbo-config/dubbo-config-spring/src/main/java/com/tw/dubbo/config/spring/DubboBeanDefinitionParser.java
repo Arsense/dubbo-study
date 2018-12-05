@@ -50,8 +50,17 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
     }
 
     //其实整个原理如  bean.addPropertyValue("serviceItf", Class.forName(serviceItf));
-    //            String serviceItf = element.getAttribute("interface");
+    //              String serviceItf = element.getAttribute("interface");
     //这里是先把property遍历生成 然后去 遍历attibut匹配赋值的
+
+    /**
+     * 从xml获取值配置到Bean中
+     * @param element
+     * @param parserContext
+     * @param beanClass
+     * @param required
+     * @return
+     */
     private static BeanDefinition parse(Element element, ParserContext parserContext
             , Class<?> beanClass, boolean required){
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
@@ -68,7 +77,6 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
             if (generatedBeanName == null || generatedBeanName.length() == 0) {
                 generatedBeanName = element.getAttribute("interface");
             }
-
             if (generatedBeanName == null || generatedBeanName.length() == 0) {
                 generatedBeanName = beanClass.getName();
             }
@@ -80,7 +88,6 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         //这里注册到beanNames当中
         parserContext.getRegistry().registerBeanDefinition(id, beanDefinition);
         beanDefinition.getPropertyValues().addPropertyValue("id", id);
-
 
         if (ProtocolConfig.class.equals(beanClass)) {
             //如果是协议配置
