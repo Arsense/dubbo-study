@@ -12,4 +12,7 @@
     <bean id="demoService" class="com.tw.dubbo.demo.provider.DemoServiceImpl"/>
 
     <dubbo:service interface="com.tw.dubbo.demo.DemoService" ref="demoService"/>
+
+    <!-- use dubbo protocol to export service on port 20880 -->
+    <dubbo:protocol name="dubbo" port="20880"/>
 </beans>

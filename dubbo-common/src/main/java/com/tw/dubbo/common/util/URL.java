@@ -154,8 +154,6 @@ public class URL implements Serializable {
 
 
     public URL(String protocol, String username, String password, String host, int port, String path, Map<String, String> parameters) {
-
-
         if ((username == null || username.length() == 0)
                 && password != null && password.length() > 0) {
             throw new IllegalArgumentException("Invalid url, password without username!");
@@ -182,8 +180,39 @@ public class URL implements Serializable {
         this(protocol, null, null, host, port, path, parameters);
     }
 
-    public static URL valueOf(String url) {
-        return new URL();
+    public static URL valueOfUrl(String url) {
+        //初始化构建URL
+        if (url == null || (url = url.trim()).length() == 0) {
+            throw new IllegalArgumentException("url == null");
+        }
+        String protocol = null;
+        String username = null;
+        String password = null;
+        String host = null;
+        int port = 0;
+        String path = null;
+        // 有木有传参
+        int i = url.indexOf("?");
+        Map<String, String> parameters = null;
+        if (i >= 0) {
+
+        } else {
+            i = url.indexOf("://");
+            if (i == 0) throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+            protocol = url.substring(0, i);
+            //越过 ://
+            url = url.substring(i + 3);
+        }
+
+        i = url.indexOf(":");
+        if (i >= 0 && i < url.length() - 1) {
+            port = Integer.parseInt(url.substring(i + 1));
+            url = url.substring(0, i);
+        }
+        if (url.length() > 0) host = url;
+
+        return new URL(protocol, username, password, host, port, path, parameters);
+
     }
 
     public String getAddress() {

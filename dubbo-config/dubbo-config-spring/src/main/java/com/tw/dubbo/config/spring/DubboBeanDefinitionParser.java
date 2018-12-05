@@ -3,7 +3,6 @@ package com.tw.dubbo.config.spring;
 import com.tw.dubbo.common.util.StringUtils;
 import com.tw.dubbo.config.ProtocolConfig;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.TypedStringValue;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
@@ -68,7 +67,7 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         //设置懒加载 false就是立即加载beanDefinition
         beanDefinition.setLazyInit(false);
 
-        if("dubbo:registry".equals(element.getTagName())){
+        if("dubbo:protocol".equals(element.getTagName())){
             int a = 1;
         }
 
@@ -85,7 +84,6 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
             if (generatedBeanName == null || generatedBeanName.length() == 0) {
                 generatedBeanName = beanClass.getName();
             }
-
             id = generatedBeanName;
         }
 //      <bean id="demoService" class="org.apache.dubbo.demo.provider.DemoServiceImpl"/>
@@ -143,7 +141,6 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
 
             }
         }
-
         NamedNodeMap attributes = element.getAttributes();
 
         int len = attributes.getLength();
@@ -151,12 +148,12 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
             Node node = attributes.item(i);
             String name = node.getLocalName();
             if (!props.contains(name)) {
-                if (parameters == null) {
-                    parameters = new ManagedMap();
-                }
-                //把属性中配了值的放到bean的 相关map中去
-                String value = node.getNodeValue();
-                parameters.put(name, new TypedStringValue(value, String.class));
+//                if (parameters == null) {
+//                    parameters = new ManagedMap();
+//                }
+//                //把属性中配了值的放到bean的 相关map中去
+//                String value = node.getNodeValue();
+//                parameters.put(name, new TypedStringValue(value, String.class));
             }
         }
         if (parameters != null) {

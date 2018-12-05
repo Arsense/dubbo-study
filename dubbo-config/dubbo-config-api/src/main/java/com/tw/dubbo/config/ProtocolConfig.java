@@ -11,6 +11,16 @@ public class ProtocolConfig extends AbstractConfig {
     //服务的IP地址
     private String host;
 
+    private  String port;
+
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
 
     public String getHost() {
         return host;

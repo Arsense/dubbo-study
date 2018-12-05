@@ -157,7 +157,7 @@ public class ServiceConfig<T> extends AbstractConfig {
         //这里已经获取到了DemoService的 sayHello函数
         String[] methods = Wrapper.getWrapper(interfaceClass).getMethodNames();
         if (methods.length == 0) {
-            logger.warn("NO method found in service interface " + interfaceClass.getName());
+            logger.warn("没有找到相应的接口实现: " + interfaceClass.getName());
             map.put("methods", "*");
         } else {
             //把数组处理成一个字符串
@@ -191,7 +191,7 @@ public class ServiceConfig<T> extends AbstractConfig {
         //equalsIgnoreCase 忽略大小写
         if (!"injvm".equalsIgnoreCase(url.getProtocol())) {
             //将URL的协议与IP等设置成本地
-            URL local = URL.valueOf(url.toFullString())
+            URL local = URL.valueOfUrl(url.toFullString())
                     .setProtocol("injvm")
                     .setHost("127.0.0.1")
                     .setPort(0);
@@ -227,6 +227,11 @@ public class ServiceConfig<T> extends AbstractConfig {
                 map.put("dubbo", Version.getProtocolVersion());
                 //时间粗
                 map.put(Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
+                //拼接协议
+                if (!map.containsKey("protocol")) {
+                    map.put("protocol", "dubbo");
+                }
+
                 List<URL> urls = UrlUtils.parseURLs(address, map);
                 for (URL url : urls) {
 //                    url = url.addParameter(Constants.REGISTRY_KEY, url.getProtocol());

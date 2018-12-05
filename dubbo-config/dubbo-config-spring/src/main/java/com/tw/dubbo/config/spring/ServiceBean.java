@@ -39,7 +39,7 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
      */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-
+        this.applicationContext = applicationContext;
     }
 
 
@@ -172,7 +172,7 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
             }
         }
 
-        export();
+//        export();
 
     }
 
@@ -183,9 +183,9 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
      */
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-//        logger.info("The service ready on spring started. service: " + getInterface());
+        logger.info("Service启动完成. service: " + getInterface());
         //Spring对所配置文件的配置和Bean准备装载OK 继续到下一步
-          export();
+        export();
     }
 
 

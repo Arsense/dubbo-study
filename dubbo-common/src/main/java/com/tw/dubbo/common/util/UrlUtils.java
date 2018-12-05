@@ -51,6 +51,7 @@ public class UrlUtils {
         int defaultPort = StringUtils.parseInteger(defaults == null ? null : defaults.get("port"));
         String defaultPath = defaults == null ? null : defaults.get("path");
         Map<String, String> defaultParameters = defaults == null ? null : new HashMap<String, String>(defaults);
+        //这里remove是什么操作？
         if (defaultParameters != null) {
             defaultParameters.remove("protocol");
             defaultParameters.remove("username");
@@ -59,7 +60,7 @@ public class UrlUtils {
             defaultParameters.remove("port");
             defaultParameters.remove("path");
         }
-        URL u = URL.valueOf(url);
+        URL u = URL.valueOfUrl(url);
         boolean changed = false;
         String protocol = u.getProtocol();
         String username = u.getUsername();
