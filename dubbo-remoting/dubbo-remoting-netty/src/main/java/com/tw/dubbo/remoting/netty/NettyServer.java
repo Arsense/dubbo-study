@@ -7,7 +7,6 @@ import com.tw.dubbo.remoting.Server;
 import com.tw.dubbo.remoting.channel.Channel;
 import com.tw.dubbo.remoting.channel.ChannelHandler;
 import com.tw.dubbo.remoting.exception.RemotingException;
-import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelPipeline;
@@ -16,7 +15,6 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,14 +43,15 @@ public class NettyServer extends AbstractServer implements Server {
         bootstrap = new ServerBootstrap(channelFactory);
 
         final NettyHandler nettyHandler = new NettyHandler(url, this);
-        channels = nettyHandler.getChannels();
+//        channels = nettyHandler.getChannels();
         bootstrap.setOption("child.tcpNoDelay", true);
         bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
             //添加配置Handler和解码器
             @Override
             public ChannelPipeline getPipeline() throws Exception {
                 //
-                NettyCodecAdapter adapter = new NettyCodecAdapter(getCodec(), getUrl(), NettyServer.this);
+//                NettyCodecAdapter adapter = new NettyCodecAdapter(getCodec(), getUrl(), NettyServer.this);
+                NettyCodecAdapter adapter = new NettyCodecAdapter();
                 ChannelPipeline pipeline = Channels.pipeline();
                 pipeline.addLast("decoder", adapter.getDecoder());
                 pipeline.addLast("encoder", adapter.getEncoder());

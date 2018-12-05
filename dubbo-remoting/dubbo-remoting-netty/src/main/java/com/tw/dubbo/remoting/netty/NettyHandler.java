@@ -61,7 +61,7 @@ public class NettyHandler extends SimpleChannelHandler {
         super.channelConnected(ctx, e);
     }
 
-    private final ChannelHandler handler;
+    private final ChannelHandler handler = null;
 
     public NettyHandler(URL url, NettyServer nettyServer) {
         if (url == null) {
@@ -71,6 +71,6 @@ public class NettyHandler extends SimpleChannelHandler {
             throw new IllegalArgumentException("handler == null");
         }
         this.url = url;
-        this.handler = handler;
+//        this.handler = handler;
     }
 }
