@@ -2,6 +2,7 @@ package com.tw.dubbo.config.spring;
 
 import com.tw.dubbo.config.ConsumerConfig;
 import com.tw.dubbo.config.ProviderConfig;
+import com.tw.dubbo.config.RegistryConfig;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
@@ -20,5 +21,6 @@ public class DubboNamespaceHandler  extends NamespaceHandlerSupport {
         registerBeanDefinitionParser("consumer", new DubboBeanDefinitionParser(ConsumerConfig.class, true));
         //provider配置里面
         registerBeanDefinitionParser("service", new DubboBeanDefinitionParser(ServiceBean.class, true));
+        registerBeanDefinitionParser("registry", new DubboBeanDefinitionParser(RegistryConfig.class, true));
     }
 }

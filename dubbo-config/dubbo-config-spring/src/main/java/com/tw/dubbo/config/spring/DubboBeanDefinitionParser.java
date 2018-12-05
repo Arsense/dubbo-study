@@ -67,6 +67,11 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         beanDefinition.setBeanClass(beanClass);
         //设置懒加载 false就是立即加载beanDefinition
         beanDefinition.setLazyInit(false);
+
+        if("dubbo:registry".equals(element.getTagName())){
+            int a = 1;
+        }
+
         //从xml取出 id=""后面的值
         String id = element.getAttribute("id");
         //没有Id 可能是<dubbo:protocol name="dubbo" port="20880"/>
@@ -159,4 +164,6 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         }
         return beanDefinition;
     }
+
+
 }

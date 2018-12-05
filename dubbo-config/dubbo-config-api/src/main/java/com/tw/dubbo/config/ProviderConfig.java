@@ -6,10 +6,9 @@ import java.util.List;
  * @author tangwei
  * @date 2018/11/27 14:03
  */
-public class ProviderConfig {
+public class ProviderConfig  extends AbstractConfig{
 
-    // if it's default
-    private Boolean isDefault;
+
 
     protected Boolean export;
 
@@ -54,10 +53,6 @@ public class ProviderConfig {
         this.protocols = protocols;
     }
 
-    public Boolean getDefault() {
-        return isDefault;
-    }
-
     public Boolean getExport() {
         return export;
     }
@@ -66,11 +61,5 @@ public class ProviderConfig {
         this.export = export;
     }
 
-    public Boolean isDefault() {
-        return isDefault;
-    }
 
-    public void setDefault(Boolean aDefault) {
-        isDefault = aDefault;
-    }
 }

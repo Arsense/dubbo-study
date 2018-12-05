@@ -17,27 +17,27 @@ import java.util.*;
 import static com.tw.dubbo.common.util.NetUtils.isInvalidLocalHost;
 
 /**
+ *
+ *
  * @author tangwei
  * @date 2018/11/27 14:25
  */
-public class ServiceConfig<T>  {
+public class ServiceConfig<T> extends AbstractConfig {
 
     protected static final Logger logger = LoggerFactory.getLogger(ServiceConfig.class);
-    private static final Protocol protocol =  ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
-    private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
+    private static final Protocol protocol =
+            ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
 
-    public ServiceConfig() {
-    }
+    private static final ProxyFactory proxyFactory =
+            ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
 
-    protected String id;
-
+    public ServiceConfig() {}
 
     // 接口实现
     private T ref;
     //发布接口集合
     private final List<Exporter<?>> exporters = new ArrayList<Exporter<?>>();
 
-    private Boolean isDefault;
     //集群协议列表
     protected List<ProtocolConfig> protocols;
     //提供者
@@ -45,9 +45,11 @@ public class ServiceConfig<T>  {
     //是否发布接口
     protected Boolean export;
 
-    protected Boolean exported;
+    protected Boolean exported = false;
 
     protected ApplicationConfig application;
+
+    private transient volatile boolean unexported = false;
 
     // registry centers
     protected List<RegistryConfig> registries;
@@ -83,6 +85,10 @@ public class ServiceConfig<T>  {
 
     protected synchronized void doExport() {
         //是否已经发布 防止多次发布
+        if (unexported) {
+            throw new IllegalStateException("Already unexported!");
+        }
+
         if (exported) {
             return;
         }
@@ -112,6 +118,7 @@ public class ServiceConfig<T>  {
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
+        //TODO 检查基础配置是否OK
 //        检查接口的方法 不检查会怎样
 //        checkInterfaceAndMethods(interfaceClass, methods);
 //        checkRef();  检查ref 与我们的bean的interface匹配不
@@ -122,6 +129,10 @@ public class ServiceConfig<T>  {
     private void doExportUrls() {
         List<URL> registryURLs = loadRegistries(true);
         //因为可能有多个接口 所以是protocols
+        //后面只要这里check了 就不用 检查了 临时的
+        if (protocols == null) {
+            throw new RuntimeException("protocols 未初始化");
+        }
         for (ProtocolConfig protocolConfig : protocols) {
             doExportUrlsForProtocol(protocolConfig, registryURLs);
         }
@@ -346,13 +357,7 @@ public class ServiceConfig<T>  {
         this.path = path;
     }
 
-    public Boolean getDefault() {
-        return isDefault;
-    }
 
-    public void setDefault(Boolean aDefault) {
-        isDefault = aDefault;
-    }
 
     public List<ProtocolConfig> getProtocols() {
         return protocols;
@@ -426,13 +431,6 @@ public class ServiceConfig<T>  {
         this.monitor = monitor;
     }
 
-    public Boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
-    }
 
     public T getRef() {
         return ref;

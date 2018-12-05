@@ -5,7 +5,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
  http://www.ares-remoting.com/schema/ares-service http://www.ares-remoting.com/schema/ares-service.xsd">
 
-
+    <!-- zk中心配置-->
+    <!-- use multicast registry center to export service -->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
     <!--提供服务的Bean-->
     <bean id="demoService" class="com.tw.dubbo.demo.provider.DemoServiceImpl"/>
 
