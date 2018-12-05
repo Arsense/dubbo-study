@@ -21,25 +21,25 @@ public class StringUtils {
         if (camelName == null || camelName.length() == 0) {
             return camelName;
         }
-        StringBuilder buffer = null;
-        // 碰到大写换小写 然后加入分隔符
+        StringBuilder buf = null;
         for (int i = 0; i < camelName.length(); i++) {
             char ch = camelName.charAt(i);
             if (ch >= 'A' && ch <= 'Z') {
-                if (buffer == null) {
-                    buffer = new StringBuilder();
+                if (buf == null) {
+                    buf = new StringBuilder();
                     if (i > 0) {
-                        buffer.append(camelName.substring(0, i));
+                        buf.append(camelName.substring(0, i));
                     }
                 }
                 if (i > 0) {
-                    buffer.append(split);
+                    buf.append(split);
                 }
-            } else if (buffer != null) {
-                buffer.append(ch);
+                buf.append(Character.toLowerCase(ch));
+            } else if (buf != null) {
+                buf.append(ch);
             }
         }
-        return buffer == null ? camelName : buffer.toString();
+        return buf == null ? camelName : buf.toString();
     }
 
 

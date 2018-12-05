@@ -68,6 +68,10 @@
                     <![CDATA[ The service implementation instance bean id. ]]></xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
-
+        <xsd:attribute name="provider" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[ Deprecated. Replace to protocol. ]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
     </xsd:complexType>
 </xsd:schema>

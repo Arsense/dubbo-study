@@ -1,9 +1,5 @@
 package com.tw.dubbo.config;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.*;
-
 import com.tw.dubbo.common.bytecode.Wrapper;
 import com.tw.dubbo.common.extension.ExtensionLoader;
 import com.tw.dubbo.common.util.*;
@@ -13,6 +9,10 @@ import com.tw.dubbo.rpc.ProxyFactory;
 import com.tw.dubbo.rpc.ServiceClassContain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.*;
 
 import static com.tw.dubbo.common.util.NetUtils.isInvalidLocalHost;
 
@@ -25,11 +25,17 @@ public class ServiceConfig<T>  {
     protected static final Logger logger = LoggerFactory.getLogger(ServiceConfig.class);
     private static final Protocol protocol =  ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
     private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
+
+    public ServiceConfig() {
+    }
+
+    protected String id;
+
+
     // 接口实现
     private T ref;
     //发布接口集合
     private final List<Exporter<?>> exporters = new ArrayList<Exporter<?>>();
-
 
     private Boolean isDefault;
     //集群协议列表
@@ -434,6 +440,14 @@ public class ServiceConfig<T>  {
 
     public void setRef(T ref) {
         this.ref = ref;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

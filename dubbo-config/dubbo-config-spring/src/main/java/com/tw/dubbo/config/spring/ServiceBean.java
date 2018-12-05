@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +27,10 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
 
     private  String beanName;
 
+    public ServiceBean() {
+        super();
+//        this.service = null;
+    }
 
     /**
      * Spring 上下背景文设置 主要是版本的兼容问题
@@ -186,7 +189,13 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
     }
 
 
+    public String getBeanName() {
+        return beanName;
+    }
 
+    public void setBeanName(String beanName) {
+        this.beanName = beanName;
+    }
 
 
 

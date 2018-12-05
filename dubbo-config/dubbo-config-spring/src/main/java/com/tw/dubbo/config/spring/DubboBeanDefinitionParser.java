@@ -1,5 +1,6 @@
 package com.tw.dubbo.config.spring;
 
+import com.tw.dubbo.common.util.StringUtils;
 import com.tw.dubbo.config.ProtocolConfig;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.TypedStringValue;
@@ -8,12 +9,10 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
-import com.tw.dubbo.common.util.StringUtils;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,7 +49,9 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         return parse(element, parserContext, beanClass, required);
     }
 
-
+    //其实整个原理如  bean.addPropertyValue("serviceItf", Class.forName(serviceItf));
+    //            String serviceItf = element.getAttribute("interface");
+    //这里是先把property遍历生成 然后去 遍历attibut匹配赋值的
     private static BeanDefinition parse(Element element, ParserContext parserContext
             , Class<?> beanClass, boolean required){
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
@@ -89,10 +90,9 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         }
         //所有属性的集合
         Set<String> props = new HashSet<String>();
-        //属性和配置对应的值
+        //把ServiceBean中所有的方法放进去 props里面 后面好匹配遍历
         ManagedMap parameters = null;
         for (Method setter : beanClass.getMethods()) {
-            //把配置文件的中的值 set到相应的属性当中
             String name = setter.getName();
             //如果有私有属性会报错吧
             if(name.length() > 3 && name.startsWith("set")
@@ -101,7 +101,7 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
                 Class<?> type = setter.getParameterTypes()[0];
                 //取出 setAge 后面age
                 String property = StringUtils.camelToSplitName(name.substring(3, 4).toLowerCase() + name.substring(4), "-");
-                props.add("test");
+                props.add(property);
                 //设置setter
                 Method getter = null;
                 try {
@@ -116,6 +116,19 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
                         || !type.equals(getter.getReturnType())) {
                     continue;
                 }
+
+                //关键的设置属性的步骤
+                String value = element.getAttribute(property);
+                if (value != null) {
+                    value = value.trim();
+                    if (value.length() > 0) {
+                       Object reference;
+                       reference = value;
+                       //主要设置属性走这
+                       beanDefinition.getPropertyValues().addPropertyValue(property, reference);
+                    }
+                }
+
             }
         }
 
