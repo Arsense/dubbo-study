@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class URL implements Serializable {
 
-    private   String full;
+    private String full;
 
     private final String protocol;
 

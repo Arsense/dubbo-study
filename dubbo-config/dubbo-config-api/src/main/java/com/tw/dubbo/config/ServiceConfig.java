@@ -172,12 +172,12 @@ public class ServiceConfig<T> extends AbstractConfig {
         URL url = new URL(name, host, port, (contextPath == null || contextPath.length() == 0 ? "" : contextPath + "/") + path, map);
         exportLocal(url);
         String scope = null;
-        if (!"local".equalsIgnoreCase(scope)){
-            if (registryURLs != null && !registryURLs.isEmpty()) {
-
-            }
-
-        }
+//        if (!"local".equalsIgnoreCase(scope)){
+//            if (registryURLs != null && !registryURLs.isEmpty()) {
+//
+//            }
+//
+//        }
 
 
 
