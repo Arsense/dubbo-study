@@ -29,9 +29,8 @@ public abstract class Wrapper {
         //动态类需要处理的
 //        while (ClassGenerator.isDynamicClass(c)) // can not wrapper on dynamic class.
 //            c = c.getSuperclass();
-
-        Wrapper ret = WRAPPER_MAP.computeIfAbsent(c, k -> makeWrapper(c));
-        return ret;
+//
+        return null;
     }
 
     //整个包装不是很明白
@@ -73,7 +72,7 @@ public abstract class Wrapper {
         }
 
 
-
+        return null;
 
 
     }
