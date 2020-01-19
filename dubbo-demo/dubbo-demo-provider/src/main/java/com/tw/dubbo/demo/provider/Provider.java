@@ -10,7 +10,7 @@ import java.io.IOException;
  *
  * </pre>
  *
- * @author tangwei
+ * @author clay
  * @date 2018/11/27 12:15
  */
 public class Provider {

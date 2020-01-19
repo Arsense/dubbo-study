@@ -5,7 +5,7 @@ import com.tw.dubbo.common.util.URL;
 /**
  * 反射类
  *
- * @author tangwei
+ * @author clay
  * @date 2018/11/30 14:57
  */
 public interface Invoker<T>  {

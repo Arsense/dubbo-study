@@ -1,7 +1,7 @@
 package com.tw.dubbo.config;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/28 0:08
  */
 public class ProtocolConfig extends AbstractConfig {

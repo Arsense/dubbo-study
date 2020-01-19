@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/30 15:08
  */
 public class DubboProtocol extends AbstractProtocol {

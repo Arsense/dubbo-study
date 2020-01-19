@@ -7,7 +7,7 @@ import com.tw.dubbo.rpc.*;
  * 协议发布的抽象类
  *
  *
- * @author tangwei
+ * @author clay
  * @date 2018/12/3 9:41
  */
 public class AbstractProtocol implements Protocol {

@@ -8,7 +8,7 @@ import com.tw.dubbo.remoting.Server;
 import java.util.Collection;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/12/3 11:20
  */
 public class HeaderExchangeServer  implements ExchangeServer {

@@ -19,7 +19,7 @@ import java.util.Set;
  * <pre>
  *     这里解析xml配置成bean
  * </pre>
- * @author tangwei
+ * @author clay
  * @date 2018/11/27 13:59
  */
 public class DubboBeanDefinitionParser implements BeanDefinitionParser {

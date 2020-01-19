@@ -1,13 +1,15 @@
 package com.tw.dubbo.common.util;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/29 10:32
  */
 public class URL implements Serializable {
@@ -301,5 +303,16 @@ public class URL implements Serializable {
 
     public void setString(String string) {
         this.string = string;
+    }
+
+    public static String encode(String value) {
+        if (StringUtils.isEmpty(value)) {
+            return "";
+        }
+        try {
+            return URLEncoder.encode(value, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 }

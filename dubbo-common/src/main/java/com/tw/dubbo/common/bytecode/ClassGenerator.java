@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 类的相关处理类
  *
- * @author tangwei
+ * @author clay
  * @date 2018/11/29 13:38
  */
 public class ClassGenerator {

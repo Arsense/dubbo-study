@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/27 14:53
  */
 public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBean,ApplicationContextAware,

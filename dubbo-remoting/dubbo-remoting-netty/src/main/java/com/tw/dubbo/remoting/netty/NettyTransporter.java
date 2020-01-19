@@ -8,7 +8,7 @@ import com.tw.dubbo.remoting.channel.ChannelHandler;
 import com.tw.dubbo.remoting.exception.RemotingException;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/12/3 12:06
  */
 public class NettyTransporter  implements Transporter {

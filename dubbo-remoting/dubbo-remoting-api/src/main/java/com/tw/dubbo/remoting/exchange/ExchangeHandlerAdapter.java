@@ -4,7 +4,7 @@ import com.tw.dubbo.remoting.exception.RemotingException;
 import com.tw.dubbo.remoting.channel.Channel;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/12/3 11:06
  */
 public class ExchangeHandlerAdapter implements ExchangeHandler {

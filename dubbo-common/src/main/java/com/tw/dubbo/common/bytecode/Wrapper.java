@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/29 11:35
  */
 public abstract class Wrapper {

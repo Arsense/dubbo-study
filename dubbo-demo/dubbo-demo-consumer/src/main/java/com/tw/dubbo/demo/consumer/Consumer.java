@@ -4,7 +4,7 @@ import com.tw.dubbo.demo.DemoService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/27 12:15
  */
 public class Consumer {

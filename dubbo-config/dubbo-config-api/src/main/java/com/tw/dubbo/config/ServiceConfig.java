@@ -19,7 +19,7 @@ import static com.tw.dubbo.common.util.NetUtils.isInvalidLocalHost;
 /**
  *
  *
- * @author tangwei
+ * @author clay
  * @date 2018/11/27 14:25
  */
 public class ServiceConfig<T> extends AbstractConfig {

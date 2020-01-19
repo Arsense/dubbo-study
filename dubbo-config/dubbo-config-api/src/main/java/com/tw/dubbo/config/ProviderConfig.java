@@ -3,7 +3,7 @@ package com.tw.dubbo.config;
 import java.util.List;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/27 14:03
  */
 public class ProviderConfig  extends AbstractConfig{

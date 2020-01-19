@@ -7,7 +7,7 @@ import com.tw.dubbo.rpc.protocol.AbstractExporter;
 import java.util.Map;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/30 16:19
  */
 public class DubboExporter<T> extends AbstractExporter<T> {

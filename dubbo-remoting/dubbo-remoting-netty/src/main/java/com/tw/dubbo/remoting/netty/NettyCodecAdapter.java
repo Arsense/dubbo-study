@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/12/5 12:20
  */
 public class NettyCodecAdapter {

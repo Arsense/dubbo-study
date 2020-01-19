@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/29 14:51
  */
 public class ExtensionLoader<T>  {

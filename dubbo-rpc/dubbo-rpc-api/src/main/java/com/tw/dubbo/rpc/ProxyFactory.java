@@ -3,7 +3,7 @@ package com.tw.dubbo.rpc;
 import com.tw.dubbo.common.util.URL;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/30 15:12
  */
 public interface ProxyFactory {

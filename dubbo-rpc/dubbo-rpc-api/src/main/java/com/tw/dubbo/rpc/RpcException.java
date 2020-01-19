@@ -3,7 +3,7 @@ package com.tw.dubbo.rpc;
 import com.tw.dubbo.remoting.exception.RemotingException;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/30 14:59
  */
 public class RpcException extends RuntimeException{

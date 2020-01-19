@@ -7,7 +7,7 @@ import com.tw.dubbo.remoting.channel.ChannelHandlerDispatcher;
 import com.tw.dubbo.remoting.exception.RemotingException;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/12/3 11:21
  */
 public class Transporters {

@@ -5,7 +5,7 @@ package com.tw.dubbo.common.util;
  *     临时存放数据的类
  * </pre>
  *
- * @author tangwei
+ * @author clay
  * @date 2018/11/29 15:02
  */
 public class Holder<T> {

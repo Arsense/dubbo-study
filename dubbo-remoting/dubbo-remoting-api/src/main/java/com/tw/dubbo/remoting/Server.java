@@ -5,7 +5,7 @@ import com.tw.dubbo.remoting.channel.Channel;
 import java.util.Collection;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/12/3 10:14
  */
 public interface Server {

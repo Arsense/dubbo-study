@@ -6,7 +6,7 @@ import com.tw.dubbo.remoting.exchange.ExchangeChannel;
 import java.util.Collection;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/12/3 10:13
  */
 public interface ExchangeServer  extends Server {

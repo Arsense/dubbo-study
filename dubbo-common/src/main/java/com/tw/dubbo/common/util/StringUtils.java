@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/28 17:30
  */
 public class StringUtils {
@@ -56,16 +56,30 @@ public class StringUtils {
 
 
     public static String join(Collection<String> coll, String split) {
-        if (coll.isEmpty()) return "";
+        if (coll.isEmpty()) {
+            return "";
+        }
 
         StringBuilder sb = new StringBuilder();
         boolean isFirst = true;
         for (String s : coll) {
-            if (isFirst) isFirst = false;
-            else sb.append(split);
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                sb.append(split);
+            }
             sb.append(s);
         }
         return sb.toString();
     }
 
+    /**
+     * is empty string.
+     *
+     * @param str source string.
+     * @return is empty.
+     */
+    public static boolean isEmpty(String str) {
+        return str == null || str.isEmpty();
     }
+}

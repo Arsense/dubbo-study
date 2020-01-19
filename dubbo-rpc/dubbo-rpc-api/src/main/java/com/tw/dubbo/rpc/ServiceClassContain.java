@@ -1,7 +1,7 @@
 package com.tw.dubbo.rpc;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2018/11/30 10:54
  */
 public class ServiceClassContain {
