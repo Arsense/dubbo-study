@@ -73,6 +73,12 @@ public class StringUtils {
         return sb.toString();
     }
 
+
+    public static boolean isNotEmpty(String str) {
+        return !isEmpty(str);
+    }
+
+
     /**
      * is empty string.
      *
@@ -82,4 +88,6 @@ public class StringUtils {
     public static boolean isEmpty(String str) {
         return str == null || str.isEmpty();
     }
+
+
 }

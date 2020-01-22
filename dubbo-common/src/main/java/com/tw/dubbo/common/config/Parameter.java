@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * 入参配置注解
- * @author tangwei
+ * @author clay
  * @date 2020/1/19 17:02
  */
 @Documented

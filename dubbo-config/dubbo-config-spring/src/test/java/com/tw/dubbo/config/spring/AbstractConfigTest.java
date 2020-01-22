@@ -3,6 +3,8 @@ package com.tw.dubbo.config.spring;
 import com.alibaba.fastjson.JSON;
 import com.tw.dubbo.common.config.Parameter;
 import com.tw.dubbo.config.AbstractConfig;
+import com.tw.dubbo.config.spring.api.Greeting;
+import com.tw.dubbo.config.util.ConfigValidationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -71,9 +73,74 @@ public class AbstractConfigTest {
     }
 
 
+    /**
+     * 测试属性解析  传前缀prefix
+     * @throws Exception
+     */
+    @Test
+    public void testAppendAttributes1() throws Exception {
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        AbstractConfig.appendAttributes(parameters, new AttributeConfig('l', true, (byte) 0x01), "prefix");
+        Assertions.assertEquals('l', parameters.get("prefix.let"));
+        Assertions.assertEquals(true, parameters.get("prefix.activate"));
+        Assertions.assertFalse(parameters.containsKey("prefix.flag"));
+    }
 
 
-    private static class ParameterConfig {
+    /**
+     * 测试属性解析 不传前缀
+     * @throws Exception
+     */
+    @Test
+    public void testAppendAttributes2() throws Exception {
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        AbstractConfig.appendAttributes(parameters, new AttributeConfig('l', true, (byte) 0x01));
+        Assertions.assertEquals('l', parameters.get("let"));
+        Assertions.assertEquals(true, parameters.get("activate"));
+        Assertions.assertFalse(parameters.containsKey("flag"));
+    }
+
+    @Test
+    public void checkExtension() throws Exception {
+        Assertions.assertThrows(IllegalStateException.class, () -> ConfigValidationUtils.checkExtension(Greeting.class, "hello", "world"));
+    }
+
+    @Test
+    public void checkMultiExtension1() throws Exception {
+        Assertions.assertThrows(IllegalStateException.class, () -> ConfigValidationUtils.checkMultiExtension(Greeting.class, "hello", "default,world"));
+    }
+
+    @Test
+    public void checkMultiExtension2() throws Exception {
+        Assertions.assertThrows(IllegalStateException.class, () -> ConfigValidationUtils.checkMultiExtension(Greeting.class, "hello", "default,-world"));
+    }
+
+
+    @Test
+    public void checkLength() throws Exception {
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i <= 200; i++) {
+                builder.append("a");
+            }
+            ConfigValidationUtils.checkLength("hello", builder.toString());
+        });
+    }
+
+    //不太清楚 这些是避免什么场景
+
+    @Test
+    public void checkPathLength() throws Exception {
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i <= 200; i++) {
+                builder.append("a");
+            }
+            ConfigValidationUtils.checkPathLength("hello", builder.toString());
+        });
+    }
+
+        private static class ParameterConfig {
         private int number;
         private String name;
         private int age;
@@ -133,6 +200,44 @@ public class AbstractConfigTest {
 
         public void setSecret(String secret) {
             this.secret = secret;
+        }
+    }
+
+    private static class AttributeConfig {
+        private char letter;
+        private boolean activate;
+        private byte flag;
+
+        public AttributeConfig(char letter, boolean activate, byte flag) {
+            this.letter = letter;
+            this.activate = activate;
+            this.flag = flag;
+        }
+
+        @Parameter(attribute = true, key = "let")
+        public char getLetter() {
+            return letter;
+        }
+
+        public void setLetter(char letter) {
+            this.letter = letter;
+        }
+
+        @Parameter(attribute = true)
+        public boolean isActivate() {
+            return activate;
+        }
+
+        public void setActivate(boolean activate) {
+            this.activate = activate;
+        }
+
+        public byte getFlag() {
+            return flag;
+        }
+
+        public void setFlag(byte flag) {
+            this.flag = flag;
         }
     }
 

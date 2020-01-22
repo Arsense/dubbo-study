@@ -1,7 +1,7 @@
 package com.tw.dubbo.common.util;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/20 15:08
  */
 public class ClassUtils {

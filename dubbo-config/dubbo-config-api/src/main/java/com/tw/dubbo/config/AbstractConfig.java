@@ -28,9 +28,9 @@ public abstract class AbstractConfig implements Serializable {
     protected Boolean isDefault;
 
 
-
     /**
      * 不含前缀的方法
+     *
      * @param parameters
      * @param config
      */
@@ -41,6 +41,7 @@ public abstract class AbstractConfig implements Serializable {
 
     /**
      * 往hashmap中添加符合格式变量
+     *
      * @param parameters
      * @param config
      * @param prefix
@@ -148,8 +149,49 @@ public abstract class AbstractConfig implements Serializable {
         return result;
     }
 
+    @Deprecated
+    public static void appendAttributes(Map<String, Object> parameters, Object config) {
+        appendAttributes(parameters, config, null);
+    }
 
-   public Boolean isDefault() {
+    @Deprecated
+    public static void appendAttributes(Map<String, Object> parameters, Object config, String prefix) {
+        if (config == null) {
+            return;
+        }
+        Method[] methods = config.getClass().getMethods();
+        for (Method method : methods) {
+            try {
+                Parameter parameter = method.getAnnotation(Parameter.class);
+                if (parameter == null || !parameter.attribute()) {
+                    continue;
+                }
+                String name = method.getName();
+                if (MethodUtils.isGetter(method)) {
+                    String key;
+                    if (parameter.key().length() > 0) {
+                        key = parameter.key();
+                    } else {
+                        key = calculateAttributeFromGetter(name);
+                    }
+                    method.setAccessible(true);
+                    Object value = method.invoke(config);
+                    if (value != null) {
+                        if (prefix != null && prefix.length() > 0) {
+                            key = prefix + "." + key;
+                        }
+                        parameters.put(key, value);
+                    }
+                }
+
+            } catch (Exception e) {
+                throw new IllegalStateException(e.getMessage(), e);
+            }
+        }
+
+    }
+
+    public Boolean isDefault() {
         return isDefault;
     }
 
@@ -166,4 +208,10 @@ public abstract class AbstractConfig implements Serializable {
         this.id = id;
     }
 
+
+
+    private static String calculateAttributeFromGetter(String getter) {
+        int i = getter.startsWith("get") ? 3 : 2;
+        return getter.substring(i, i + 1).toLowerCase() + getter.substring(i + 1);
+    }
 }
