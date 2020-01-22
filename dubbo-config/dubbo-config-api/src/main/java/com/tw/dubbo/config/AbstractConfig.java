@@ -1,10 +1,14 @@
 package com.tw.dubbo.config;
 
 import com.tw.dubbo.common.config.Parameter;
+import com.tw.dubbo.common.util.StringUtils;
 import com.tw.dubbo.common.util.URL;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 /**
  * <pre>
@@ -21,13 +25,19 @@ public abstract class AbstractConfig implements Serializable {
     /**
      *
      */
-    private Boolean isDefault;
+    protected Boolean isDefault;
 
-    private static class ParameterConfig {
-        ParameterConfig() {
 
-        }
+
+    /**
+     * 不含前缀的方法
+     * @param parameters
+     * @param config
+     */
+    public static void appendParameters(Map<String, String> parameters, Object config) {
+        appendParameters(parameters, config, null);
     }
+
 
     /**
      * 往hashmap中添加符合格式变量
@@ -35,18 +45,19 @@ public abstract class AbstractConfig implements Serializable {
      * @param config
      * @param prefix
      */
-    public static void appendParameters(Map<String, String> parameters, Object config, String prefix){
+    public static void appendParameters(Map<String, String> parameters, Object config, String prefix) {
         if (config == null) {
             return;
         }
         Method[] methods = config.getClass().getMethods();
         for (Method method : methods) {
 
-
             try {
                 if (MethodUtils.isGetter(method)) {
                     Parameter parameter = method.getAnnotation(Parameter.class);
                     String key = null;
+                    String name = method.getName();
+
                     //注解返利类是Object对象的 或者配置exclued属性的直接跳过
                     if (method.getReturnType() == Object.class || parameter != null && parameter.excluded()) {
                         continue;
@@ -54,10 +65,13 @@ public abstract class AbstractConfig implements Serializable {
                     if (parameter != null && parameter.key().length() > 0) {
                         key = parameter.key();
                     } else {
-                        System.out.println(method.getName() + "没有配置注解");
-//                key = calculatePropertyFromGetter(name);
+                        //"没有配置注解"
+                        key = calculatePropertyFromGetter(name);
                     }
                     //调用方法获取值
+                    //TODO 源码没有权限
+                    method.setAccessible(true);
+
                     Object value = method.invoke(config);
                     String str = String.valueOf(value).trim();
                     if (value != null && str.length() > 0) {
@@ -81,12 +95,12 @@ public abstract class AbstractConfig implements Serializable {
                     } else if (parameter != null && parameter.required()) {
                         throw new IllegalStateException(config.getClass().getSimpleName() + "." + key + " == null");
                     }
+                } else if (isParametersGetter(method)) {
+                    //处理
+                    method.setAccessible(true);
+                    Map<String, String> map = (Map<String, String>) method.invoke(config, new Object[0]);
+                    parameters.putAll(convert(map, prefix));
                 }
-//                } else if (isParametersGetter(method)) {
-//                    //处理
-//                    Map<String, String> map = (Map<String, String>) method.invoke(config, new Object[0]);
-//                    parameters.putAll(convert(map, prefix));
-//                }
 
 
             } catch (Exception e) {
@@ -98,8 +112,44 @@ public abstract class AbstractConfig implements Serializable {
 
     }
 
+    private static String calculatePropertyFromGetter(String name) {
+        //可能是get 就3开头 is 2
+        int i = name.startsWith("get") ? 3 : 2;
+        return StringUtils.camelToSplitName(name.substring(i, i + 1).toLowerCase() + name.substring(i + 1), ".");
+    }
 
-    public Boolean isDefault() {
+    private static boolean isParametersGetter(Method method) {
+        String name = method.getName();
+        return ("getParameters".equals(name)
+                && Modifier.isPublic(method.getModifiers())
+                && method.getParameterTypes().length == 0
+                && method.getReturnType() == Map.class);
+    }
+
+    private static Map<String, String> convert(Map<String, String> parameters, String prefix) {
+        if (parameters == null || parameters.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        Map<String, String> result = new HashMap<>();
+
+        // prefix 为空 就是空格, 非空则是 prefix.
+        String pre = (prefix != null && prefix.length() > 0 ? prefix + "." : "");
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            result.put(pre + key, value);
+            // For compatibility, key like "registry-type" will has a duplicate key "registry.type"
+            //将 - 替换 .
+            if (key.contains("-")) {
+                result.put(pre + key.replace('-', '.'), value);
+            }
+        }
+
+        return result;
+    }
+
+
+   public Boolean isDefault() {
         return isDefault;
     }
 

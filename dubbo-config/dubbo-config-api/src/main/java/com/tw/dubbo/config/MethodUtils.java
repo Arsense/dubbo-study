@@ -1,5 +1,7 @@
 package com.tw.dubbo.config;
 
+import com.tw.dubbo.common.util.ClassUtils;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -19,7 +21,7 @@ public class MethodUtils {
                 && !"get".equals(name) && !"is".equals(name)
                 && !"getClass".equals(name) && !"getObject".equals(name)
                 && Modifier.isPublic(method.getModifiers())
-                && method.getParameterTypes().length == 0;
-//                && ClassUtils.isPrimitive(method.getReturnType())
+                && method.getParameterTypes().length == 0
+                && ClassUtils.isPrimitive(method.getReturnType());
     }
 }

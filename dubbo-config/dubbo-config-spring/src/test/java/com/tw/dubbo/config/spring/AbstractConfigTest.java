@@ -3,11 +3,13 @@ package com.tw.dubbo.config.spring;
 import com.alibaba.fastjson.JSON;
 import com.tw.dubbo.common.config.Parameter;
 import com.tw.dubbo.config.AbstractConfig;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * @author clay
@@ -20,8 +22,10 @@ public class AbstractConfigTest {
      * @throws Exception
      */
     @Test
-    public void testAppendParameters1() throws Exception {
-        Map<String, String> parameters = new HashMap<String, String>();
+    public void testAppendParameters1() {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("num", "ONE");
+
         AbstractConfig.appendParameters(parameters, new ParameterConfig(1, "hello/world", 30, "password"), "prefix");
 
         System.out.println("testAppendParameters1结果是================="
@@ -35,9 +39,40 @@ public class AbstractConfigTest {
         Assertions.assertTrue(parameters.containsKey("prefix.key.2"));
         Assertions.assertFalse(parameters.containsKey("prefix.secret"));
 
-
-
     }
+
+
+    @Test
+    public void testAppendParameters2() throws Exception {
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            Map<String, String> parameters = new HashMap<String, String>();
+            AbstractConfig.appendParameters(parameters, new ParameterConfig());
+        });
+    }
+
+    @Test
+    public void testAppendParameters3() throws Exception {
+        Map<String, String> parameters = new HashMap<String, String>();
+        AbstractConfig.appendParameters(parameters, null);
+        Assert.assertTrue(parameters.isEmpty());
+//        assertTrue();
+    }
+
+    @Test
+    public void testAppendParameters4() throws Exception {
+        Map<String, String> parameters = new HashMap<String, String>();
+
+        AbstractConfig.appendParameters(parameters, new ParameterConfig(1, "hello/world", 30, "password"));
+        Assertions.assertEquals("one", parameters.get("key.1"));
+        Assertions.assertEquals("two", parameters.get("key.2"));
+        Assertions.assertEquals("1", parameters.get("num"));
+        Assertions.assertEquals("hello%2Fworld", parameters.get("naming"));
+        Assertions.assertEquals("30", parameters.get("age"));
+    }
+
+
+
+
     private static class ParameterConfig {
         private int number;
         private String name;
@@ -63,15 +98,22 @@ public class AbstractConfigTest {
             this.number = number;
         }
 
+        @Parameter(key = "naming", append = true, escaped = true, required = true)
         public String getName() {
             return name;
+        }
+
+        public Map getParameters() {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("key.1", "one");
+            map.put("key-2", "two");
+            return map;
         }
 
         /**
          *
          * @param name
          */
-        @Parameter(key = "naming", append = true, escaped = true, required = true)
         public void setName(String name) {
             this.name = name;
         }
