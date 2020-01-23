@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.tw.dubbo.config.constants.CommonConstants.REMOVE_VALUE_PREFIX;
-import static com.tw.dubbo.config.constants.CommonConstants.DEFAULT_KEY;
+import static com.tw.dubbo.common.constants.CommonConstants.REMOVE_VALUE_PREFIX;
+import static com.tw.dubbo.common.constants.CommonConstants.DEFAULT_KEY;
 
 /**
  * config校验工具类

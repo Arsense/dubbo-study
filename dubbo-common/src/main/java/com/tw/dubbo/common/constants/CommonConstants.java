@@ -1,4 +1,4 @@
-package com.tw.dubbo.config.constants;
+package com.tw.dubbo.common.constants;
 
 /**
  *
