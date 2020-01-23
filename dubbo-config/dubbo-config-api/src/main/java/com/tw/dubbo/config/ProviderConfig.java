@@ -1,5 +1,7 @@
 package com.tw.dubbo.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,12 +16,27 @@ public class ProviderConfig  extends AbstractConfig{
 
     protected ApplicationConfig application;
 
-    // registry centers
+    /**
+     * 注册中心信息
+     */
     protected List<RegistryConfig> registries;
 
     protected List<ProtocolConfig> protocols;
 
     private String host;
+
+    /**
+     * 设置协议信息
+     * @param protocol
+     */
+    public void setProtocol(ProtocolConfig protocol) {
+        setProtocols(new ArrayList<>(Arrays.asList(protocol)));
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void setProtocols(List<? extends ProtocolConfig> protocols) {
+        this.protocols = (List<ProtocolConfig>) protocols;
+    }
 
     public String getHost() {
         return host;
@@ -49,9 +66,7 @@ public class ProviderConfig  extends AbstractConfig{
         return protocols;
     }
 
-    public void setProtocols(List<ProtocolConfig> protocols) {
-        this.protocols = protocols;
-    }
+
 
     public Boolean getExport() {
         return export;

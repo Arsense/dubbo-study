@@ -214,4 +214,5 @@ public abstract class AbstractConfig implements Serializable {
         int i = getter.startsWith("get") ? 3 : 2;
         return getter.substring(i, i + 1).toLowerCase() + getter.substring(i + 1);
     }
+
 }

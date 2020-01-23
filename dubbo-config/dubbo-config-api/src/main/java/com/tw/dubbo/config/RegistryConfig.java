@@ -6,9 +6,14 @@ package com.tw.dubbo.config;
  */
 public class RegistryConfig  extends AbstractConfig{
 
-    //注册中心IP地址
+    /**
+     * 注册中心IP地址
+     */
     private String address;
-
+    /**
+     * 协议与注册中心
+     */
+    private String protocol;
 
     public String getAddress() {
         return address;
@@ -18,7 +23,9 @@ public class RegistryConfig  extends AbstractConfig{
         this.address = address;
     }
 
-
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
 
 
 }

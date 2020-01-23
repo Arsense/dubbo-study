@@ -325,6 +325,17 @@ public class ServiceConfig<T> extends AbstractConfig {
         return hostToRegistry;
     }
 
+
+    /**
+     * 设置注册信息
+     * @param registry
+     */
+    public void setRegistry(RegistryConfig registry) {
+        List<RegistryConfig> registries = new ArrayList<RegistryConfig>(1);
+        registries.add(registry);
+        setRegistries(registries);
+
+    }
         /**
          * Provider 中配置到Protocol里面
          * @param providers
@@ -351,6 +362,14 @@ public class ServiceConfig<T> extends AbstractConfig {
     private static ProviderConfig convertProtocolToProvider(ProtocolConfig protocol) {
         ProviderConfig provider = new ProviderConfig();
         return provider;
+    }
+
+    public void setInterface(Class<?> interfaceClass) {
+        if (interfaceClass != null && !interfaceClass.isInterface()) {
+            throw new IllegalStateException("The interface class " + interfaceClass + " is not a interface!");
+        }
+        this.interfaceClass = interfaceClass;
+        setInterface(interfaceClass == null ? null : interfaceClass.getName());
     }
 
 
