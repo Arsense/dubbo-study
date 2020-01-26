@@ -27,6 +27,13 @@ public abstract class AbstractConfig implements Serializable {
      */
     protected Boolean isDefault;
 
+    /**
+     * 更新配置
+     */
+    public void refresh() {
+
+    }
+
 
     /**
      * 不含前缀的方法

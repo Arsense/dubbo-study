@@ -6,12 +6,12 @@ import com.tw.dubbo.common.util.CollectionUtils;
 import com.tw.dubbo.common.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.tw.dubbo.common.config.Constants.*;
-import static com.tw.dubbo.common.constants.QosConstants.ACCEPT_FOREIGN_IP;
-import static com.tw.dubbo.common.constants.QosConstants.QOS_ENABLE;
-import static com.tw.dubbo.common.constants.QosConstants.QOS_PORT;
+import static com.tw.dubbo.common.constants.QosConstants.*;
 
 /**
  *  应用程序基础config类
@@ -80,6 +80,35 @@ public class ApplicationConfig extends AbstractConfig {
     private Boolean qosAcceptForeignIp;
 
 
+    /**
+     * Customized parameters
+     */
+    private Map<String, String> parameters;
+
+    @Override
+    public void refresh() {
+        //todo  完成
+        super.refresh();
+        appendEnvironmentProperties();
+    }
+
+    private void appendEnvironmentProperties() {
+        if (parameters == null) {
+            parameters = new HashMap<>();
+        }
+
+//        Set<InfraAdapter> adapters = ExtensionLoader.getExtensionLoader(InfraAdapter.class).getSupportedExtensionInstances();
+
+    }
+
+
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
 
     @Parameter(key = QOS_PORT)
     public Integer getQosPort() {

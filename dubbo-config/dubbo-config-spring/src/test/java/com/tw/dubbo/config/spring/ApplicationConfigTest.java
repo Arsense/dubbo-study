@@ -186,8 +186,12 @@ public class ApplicationConfigTest {
     @Test
     public void testAppendEnvironmentProperties() {
         ApplicationConfig application = new ApplicationConfig("app");
-
-
+        System.setProperty("dubbo.labels", "tag1=value1;tag2=value2 ; tag3 = value3");
+        application.refresh();
+        Map<String, String> parameters = application.getParameters();
+        Assertions.assertEquals("value1", parameters.get("tag1"));
+        Assertions.assertEquals("value2", parameters.get("tag2"));
+        Assertions.assertEquals("value3", parameters.get("tag3"));
 
 
     }
