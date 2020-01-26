@@ -1,6 +1,6 @@
 package com.tw.dubbo.config.spring.api;
 
-import com.tw.dubbo.config.extension.SPI;
+import com.tw.dubbo.common.extension.SPI;
 
 /**
  * @author clay

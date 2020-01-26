@@ -25,9 +25,18 @@ public class ExtensionLoader<T>  {
         this.type = type;
     }
 
+    /**
+     * 根据类型获取SPI注解上对应的类
+     * 实际上是初始化的时候放入 一个concurrentHashMap
+     * TODO question 什么时候初始化扫描注解存入 存入的 key-value规则是？
+     * @param type
+     * @param <T>
+     * @return
+     */
     public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> type) {
-        if (type == null)
+        if (type == null) {
             throw new IllegalArgumentException("Extension type == null");
+        }
         if (!type.isInterface()) {
             throw new IllegalArgumentException("Extension type(" + type + ") is not interface!");
         }
@@ -44,8 +53,9 @@ public class ExtensionLoader<T>  {
     }
 
     public T getExtension(String name) {
-        if (name == null || name.length() == 0)
+        if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("Extension name == null");
+        }
 
         Holder<Object> holder = cachedInstances.get(name);
         if (holder == null) {

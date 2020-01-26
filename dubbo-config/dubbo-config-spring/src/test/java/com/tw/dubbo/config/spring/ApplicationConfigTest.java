@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.tw.dubbo.common.constants.QosConstants.ACCEPT_FOREIGN_IP;
+import static com.tw.dubbo.common.constants.QosConstants.QOS_ENABLE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -136,5 +138,57 @@ public class ApplicationConfigTest {
         ApplicationConfig application = new ApplicationConfig("app");
         application.setDefault(true);
         assertThat(application.isDefault(), is(true));
+    }
+
+
+    @Test
+    public void testDumpDirectory() throws Exception {
+        ApplicationConfig application = new ApplicationConfig("app");
+        application.setDumpDirectory("/dump");
+        assertThat(application.getDumpDirectory(), equalTo("/dump"));
+        Map<String, String> parameters = new HashMap<String, String>();
+        ApplicationConfig.appendParameters(parameters, application);
+        assertThat(parameters, hasEntry("dump.directory", "/dump"));
+    }
+
+
+    @Test
+    public void testQosEnable() throws Exception {
+        ApplicationConfig application = new ApplicationConfig("app");
+        application.setQosEnable(true);
+        assertThat(application.getQosEnable(), is(true));
+        Map<String, String> parameters = new HashMap<String, String>();
+        ApplicationConfig.appendParameters(parameters, application);
+        assertThat(parameters, hasEntry(QOS_ENABLE, "true"));
+    }
+
+    @Test
+    public void testQosPort() throws Exception {
+        ApplicationConfig application = new ApplicationConfig("app");
+        application.setQosPort(8080);
+        assertThat(application.getQosPort(), equalTo(8080));
+    }
+
+    @Test
+    public void testParameters() throws Exception {
+        ApplicationConfig application = new ApplicationConfig("app");
+        application.setQosAcceptForeignIp(true);
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("k1", "v1");
+        ApplicationConfig.appendParameters(parameters, application);
+        assertThat(parameters, hasEntry("k1", "v1"));
+        assertThat(parameters, hasEntry(ACCEPT_FOREIGN_IP, "true"));
+    }
+
+    /**
+     * 测试系统设置环境变量
+     */
+    @Test
+    public void testAppendEnvironmentProperties() {
+        ApplicationConfig application = new ApplicationConfig("app");
+
+
+
+
     }
 }

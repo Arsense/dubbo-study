@@ -32,3 +32,9 @@
 2020年1.19重新开始学习
 3468 1.19
 4238 1.23
+
+## question
+1 RPC与HTTP 本质区别 
+2 RPC与HTTP不同场景什么时候更适用
+3 @SPI 什么时候初始化扫描注解存入 存入的 key-value规则是？
+取的时候都是在ExtensionLoader这个类里取的
