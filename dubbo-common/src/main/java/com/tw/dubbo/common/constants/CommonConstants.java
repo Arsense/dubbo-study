@@ -12,4 +12,13 @@ public interface CommonConstants {
 
     String DEFAULT_KEY = "default";
 
+
+    String SHUTDOWN_WAIT_KEY = "dubbo.service.shutdown.wait";
+
+    @Deprecated
+    String SHUTDOWN_WAIT_SECONDS_KEY = "dubbo.service.shutdown.wait.seconds";
+
+    // FIXME: is this still useful?
+    String SHUTDOWN_TIMEOUT_KEY = "shutdown.timeout";
+
 }
