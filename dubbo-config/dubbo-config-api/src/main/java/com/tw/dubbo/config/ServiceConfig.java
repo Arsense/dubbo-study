@@ -464,6 +464,7 @@ public class ServiceConfig<T> extends AbstractConfig {
         this.ref = ref;
     }
 
+    @Override
     public String getId() {
         return id;
     }

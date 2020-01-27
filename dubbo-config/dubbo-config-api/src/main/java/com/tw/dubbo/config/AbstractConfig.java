@@ -207,6 +207,7 @@ public abstract class AbstractConfig implements Serializable {
     }
 
 
+    @Parameter(excluded = true)
     public String getId() {
         return id;
     }
@@ -215,6 +216,11 @@ public abstract class AbstractConfig implements Serializable {
         this.id = id;
     }
 
+    public void updateIdIfAbsent(String value) {
+        if (StringUtils.isNotEmpty(value) && StringUtils.isEmpty(id)) {
+            this.id = value;
+        }
+    }
 
 
     private static String calculateAttributeFromGetter(String getter) {
