@@ -1,7 +1,7 @@
 package com.tw.dubbo.common.config;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/23 17:24
  */
 public interface Constants {

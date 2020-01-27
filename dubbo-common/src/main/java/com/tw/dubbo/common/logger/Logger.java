@@ -1,7 +1,7 @@
 package com.tw.dubbo.common.logger;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/24 19:57
  */
 public interface Logger {

@@ -5,7 +5,7 @@ import com.tw.dubbo.common.extension.ExtensionLoader;
 /**
  *
  * logger 工厂
- * @author tangwei
+ * @author clay
  * @date 2020/1/24 18:17
  */
 public class LoggerFactory {

@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 /**
  * 监控配置类config
- * @author tangwei
+ * @author clay
  * @date 2020/1/24 1:21
  */
 public class MonitorConfigTest {

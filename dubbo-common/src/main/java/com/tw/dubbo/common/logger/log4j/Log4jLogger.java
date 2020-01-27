@@ -4,7 +4,7 @@ import com.tw.dubbo.common.logger.Logger;
 import com.tw.dubbo.common.logger.support.FailsafeLogger;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/24 19:58
  */
 public class Log4jLogger  implements Logger {

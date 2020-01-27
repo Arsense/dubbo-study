@@ -3,7 +3,7 @@ package com.tw.dubbo.common.constants;
 /**
  *
  * why interface 有什么好处呢
- * @author tangwei
+ * @author clay
  * @date 2020/1/22 23:05
  */
 public interface CommonConstants {

@@ -8,7 +8,7 @@ import com.tw.dubbo.config.spring.api.User;
 import java.util.List;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/23 13:12
  */
 public class DemoServiceImpl  implements DemoService {

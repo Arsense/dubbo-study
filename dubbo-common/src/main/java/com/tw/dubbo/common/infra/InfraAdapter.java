@@ -11,7 +11,7 @@ import java.util.*;
 
  *2。从第三方系统获取可能对特定组件有用的配置
  *
- * @author tangwei
+ * @author clay
  * @date 2020/1/26 15:06
  */
 @SPI

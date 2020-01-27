@@ -15,7 +15,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/22 23:27
  */
 public class ServiceConfigTest {

@@ -3,7 +3,7 @@ package com.tw.dubbo.config.spring.api;
 import java.util.List;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/23 13:13
  */
 public interface DemoService {

@@ -10,7 +10,7 @@ import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/23 17:01
  */
 public class ProtocolConfigTest {

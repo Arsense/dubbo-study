@@ -5,7 +5,7 @@ import com.tw.dubbo.common.infra.InfraAdapter;
 import java.util.Map;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/26 15:08
  */
 public class EnvironmentAdapter implements InfraAdapter {

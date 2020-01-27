@@ -3,7 +3,7 @@ package com.tw.dubbo.common.util;
 import java.util.Collection;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/23 18:25
  */
 public class CollectionUtils {

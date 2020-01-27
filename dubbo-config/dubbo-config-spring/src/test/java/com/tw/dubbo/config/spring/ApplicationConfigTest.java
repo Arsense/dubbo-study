@@ -19,7 +19,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 /**
  *
  * 应用config测试类
- * @author tangwei
+ * @author clay
  * @date 2020/1/23 16:46
  */
 public class ApplicationConfigTest {
