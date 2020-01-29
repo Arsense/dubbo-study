@@ -1,13 +1,13 @@
-package com.tw.dubbo.common.config;
+package com.tw.dubbo.config;
 
 import com.tw.dubbo.common.bytecode.Wrapper;
+import com.tw.dubbo.common.config.*;
 import com.tw.dubbo.common.extension.ExtensionLoader;
 import com.tw.dubbo.common.util.*;
-import com.tw.dubbo.common.util.Constants;
 import com.tw.dubbo.rpc.Exporter;
 import com.tw.dubbo.rpc.Protocol;
-import com.tw.dubbo.rpc.ProxyFactory;
 import com.tw.dubbo.rpc.ServiceClassContain;
+import javassist.util.proxy.ProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -288,9 +288,9 @@ public class ServiceConfig<T> extends AbstractConfig {
                     .setPort(0);
             ServiceClassContain.getInstance().pushServiceClass(getServiceClass(ref));
             //本地发布的关键代码
-            Exporter<?> exporter = protocol.export(
-                    proxyFactory.getInvoker(ref, (Class) interfaceClass, local));
-            exporters.add(exporter);
+//            Exporter<?> exporter = protocol.export(
+//                    proxyFactory.getInvoker(ref, (Class) interfaceClass, local));
+//            exporters.add(exporter);
             logger.info("发布DUBBO接口 " + interfaceClass.getName() + " 道本地注册中心");
         }
     }

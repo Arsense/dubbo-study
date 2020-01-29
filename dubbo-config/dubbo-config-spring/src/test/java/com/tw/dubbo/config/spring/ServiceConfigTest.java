@@ -2,6 +2,7 @@ package com.tw.dubbo.config.spring;
 
 import com.tw.dubbo.common.config.*;
 import com.tw.dubbo.common.util.URL;
+import com.tw.dubbo.config.ServiceConfig;
 import com.tw.dubbo.config.spring.api.DemoService;
 import com.tw.dubbo.config.spring.provider.impl.DemoServiceImpl;
 import com.tw.dubbo.rpc.Protocol;

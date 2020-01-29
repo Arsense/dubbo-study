@@ -29,7 +29,7 @@
             <xsd:documentation><![CDATA[ Export service config ]]></xsd:documentation>
             <xsd:appinfo>
                 <tool:annotation>
-                    <tool:exports type="com.tw.dubbo.common.config.ServiceConfig"/>
+                    <tool:exports type="com.tw.dubbo.config.ServiceConfig"/>
                 </tool:annotation>
             </xsd:appinfo>
         </xsd:annotation>

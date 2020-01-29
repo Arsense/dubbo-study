@@ -1,6 +1,4 @@
-package com.tw.dubbo.config;
-
-import com.tw.dubbo.common.util.ClassUtils;
+package com.tw.dubbo.common.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
