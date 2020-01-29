@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/29 12:18
  */
 public class AbstractMethodConfigTest {

@@ -3,7 +3,7 @@ package com.tw.dubbo.config.spring;
 import org.junit.jupiter.api.Test;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/29 12:08
  */
 public class MethodConfigTest {

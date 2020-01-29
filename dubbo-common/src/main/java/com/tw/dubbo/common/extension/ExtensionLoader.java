@@ -69,8 +69,9 @@ public class ExtensionLoader<T>  {
 
 
     public boolean hasExtension(String name) {
-        if (name == null || name.length() == 0)
+        if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("Extension name == null");
+        }
         try {
             this.getExtensionClass(name);
             return true;
@@ -81,13 +82,16 @@ public class ExtensionLoader<T>  {
 
 
     private Class<?> getExtensionClass(String name) {
-        if (type == null)
+        if (type == null) {
             throw new IllegalArgumentException("Extension type == null");
-        if (name == null)
+        }
+        if (name == null) {
             throw new IllegalArgumentException("Extension name == null");
+        }
         Class<?> clazz = getExtensionClasses().get(name);
-        if (clazz == null)
+        if (clazz == null) {
             throw new IllegalStateException("No such extension \"" + name + "\" for " + type.getName() + "!");
+        }
         return clazz;
     }
 

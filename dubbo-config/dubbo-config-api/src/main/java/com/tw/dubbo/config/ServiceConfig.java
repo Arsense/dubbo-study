@@ -110,7 +110,7 @@ public class ServiceConfig<T> extends AbstractConfig {
             throw new IllegalStateException(e.getMessage(), e);
         }
         //校验接口方法不为空
-//        checkInterfaceAndMethods(interfaceClass, getMethods());
+        checkInterfaceAndMethods(interfaceClass, getMethods());
         //校验接口实现类
         checkRef();
 //        generic = Boolean.FALSE.toString();
@@ -118,13 +118,15 @@ public class ServiceConfig<T> extends AbstractConfig {
     }
 
 
-    public void getMethods(){
+    public List<MethodConfig>  getMethods(){
+
+        return new ArrayList<>();
 
     }
-//    private void checkInterfaceAndMethods(Class<?> interfaceClass, List<MethodConfig> methods){
-//
-//
-//    }
+    private void checkInterfaceAndMethods(Class<?> interfaceClass, List<MethodConfig> methods){
+
+
+    }
     /**
      * 接口实现类校验
      */

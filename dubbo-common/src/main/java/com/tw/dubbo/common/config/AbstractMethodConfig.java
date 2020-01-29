@@ -3,7 +3,7 @@ package com.tw.dubbo.common.config;
 
 import java.util.*;
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/29 12:15
  */
 public abstract class AbstractMethodConfig extends AbstractConfig {
