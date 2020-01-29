@@ -1,12 +1,15 @@
-package com.tw.dubbo.config;
+package com.tw.dubbo.common.config;
 
 
-import java.util.*;
+import com.tw.dubbo.common.config.annotation.Parameter;
+import com.tw.dubbo.common.util.StringUtils;
+
+import java.util.Map;
 /**
  * @author clay
  * @date 2018/11/28 11:23
  */
-public class RegistryConfig  extends AbstractConfig{
+public class RegistryConfig  extends AbstractConfig {
 
     /**
      * 注册中心IP地址
@@ -260,5 +263,8 @@ public class RegistryConfig  extends AbstractConfig{
         this.protocol = protocol;
     }
 
-
+    @Parameter(excluded = true)
+    public boolean isValid() {
+        return !StringUtils.isEmpty(address);
+    }
 }

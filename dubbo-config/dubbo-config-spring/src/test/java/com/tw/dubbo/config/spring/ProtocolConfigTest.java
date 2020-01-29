@@ -1,6 +1,6 @@
 package com.tw.dubbo.config.spring;
 
-import com.tw.dubbo.config.ProtocolConfig;
+import com.tw.dubbo.common.config.ProtocolConfig;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

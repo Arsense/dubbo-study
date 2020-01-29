@@ -1,6 +1,4 @@
-package com.tw.dubbo.config;
-
-import com.tw.dubbo.common.util.URL;
+package com.tw.dubbo.common.config;
 
 /**
  * @author clay

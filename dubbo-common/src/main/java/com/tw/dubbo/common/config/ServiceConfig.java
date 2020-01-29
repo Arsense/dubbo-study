@@ -1,8 +1,9 @@
-package com.tw.dubbo.config;
+package com.tw.dubbo.common.config;
 
 import com.tw.dubbo.common.bytecode.Wrapper;
 import com.tw.dubbo.common.extension.ExtensionLoader;
 import com.tw.dubbo.common.util.*;
+import com.tw.dubbo.common.util.Constants;
 import com.tw.dubbo.rpc.Exporter;
 import com.tw.dubbo.rpc.Protocol;
 import com.tw.dubbo.rpc.ProxyFactory;
@@ -74,6 +75,10 @@ public class ServiceConfig<T> extends AbstractConfig {
     }
 
     public synchronized void export() {
+
+        //先校验 服务端接口暴露必备信息校验
+        checkAndUpdateSubConfigs();
+
         //判断是否发布
         if (provider != null) {
             if (export == null) {
@@ -82,6 +87,92 @@ public class ServiceConfig<T> extends AbstractConfig {
         }
         doExport();
     }
+
+    private void checkAndUpdateSubConfigs() {
+        //step1 provider 是否存在不存在则创建
+        //step2 register 注册中心信息
+        //step3 校验协议RPC协议信息
+        //step4 刷新配置 如果发布方有重新设置环境参数
+        //step5 接口提供方有指定接口与接口实现类
+        checkDefaultProvider();
+        checkRegistry();
+        checkProtocol();
+        this.refresh();
+
+        if (StringUtils.isEmpty(interfaceName)) {
+            throw new IllegalStateException("<dubbo:service interface=\"\" /> interface not allow null!");
+        }
+
+        try {
+            interfaceClass = Class.forName(interfaceName, true, Thread.currentThread()
+                    .getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+        //校验接口方法不为空
+//        checkInterfaceAndMethods(interfaceClass, getMethods());
+        //校验接口实现类
+        checkRef();
+//        generic = Boolean.FALSE.toString();
+
+    }
+
+
+    public void getMethods(){
+
+    }
+//    private void checkInterfaceAndMethods(Class<?> interfaceClass, List<MethodConfig> methods){
+//
+//
+//    }
+    /**
+     * 接口实现类校验
+     */
+    private void checkRef() {
+        if (ref == null) {
+            throw new IllegalStateException("ref not allow null!");
+        }
+        if (!interfaceClass.isInstance(ref)) {
+            throw new IllegalStateException("The class "
+                    + ref.getClass().getName() + " unimplemented interface "
+                    + interfaceClass + "!");
+        }
+    }
+
+    /**
+     * 校验基本的协议信息
+     */
+    private void checkProtocol() {
+        if (CollectionUtils.isEmpty(protocols) && provider != null) {
+            setProtocols(provider.getProtocols());
+        }
+//        convertProtocolIdsToProtocols();
+
+    }
+
+    /**
+     * 校验是否有注册中心信息
+     */
+    private void checkRegistry() {
+        convertRegistryIdsToRegistries();
+        for (RegistryConfig registryConfig : registries) {
+            if (!registryConfig.isValid()) {
+                throw new IllegalStateException("No registry config found or it's not a valid config! " +
+                        "The registry config is: " + registryConfig);
+            }
+        }
+    }
+
+    private void convertRegistryIdsToRegistries() {
+    }
+
+    /**
+     * 是否需要创建默认的provider
+     */
+    private void checkDefaultProvider() {
+
+    }
+
 
     protected synchronized void doExport() {
         //是否已经发布 防止多次发布
@@ -152,7 +243,7 @@ public class ServiceConfig<T> extends AbstractConfig {
         Map<String, String> map = new HashMap<String, String>();
         map.put("side", "provider");
         map.put("dubbo", Version.getProtocolVersion());
-        map.put(Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
+        map.put(com.tw.dubbo.common.util.Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
 
         //这里已经获取到了DemoService的 sayHello函数
         String[] methods = Wrapper.getWrapper(interfaceClass).getMethodNames();

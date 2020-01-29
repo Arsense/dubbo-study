@@ -1,4 +1,4 @@
-package com.tw.dubbo.config;
+package com.tw.dubbo.common.config;
 
 import com.tw.dubbo.common.util.CollectionUtils;
 

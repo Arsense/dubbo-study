@@ -1,6 +1,6 @@
 package com.tw.dubbo.config.spring;
 
-import com.tw.dubbo.config.MonitorConfig;
+import com.tw.dubbo.common.config.MonitorConfig;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

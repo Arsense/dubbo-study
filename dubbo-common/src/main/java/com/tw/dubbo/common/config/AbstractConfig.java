@@ -1,6 +1,6 @@
-package com.tw.dubbo.config;
+package com.tw.dubbo.common.config;
 
-import com.tw.dubbo.common.config.Parameter;
+import com.tw.dubbo.common.config.annotation.Parameter;
 import com.tw.dubbo.common.util.StringUtils;
 import com.tw.dubbo.common.util.URL;
 

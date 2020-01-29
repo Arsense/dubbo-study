@@ -1,4 +1,4 @@
-package com.tw.dubbo.common.config;
+package com.tw.dubbo.common.config.annotation;
 
 import java.lang.annotation.*;
 

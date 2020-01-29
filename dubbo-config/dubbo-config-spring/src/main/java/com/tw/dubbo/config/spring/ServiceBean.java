@@ -1,6 +1,6 @@
 package com.tw.dubbo.config.spring;
 
-import com.tw.dubbo.config.*;
+import com.tw.dubbo.common.config.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.InitializingBean;

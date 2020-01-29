@@ -1,7 +1,7 @@
 package com.tw.dubbo.config.spring;
 
+import com.tw.dubbo.common.config.*;
 import com.tw.dubbo.common.util.URL;
-import com.tw.dubbo.config.*;
 import com.tw.dubbo.config.spring.api.DemoService;
 import com.tw.dubbo.config.spring.provider.impl.DemoServiceImpl;
 import com.tw.dubbo.rpc.Protocol;
@@ -40,15 +40,15 @@ public class ServiceConfigTest {
 
 
         RegistryConfig registry = new RegistryConfig();
-        registry.setProtocol("mockprotocol2");
-        registry.setAddress("N/A");
+//        registry.setProtocol("mockprotocol2");
+//        registry.setAddress("N/A");
 
         //设置提供者 app 注册信息 接口名 接口实现
-        service.setProvider(provider);
-        service.setApplication(app);
+//        service.setProvider(provider);
+//        service.setApplication(app);
         service.setRegistry(registry);
-        service.setInterface(DemoService.class);
-        service.setRef(new DemoServiceImpl());
+//        service.setInterface(DemoService.class);
+//        service.setRef(new DemoServiceImpl());
 
     }
 

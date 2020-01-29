@@ -1,9 +1,9 @@
 package com.tw.dubbo.config.spring;
 
-import com.tw.dubbo.config.ConsumerConfig;
-import com.tw.dubbo.config.ProtocolConfig;
-import com.tw.dubbo.config.ProviderConfig;
-import com.tw.dubbo.config.RegistryConfig;
+import com.tw.dubbo.common.config.ConsumerConfig;
+import com.tw.dubbo.common.config.ProtocolConfig;
+import com.tw.dubbo.common.config.ProviderConfig;
+import com.tw.dubbo.common.config.RegistryConfig;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**

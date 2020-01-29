@@ -1,8 +1,8 @@
 package com.tw.dubbo.config.spring;
 
 import com.alibaba.fastjson.JSON;
-import com.tw.dubbo.common.config.Parameter;
-import com.tw.dubbo.config.AbstractConfig;
+import com.tw.dubbo.common.config.annotation.Parameter;
+import com.tw.dubbo.common.config.AbstractConfig;
 import com.tw.dubbo.config.spring.api.Greeting;
 import com.tw.dubbo.config.util.ConfigValidationUtils;
 import org.junit.Assert;

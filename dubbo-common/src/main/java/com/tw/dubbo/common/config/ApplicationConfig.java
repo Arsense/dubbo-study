@@ -1,6 +1,6 @@
-package com.tw.dubbo.config;
+package com.tw.dubbo.common.config;
 
-import com.tw.dubbo.common.config.Parameter;
+import com.tw.dubbo.common.config.annotation.Parameter;
 import com.tw.dubbo.common.logger.LoggerFactory;
 import com.tw.dubbo.common.util.CollectionUtils;
 import com.tw.dubbo.common.util.StringUtils;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tw.dubbo.common.config.Constants.*;
+import static com.tw.dubbo.common.config.annotation.Constants.*;
 import static com.tw.dubbo.common.constants.QosConstants.*;
 
 /**

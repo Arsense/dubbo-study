@@ -1,6 +1,6 @@
 package com.tw.dubbo.config.spring;
 
-import com.tw.dubbo.config.ProviderConfig;
+import com.tw.dubbo.common.config.ProviderConfig;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
