@@ -6,8 +6,8 @@ import com.tw.dubbo.common.extension.ExtensionLoader;
 import com.tw.dubbo.common.util.*;
 import com.tw.dubbo.rpc.Exporter;
 import com.tw.dubbo.rpc.Protocol;
+import com.tw.dubbo.rpc.ProxyFactory;
 import com.tw.dubbo.rpc.ServiceClassContain;
-import javassist.util.proxy.ProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,27 +23,31 @@ import static com.tw.dubbo.common.util.NetUtils.isInvalidLocalHost;
  * @author clay
  * @date 2018/11/27 14:25
  */
-public class ServiceConfig<T> extends AbstractConfig {
+public class ServiceConfig<T> extends ServiceConfigBase<T>  {
 
     protected static final Logger logger = LoggerFactory.getLogger(ServiceConfig.class);
     private static final Protocol protocol =
             ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
 
-    private static final ProxyFactory proxyFactory =
+    private static final ProxyFactory PROXY_FACTORY =
             ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
 
     public ServiceConfig() {}
 
-    // 接口实现
-    private T ref;
-    //发布接口集合
+
+    /**
+     * 发布接口集合
+     */
     private final List<Exporter<?>> exporters = new ArrayList<Exporter<?>>();
 
-    //集群协议列表
+    /**
+     * 集群协议列表
+     */
     protected List<ProtocolConfig> protocols;
-    //提供者
-    private ProviderConfig provider;
-    //是否发布接口
+
+    /**
+     * 是否发布接口
+     */
     protected Boolean export;
 
     protected Boolean exported = false;
@@ -52,30 +56,28 @@ public class ServiceConfig<T> extends AbstractConfig {
 
     private transient volatile boolean unexported = false;
 
-    // registry centers
+    /**
+     * registry centers
+     */
     protected List<RegistryConfig> registries;
-    //接口类型
-    protected Class<?> interfaceClass;
-    //接口名
-    private String interfaceName;
 
-    // service monitor
+
+    /**
+     * service monitor
+     */
     protected MonitorConfig monitor;
-    //包路径
+    /**
+     * 包路径
+     */
     private String path;
 
     private String host;
 
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
 
     public synchronized void export() {
-
+        if (!shouldExport()) {
+            return;
+        }
         //先校验 服务端接口暴露必备信息校验
         checkAndUpdateSubConfigs();
 
@@ -86,6 +88,11 @@ public class ServiceConfig<T> extends AbstractConfig {
             }
         }
         doExport();
+    }
+
+    private boolean shouldExport() {
+
+        return true;
     }
 
     private void checkAndUpdateSubConfigs() {
@@ -155,7 +162,8 @@ public class ServiceConfig<T> extends AbstractConfig {
     /**
      * 校验是否有注册中心信息
      */
-    private void checkRegistry() {
+    @Override
+    public void checkRegistry() {
         convertRegistryIdsToRegistries();
         for (RegistryConfig registryConfig : registries) {
             if (!registryConfig.isValid()) {
@@ -462,7 +470,7 @@ public class ServiceConfig<T> extends AbstractConfig {
             throw new IllegalStateException("The interface class " + interfaceClass + " is not a interface!");
         }
         this.interfaceClass = interfaceClass;
-        setInterface(interfaceClass == null ? null : interfaceClass.getName());
+//        setInterface(interfaceClass == null ? null : interfaceClass.getName());
     }
 
 
@@ -484,13 +492,7 @@ public class ServiceConfig<T> extends AbstractConfig {
         this.protocols = protocols;
     }
 
-    public ProviderConfig getProvider() {
-        return provider;
-    }
 
-    public void setProvider(ProviderConfig provider) {
-        this.provider = provider;
-    }
 
     public Boolean getExport() {
         return export;
@@ -508,37 +510,13 @@ public class ServiceConfig<T> extends AbstractConfig {
         this.exported = exported;
     }
 
-    public ApplicationConfig getApplication() {
-        return application;
-    }
+
 
     public void setApplication(ApplicationConfig application) {
         this.application = application;
     }
 
-    public List<RegistryConfig> getRegistries() {
-        return registries;
-    }
 
-    public void setRegistries(List<RegistryConfig> registries) {
-        this.registries = registries;
-    }
-
-    public Class<?> getInterfaceClass() {
-        return interfaceClass;
-    }
-
-    public void setInterfaceClass(Class<?> interfaceClass) {
-        this.interfaceClass = interfaceClass;
-    }
-
-    public String getInterface() {
-        return interfaceName;
-    }
-
-    public void setInterface(String interfaceName) {
-        this.interfaceName = interfaceName;
-    }
 
     public MonitorConfig getMonitor() {
         return monitor;
@@ -549,21 +527,19 @@ public class ServiceConfig<T> extends AbstractConfig {
     }
 
 
-    public T getRef() {
-        return ref;
-    }
-
-    public void setRef(T ref) {
-        this.ref = ref;
-    }
 
     @Override
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getHost() {
+        return host;
     }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
 
 }

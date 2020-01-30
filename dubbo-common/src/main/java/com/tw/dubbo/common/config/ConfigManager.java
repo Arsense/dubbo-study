@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
-
 /**
  * @author clay
  * @date 2020/1/29 22:56
@@ -19,12 +17,19 @@ public class ConfigManager extends LifecycleAdapter implements FrameworkExt {
 
     public static final String NAME = "config";
 
+    private ApplicationConfig application;
+
     public Optional<ApplicationConfig> getApplication() {
-        return ofNullable(getConfig(getTagName(ApplicationConfig.class)));
+//        return ofNullable(getConfig(getTagName(ApplicationConfig.class)));
+          return null;
     }
 
 
     public ApplicationConfig getApplicationOrElseThrow() {
         return getApplication().orElseThrow(() -> new IllegalStateException("There's no ApplicationConfig specified."));
+    }
+
+    public void setApplication(ApplicationConfig application) {
+        this.application = application;
     }
 }

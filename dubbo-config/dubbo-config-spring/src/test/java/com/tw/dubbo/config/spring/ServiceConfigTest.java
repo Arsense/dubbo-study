@@ -23,7 +23,7 @@ public class ServiceConfigTest {
     private Protocol protocolDelegate = Mockito.mock(Protocol.class);
     private Registry registryDelegate = Mockito.mock(Registry.class);
 
-    private ServiceConfig<DemoServiceImpl> service = new ServiceConfig<DemoServiceImpl>();
+    private ServiceConfig<DemoServiceImpl> service = new ServiceConfig<>();
 
 
     @BeforeEach

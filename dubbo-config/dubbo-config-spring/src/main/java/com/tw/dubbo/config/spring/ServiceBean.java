@@ -165,13 +165,13 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
             }
         }
         //设置包路径
-        if (getPath() == null || getPath().length() == 0) {
-            if (beanName != null && beanName.length() > 0
-                    && getInterface() != null && getInterface().length() > 0
-                    && beanName.startsWith(getInterface())) {
-                setPath(beanName);
-            }
-        }
+//        if (getPath() == null || getPath().length() == 0) {
+//            if (beanName != null && beanName.length() > 0
+//                    && getInterface() != null && getInterface().length() > 0
+//                    && beanName.startsWith(getInterface())) {
+//                setPath(beanName);
+//            }
+//        }
 
 //        export();
 
@@ -199,9 +199,7 @@ public class ServiceBean<T>  extends ServiceConfig<T> implements InitializingBea
     }
 
 
-
-
-
-
-
+    public boolean getInterface() {
+        return true;
+    }
 }

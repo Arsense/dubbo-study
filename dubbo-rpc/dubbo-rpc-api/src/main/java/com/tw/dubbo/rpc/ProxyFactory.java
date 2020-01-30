@@ -1,11 +1,13 @@
 package com.tw.dubbo.rpc;
 
+import com.tw.dubbo.common.extension.SPI;
 import com.tw.dubbo.common.util.URL;
 
 /**
  * @author clay
  * @date 2018/11/30 15:12
  */
+@SPI("javassist")
 public interface ProxyFactory {
 
 
