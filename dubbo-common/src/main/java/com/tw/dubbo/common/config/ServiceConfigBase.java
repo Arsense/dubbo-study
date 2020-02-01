@@ -1,7 +1,7 @@
 package com.tw.dubbo.common.config;
 
 import com.tw.dubbo.common.rpc.ApplicationModel;
-import com.tw.dubbo.common.util.CollectionUtils;
+import com.tw.dubbo.common.utils.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,12 @@ public abstract class ServiceConfigBase<T> extends AbstractServiceConfig {
      * 提供者
      */
     protected ProviderConfig provider;
+
+    /**
+     * 路径
+     */
+    protected String path;
+
 
     protected boolean shouldExport() {
         //优先级是provider的export 就是可以提供者执行设置
@@ -136,6 +142,12 @@ public abstract class ServiceConfigBase<T> extends AbstractServiceConfig {
 
     }
 
+
+
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public T getRef() {
         return ref;

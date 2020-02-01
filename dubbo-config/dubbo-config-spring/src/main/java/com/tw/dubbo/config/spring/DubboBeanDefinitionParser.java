@@ -1,6 +1,6 @@
 package com.tw.dubbo.config.spring;
 
-import com.tw.dubbo.common.util.StringUtils;
+import com.tw.dubbo.common.utils.StringUtils;
 import com.tw.dubbo.common.config.ProtocolConfig;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.ManagedMap;

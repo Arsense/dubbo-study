@@ -1,6 +1,6 @@
-package com.tw.dubbo.common.util;
+package com.tw.dubbo.common.utils;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  * @author clay
@@ -16,4 +16,9 @@ public class CollectionUtils {
     public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
     }
+
+    public static boolean isEmptyMap(Map map) {
+        return map == null || map.size() == 0;
+    }
+
 }

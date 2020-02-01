@@ -1,9 +1,9 @@
 package com.tw.dubbo.common.config;
 
 import com.tw.dubbo.common.config.annotation.Parameter;
-import com.tw.dubbo.common.util.MethodUtils;
-import com.tw.dubbo.common.util.StringUtils;
-import com.tw.dubbo.common.util.URL;
+import com.tw.dubbo.common.utils.MethodUtils;
+import com.tw.dubbo.common.utils.StringUtils;
+import com.tw.dubbo.common.utils.URL;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;

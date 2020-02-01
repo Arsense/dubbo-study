@@ -1,6 +1,6 @@
 package com.tw.dubbo.remoting.header;
 
-import com.tw.dubbo.common.util.URL;
+import com.tw.dubbo.common.utils.URL;
 import com.tw.dubbo.remoting.*;
 import com.tw.dubbo.remoting.exception.RemotingException;
 import com.tw.dubbo.remoting.exchange.ExchangeHandler;

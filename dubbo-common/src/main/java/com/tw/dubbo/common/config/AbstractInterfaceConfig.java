@@ -54,6 +54,12 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
 
     }
 
+
+    protected void checkStubAndLocal(Class<?> interfaceClass) {
+
+        //TODO 什么存根合法性检查 目前不涉及
+    }
+
     public Boolean getExport() {
         return export;
     }

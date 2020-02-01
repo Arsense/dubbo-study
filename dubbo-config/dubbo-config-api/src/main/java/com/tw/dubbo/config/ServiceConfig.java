@@ -3,7 +3,8 @@ package com.tw.dubbo.config;
 import com.tw.dubbo.common.bytecode.Wrapper;
 import com.tw.dubbo.common.config.*;
 import com.tw.dubbo.common.extension.ExtensionLoader;
-import com.tw.dubbo.common.util.*;
+import com.tw.dubbo.common.utils.*;
+import com.tw.dubbo.config.util.ConfigValidationUtils;
 import com.tw.dubbo.rpc.Exporter;
 import com.tw.dubbo.rpc.Protocol;
 import com.tw.dubbo.rpc.ProxyFactory;
@@ -15,7 +16,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
 
-import static com.tw.dubbo.common.util.NetUtils.isInvalidLocalHost;
+import static com.tw.dubbo.common.utils.NetUtils.isInvalidLocalHost;
 
 /**
  *
@@ -88,15 +89,20 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
 
     private void checkAndUpdateSubConfigs() {
         //step1 provider 是否存在不存在则创建
-        //step2 register 注册中心信息
-        //step3 校验协议RPC协议信息
-        //step4 刷新配置 如果发布方有重新设置环境参数
-        //step5 接口提供方有指定接口与接口实现类
         checkDefaultProvider();
+
+        //step2 register 注册中心信息
         checkRegistry();
+
+        //step3 校验协议RPC协议信息
         checkProtocol();
+
+
+        //step4 刷新配置 如果发布方有重新设置环境参数
         this.refresh();
 
+
+        //step5 接口提供方有指定接口与接口实现类
         if (StringUtils.isEmpty(interfaceName)) {
             throw new IllegalStateException("<dubbo:service interface=\"\" /> interface not allow null!");
         }
@@ -113,7 +119,15 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
         checkRef();
 //        generic = Boolean.FALSE.toString();
 
+        // 目前是空方法
+        checkStubAndLocal(interfaceClass);
+        ConfigValidationUtils.checkMock(interfaceClass, this);
+
+
+        ConfigValidationUtils.validateServiceConfig(this);
+
     }
+
 
 
     public List<MethodConfig>  getMethods(){
@@ -122,6 +136,16 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
 
     }
     private void checkInterfaceAndMethods(Class<?> interfaceClass, List<MethodConfig> methods){
+        //类不能为空Class<?>
+        Assert.notNull(interfaceClass, new IllegalStateException("interface not allow null!"));
+        //不能为为接口类
+
+        if (!interfaceClass.isInterface()) {
+            throw new IllegalStateException("The interface class " + interfaceClass + " is not a interface!");
+        }
+        //TODO finish it
+        if (CollectionUtils.isNotEmpty(methods)) {
+        }
 
 
     }
@@ -239,7 +263,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
         Map<String, String> map = new HashMap<String, String>();
         map.put("side", "provider");
         map.put("dubbo", Version.getProtocolVersion());
-        map.put(com.tw.dubbo.common.util.Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
+        map.put(com.tw.dubbo.common.utils.Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
 
         //这里已经获取到了DemoService的 sayHello函数
         String[] methods = Wrapper.getWrapper(interfaceClass).getMethodNames();

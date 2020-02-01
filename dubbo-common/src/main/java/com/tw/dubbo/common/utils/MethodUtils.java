@@ -1,4 +1,4 @@
-package com.tw.dubbo.common.util;
+package com.tw.dubbo.common.utils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

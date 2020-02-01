@@ -2,8 +2,8 @@ package com.tw.dubbo.common.config;
 
 import com.tw.dubbo.common.config.annotation.Parameter;
 import com.tw.dubbo.common.logger.LoggerFactory;
-import com.tw.dubbo.common.util.CollectionUtils;
-import com.tw.dubbo.common.util.StringUtils;
+import com.tw.dubbo.common.utils.CollectionUtils;
+import com.tw.dubbo.common.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

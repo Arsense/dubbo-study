@@ -8,9 +8,37 @@ package com.tw.dubbo.common.constants;
  */
 public interface CommonConstants {
 
+    String DUBBO_PROTOCOL = "dubbo";
+
+
     String REMOVE_VALUE_PREFIX = "-";
 
     String DEFAULT_KEY = "default";
+
+    String VERSION_KEY = "version";
+
+
+    String GROUP_KEY = "group";
+
+    String CLIENT_KEY = "client";
+    String HOST_KEY = "host";
+
+    String TOKEN_KEY = "token";
+
+    String PATH_KEY = "path";
+
+    String RETURN_PREFIX = "return ";
+    String THROW_PREFIX = "throw";
+    String MOCK_KEY = "mock";
+    String FAIL_PREFIX = "fail:";
+    String FORCE_PREFIX = "force:";
+
+    String PROTOCOL_KEY = "protocol";
+    String CLUSTER_KEY = "cluster";
+    String USERNAME_KEY = "username";
+    String PASSWORD_KEY = "password";
+    String FILE_KEY = "file";
+    String SERVER_KEY = "server";
 
 
     String SHUTDOWN_WAIT_KEY = "dubbo.service.shutdown.wait";

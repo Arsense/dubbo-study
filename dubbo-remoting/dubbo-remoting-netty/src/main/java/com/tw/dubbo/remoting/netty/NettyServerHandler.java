@@ -1,6 +1,6 @@
 package com.tw.dubbo.remoting.netty;
 
-import com.tw.dubbo.common.util.URL;
+import com.tw.dubbo.common.utils.URL;
 import com.tw.dubbo.remoting.channel.Channel;
 import com.tw.dubbo.remoting.channel.ChannelHandler;
 import io.netty.channel.ChannelDuplexHandler;

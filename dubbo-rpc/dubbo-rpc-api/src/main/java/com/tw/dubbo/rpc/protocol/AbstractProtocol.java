@@ -1,6 +1,6 @@
 package com.tw.dubbo.rpc.protocol;
 
-import com.tw.dubbo.common.util.URL;
+import com.tw.dubbo.common.utils.URL;
 import com.tw.dubbo.rpc.*;
 
 /**

@@ -2,7 +2,7 @@ package com.tw.dubbo.common.config;
 
 import com.tw.dubbo.common.context.FrameworkExt;
 import com.tw.dubbo.common.context.LifecycleAdapter;
-import com.tw.dubbo.common.util.CollectionUtils;
+import com.tw.dubbo.common.utils.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 
 import static com.tw.dubbo.common.config.AbstractConfig.getTagName;
 import static com.tw.dubbo.common.constants.CommonConstants.DEFAULT_KEY;
-import static com.tw.dubbo.common.util.ReflectUtils.getProperty;
-import static com.tw.dubbo.common.util.StringUtils.isNotEmpty;
+import static com.tw.dubbo.common.utils.ReflectUtils.getProperty;
+import static com.tw.dubbo.common.utils.StringUtils.isNotEmpty;
 import static java.lang.Boolean.TRUE;
 import static java.util.Collections.emptyMap;
 

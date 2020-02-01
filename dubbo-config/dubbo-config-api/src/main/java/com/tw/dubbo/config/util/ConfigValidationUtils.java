@@ -1,15 +1,20 @@
 package com.tw.dubbo.config.util;
 
+import com.tw.dubbo.common.config.*;
 import com.tw.dubbo.common.extension.ExtensionLoader;
-import com.tw.dubbo.common.util.StringUtils;
+import com.tw.dubbo.common.utils.CollectionUtils;
+import com.tw.dubbo.common.utils.ConfigUtils;
+import com.tw.dubbo.common.utils.StringUtils;
+import com.tw.dubbo.config.ServiceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.tw.dubbo.common.constants.CommonConstants.REMOVE_VALUE_PREFIX;
-import static com.tw.dubbo.common.constants.CommonConstants.DEFAULT_KEY;
+import static com.tw.dubbo.common.constants.CommonConstants.*;
 
 /**
  * config校验工具类
@@ -23,14 +28,35 @@ public class ConfigValidationUtils {
      */
     private static final int MAX_LENGTH = 200;
     /**
-     * 正则匹配
+     * name的正则校验
      */
     private static final Pattern PATTERN_NAME = Pattern.compile("[\\-._0-9a-zA-Z]+");
+
+    /**
+     * key的正则校验
+     */
+    private static final Pattern PATTERN_KEY = Pattern.compile("[*,\\-._0-9a-zA-Z]+");
 
     /**
      * 扩展属性格式校验 ,号分隔 所以运行,
      */
     private static final Pattern PATTERN_MULTI_NAME = Pattern.compile("[,\\-._0-9a-zA-Z]+");
+
+    /**
+     * The rule qualification for <b>method names</b>
+     */
+    private static final Pattern PATTERN_METHOD_NAME = Pattern.compile("[a-zA-Z][0-9a-zA-Z]*");
+
+    /**
+     * 路径正则匹配
+     */
+    private static final Pattern PATTERN_PATH = Pattern.compile("[/\\-$._0-9a-zA-Z]+");
+
+    /**
+     * The pattern matches a value who has a symbol
+     */
+    private static final Pattern PATTERN_NAME_HAS_SYMBOL = Pattern.compile("[:*,\\s/\\-._0-9a-zA-Z]+");
+
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigValidationUtils.class);
     public static void checkExtension(Class<?> type, String property, String value) {
@@ -41,9 +67,8 @@ public class ConfigValidationUtils {
         }
     }
 
-    private static void checkName(String property, String value) {
-        checkProperty(property, value, MAX_LENGTH, PATTERN_NAME);
-    }
+
+
 
     /**
      * 检查是否有扩展名（属性）为value（需要特殊处理）
@@ -106,6 +131,148 @@ public class ConfigValidationUtils {
     }
 
 
+
+
+    /**
+     * 校验service属性
+     * 前面校验必填字段  此处校验必填字段是否有非法字符配置传入
+     *
+     * @param config
+     */
+    public static  void validateServiceConfig(ServiceConfig config) {
+        //版本号 组别 token 路径中是否有非法字符 用的正则匹配
+        checkKey(VERSION_KEY, config.getVersion());
+        checkKey(GROUP_KEY, config.getGroup());
+        checkName(TOKEN_KEY, config.getToken());
+        checkPathName(PATH_KEY, config.getPath());
+
+//        checkMultiExtension(ExporterListener.class, "listener", config.getListener());
+
+        //校验接口config字段信息
+        validateAbstractInterfaceConfig(config);
+
+        //校验注册信息
+        List<RegistryConfig> registries = config.getRegistries();
+        if (registries != null) {
+            for (RegistryConfig registry : registries) {
+                validateRegistryConfig(registry);
+            }
+        }
+
+
+        List<ProtocolConfig> protocols = config.getProtocols();
+        if (protocols != null) {
+            for (ProtocolConfig protocol : protocols) {
+                validateProtocolConfig(protocol);
+            }
+        }
+
+        ProviderConfig providerConfig = config.getProvider();
+        if (providerConfig != null) {
+            validateProviderConfig(providerConfig);
+        }
+
+    }
+
+    private static void validateProviderConfig(ProviderConfig config) {
+//        checkPathName(CONTEXTPATH_KEY, config.getContextpath());
+//        checkExtension(ThreadPool.class, THREADPOOL_KEY, config.getThreadpool());
+//        checkMultiExtension(TelnetHandler.class, TELNET, config.getTelnet());
+//        checkMultiExtension(StatusChecker.class, STATUS_KEY, config.getStatus());
+//        checkExtension(Transporter.class, TRANSPORTER_KEY, config.getTransporter());
+//        checkExtension(Exchanger.class, EXCHANGER_KEY, config.getExchanger());
+
+    }
+
+    private static void validateProtocolConfig(ProtocolConfig config) {
+        if (config != null) {
+            String name = config.getName();
+            checkName("name", name);
+            checkName(HOST_KEY, config.getHost());
+            checkPathName("contextpath", config.getContextpath());
+
+            //dubbo协议需要 单独校验的参数
+            if (DUBBO_PROTOCOL.equals(name)) {
+//                checkMultiExtension(Codec.class, CODEC_KEY, config.getCodec());
+//                checkMultiExtension(Serialization.class, SERIALIZATION_KEY, config.getSerialization());
+//                checkMultiExtension(Transporter.class, SERVER_KEY, config.getServer());
+//                checkMultiExtension(Transporter.class, CLIENT_KEY, config.getClient());
+            }
+
+//            checkMultiExtension(TelnetHandler.class, TELNET, config.getTelnet());
+//            checkMultiExtension(StatusChecker.class, "status", config.getStatus());
+//            checkExtension(Transporter.class, TRANSPORTER_KEY, config.getTransporter());
+//            checkExtension(Exchanger.class, EXCHANGER_KEY, config.getExchanger());
+//            checkExtension(Dispatcher.class, DISPATCHER_KEY, config.getDispatcher());
+//            checkExtension(Dispatcher.class, "dispather", config.getDispather());
+//            checkExtension(ThreadPool.class, THREADPOOL_KEY, config.getThreadpool());
+        }
+
+
+    }
+
+    private static void validateRegistryConfig(RegistryConfig config) {
+        checkName(PROTOCOL_KEY, config.getProtocol());
+        checkName(USERNAME_KEY, config.getUsername());
+        checkLength(PASSWORD_KEY, config.getPassword());
+        checkPathLength(FILE_KEY, config.getFile());
+//        checkName(TRANSPORTER_KEY, config.getTransporter());
+        checkName(SERVER_KEY, config.getServer());
+        checkName(CLIENT_KEY, config.getClient());
+        checkParameterName(config.getParameters());
+    }
+
+
+    private static void validateAbstractInterfaceConfig(ServiceConfig config) {
+
+//        checkName(LOCAL_KEY, config.getLocal());
+//        checkName("stub", config.getStub());
+//        checkMultiName("owner", config.getOwner());
+
+//        checkExtension(ProxyFactory.class, PROXY_KEY, config.getProxy());
+//        checkExtension(Cluster.class, CLUSTER_KEY, config.getCluster());
+//        checkMultiExtension(Filter.class, FILE_KEY, config.getFilter());
+//        checkMultiExtension(InvokerListener.class, LISTENER_KEY, config.getListener());
+//        checkNameHasSymbol(LAYER_KEY, config.getLayer());
+
+        List<MethodConfig> methods = config.getMethods();
+        if (CollectionUtils.isNotEmpty(methods)) {
+            methods.forEach(ConfigValidationUtils::validateMethodConfig);
+        }
+
+
+    }
+
+    public static void validateMethodConfig(MethodConfig config) {
+
+//        checkExtension(LoadBalance.class, LOADBALANCE_KEY, config.getLoadbalance());
+        checkParameterName(config.getParameters());
+        checkMethodName("name", config.getName());
+
+        String mock = config.getMock();
+        if (StringUtils.isNotEmpty(mock)) {
+            if (mock.startsWith(RETURN_PREFIX) || mock.startsWith(THROW_PREFIX + " ")) {
+                checkLength(MOCK_KEY, mock);
+            } else if (mock.startsWith(FAIL_PREFIX) || mock.startsWith(FORCE_PREFIX)) {
+                checkNameHasSymbol(MOCK_KEY, mock);
+            } else {
+                checkName(MOCK_KEY, mock);
+            }
+        }
+
+    }
+
+    public static void checkMethodName(String property, String value) {
+        checkProperty(property, value, MAX_LENGTH, PATTERN_METHOD_NAME);
+    }
+
+
+     public static void checkKey(String property, String value) {
+        checkProperty(property, value, MAX_LENGTH, PATTERN_KEY);
+    }
+
+
+
     public static void checkLength(String property, String value) {
         checkProperty(property, value, MAX_LENGTH, null);
     }
@@ -115,4 +282,39 @@ public class ConfigValidationUtils {
         checkProperty(property, value, MAX_LENGTH, null);
 
     }
+
+    public static void checkNameHasSymbol(String property, String value) {
+        checkProperty(property, value, MAX_LENGTH, PATTERN_NAME_HAS_SYMBOL);
+    }
+
+
+    public static void checkParameterName(Map<String, String> parameters) {
+        if (CollectionUtils.isEmptyMap(parameters)) {
+            return;
+        }
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            checkNameHasSymbol(entry.getKey(), entry.getValue());
+        }
+    }
+
+
+    public static void checkMock(Class<?> interfaceClass, AbstractInterfaceConfig config) {
+        String mock = config.getMock();
+        if (ConfigUtils.isEmpty(mock)) {
+            return;
+        }
+
+    }
+
+    private static void checkName(String property, String value) {
+        checkProperty(property, value, MAX_LENGTH, PATTERN_NAME);
+    }
+
+
+    public static void checkPathName(String property, String value) {
+        checkProperty(property, value, MAX_LENGTH, PATTERN_PATH);
+    }
+
+
+
 }

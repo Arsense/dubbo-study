@@ -1,6 +1,6 @@
 package com.tw.dubbo.common.extension;
 
-import com.tw.dubbo.common.util.Holder;
+import com.tw.dubbo.common.utils.Holder;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

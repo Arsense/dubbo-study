@@ -1,11 +1,11 @@
 //package com.tw.dubbo.remoting.netty;
 //
-//import com.tw.dubbo.common.util.URL;
+//import com.tw.dubbo.common.utils.URL;
 //import com.tw.dubbo.remoting.channel.ChannelHandler;
 //import org.jboss.netty.channel.*;
 //
-//import java.util.Map;
-//import java.util.concurrent.ConcurrentHashMap;
+//import java.utils.Map;
+//import java.utils.concurrent.ConcurrentHashMap;
 //
 ///**
 // * Netty具体的处理类

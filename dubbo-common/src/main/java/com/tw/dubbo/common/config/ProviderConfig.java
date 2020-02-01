@@ -1,6 +1,6 @@
 package com.tw.dubbo.common.config;
 
-import com.tw.dubbo.common.util.CollectionUtils;
+import com.tw.dubbo.common.utils.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

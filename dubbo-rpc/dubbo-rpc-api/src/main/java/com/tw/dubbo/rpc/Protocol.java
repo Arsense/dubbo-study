@@ -1,6 +1,6 @@
 package com.tw.dubbo.rpc;
 
-import com.tw.dubbo.common.util.URL;
+import com.tw.dubbo.common.utils.URL;
 
 /**
  * @author clay
