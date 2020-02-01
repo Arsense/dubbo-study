@@ -15,13 +15,15 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
      * The application info
      */
     protected ApplicationConfig application;
-
     /**
      *
      */
     protected List<RegistryConfig> registries;
 
-
+    /**
+     * 是否发布接口
+     */
+    protected Boolean export;
 
     public ApplicationConfig getApplication() {
         if (application != null) {
@@ -52,6 +54,13 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
 
     }
 
+    public Boolean getExport() {
+        return export;
+    }
+
+    public void setExport(Boolean export) {
+        this.export = export;
+    }
 
     public List<RegistryConfig> getRegistries() {
         return registries;

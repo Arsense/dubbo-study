@@ -31,6 +31,7 @@ public abstract class AbstractMethodConfig extends AbstractConfig {
     protected String loadbalance;
 
 
+
     /**
      * max concurrent invocations
      */

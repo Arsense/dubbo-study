@@ -40,15 +40,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
      */
     private final List<Exporter<?>> exporters = new ArrayList<Exporter<?>>();
 
-    /**
-     * 集群协议列表
-     */
-    protected List<ProtocolConfig> protocols;
 
-    /**
-     * 是否发布接口
-     */
-    protected Boolean export;
 
     protected Boolean exported = false;
 
@@ -56,10 +48,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
 
     private transient volatile boolean unexported = false;
 
-    /**
-     * registry centers
-     */
-    protected List<RegistryConfig> registries;
+
 
 
     /**
@@ -90,10 +79,12 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
         doExport();
     }
 
-    private boolean shouldExport() {
 
-        return true;
-    }
+
+
+
+
+
 
     private void checkAndUpdateSubConfigs() {
         //step1 provider 是否存在不存在则创建
@@ -160,7 +151,8 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
     }
 
     /**
-     * 校验是否有注册中心信息
+     * 校验是否有注册中心信息 and then conversion it to {@link RegistryConfig}
+     *
      */
     @Override
     public void checkRegistry() {
@@ -176,12 +168,6 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
     private void convertRegistryIdsToRegistries() {
     }
 
-    /**
-     * 是否需要创建默认的provider
-     */
-    private void checkDefaultProvider() {
-
-    }
 
 
     protected synchronized void doExport() {
@@ -348,18 +334,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
 
     }
 
-    public List<ProviderConfig> getProviders() {
-        return convertProtocolToProvider(protocols);
-    }
 
-    /**
-     * @deprecated Replace to setProtocols()
-     */
-    // @Deprecated不允许改方法名
-
-    public void setProviders(List<ProviderConfig> providers) {
-        this.protocols = convertProviderToProtocol(providers);
-    }
 
 
     private Integer findConfigedPorts(ProtocolConfig protocolConfig, String name, Map<String, String> map) {
@@ -374,22 +349,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
         return portToBind;
     }
 
-    /**
-     *  Protocol 转换成Provider
-     * @param protocols
-     * @return
-     */
-    private static List<ProviderConfig> convertProtocolToProvider(List<ProtocolConfig> protocols) {
-        if (protocols == null || protocols.isEmpty()) {
-            return null;
-        }
-        //细节 省空间protocols.size()
-        List<ProviderConfig> providers = new ArrayList<ProviderConfig>(protocols.size());
-        for (ProtocolConfig provider : protocols) {
-            providers.add(convertProtocolToProvider(provider));
-        }
-        return providers;
-    }
+
 
     /**
      * *为服务提供商注册和绑定IP地址，可以单独配置。
@@ -453,9 +413,13 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
         return protocols;
     }
 
-
+    @Deprecated
     private static ProtocolConfig convertProviderToProtocol(ProviderConfig provider) {
         ProtocolConfig protocol = new ProtocolConfig();
+        protocol.setName(provider.getProtocol().getName());
+        protocol.setHost(provider.getHost());
+        protocol.setPort(provider.getPort());
+        protocol.setThreads(provider.getThreads());
         return protocol;
     }
 
@@ -484,20 +448,12 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
 
 
 
-    public List<ProtocolConfig> getProtocols() {
-        return protocols;
-    }
-
-    public void setProtocols(List<ProtocolConfig> protocols) {
-        this.protocols = protocols;
-    }
-
-
-
+    @Override
     public Boolean getExport() {
         return export;
     }
 
+    @Override
     public void setExport(Boolean export) {
         this.export = export;
     }
@@ -512,6 +468,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
 
 
 
+    @Override
     public void setApplication(ApplicationConfig application) {
         this.application = application;
     }
