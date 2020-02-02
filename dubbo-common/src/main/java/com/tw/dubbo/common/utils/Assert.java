@@ -2,7 +2,7 @@ package com.tw.dubbo.common.utils;
 
 /**
  * 工具校验类
- * @author tangwei
+ * @author clay
  * @date 2020/2/1 17:25
  */
 public class Assert {

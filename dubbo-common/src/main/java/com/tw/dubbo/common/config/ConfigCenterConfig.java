@@ -11,7 +11,7 @@ import java.util.Map;
 import static com.tw.dubbo.common.constants.CommonConstants.*;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/2 16:24
  */
 public class ConfigCenterConfig  extends AbstractConfig {

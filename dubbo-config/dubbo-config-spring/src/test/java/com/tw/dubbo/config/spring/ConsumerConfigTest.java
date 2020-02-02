@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.is;
 
 /**
  * ConsumerConfig
- * @author tangwei
+ * @author clay
  * @date 2020/1/30 1:17
  */
 public class ConsumerConfigTest {

@@ -4,7 +4,7 @@ import com.tw.dubbo.rpc.Invoker;
 import com.tw.dubbo.rpc.protocol.AbstractExporter;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/2 12:07
  */
 public class InjvmExporter <T> extends AbstractExporter<T> {

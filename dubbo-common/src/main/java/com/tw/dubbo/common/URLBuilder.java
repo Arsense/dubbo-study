@@ -5,7 +5,7 @@ import com.tw.dubbo.common.utils.URL;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/2 11:50
  */
 public class URLBuilder {

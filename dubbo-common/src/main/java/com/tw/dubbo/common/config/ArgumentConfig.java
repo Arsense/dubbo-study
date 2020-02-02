@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  *
  * The method arguments configuration
- * @author tangwei
+ * @author clay
  * @date 2020/2/2 17:00
  */
 public class ArgumentConfig  implements Serializable {

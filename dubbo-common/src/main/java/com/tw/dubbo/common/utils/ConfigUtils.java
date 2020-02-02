@@ -4,7 +4,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/1 17:35
  */
 public class ConfigUtils {

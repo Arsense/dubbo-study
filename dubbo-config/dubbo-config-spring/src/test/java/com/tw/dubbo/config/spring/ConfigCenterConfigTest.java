@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/2 16:24
  */
 public class ConfigCenterConfigTest {

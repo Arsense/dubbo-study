@@ -112,6 +112,17 @@ public class URL implements Serializable {
         return i;
     }
 
+    public URL addParameter(String key, String value) {
+        if (StringUtils.isEmpty(key)
+                || StringUtils.isEmpty(value)) {
+            return this;
+        }
+
+
+        return null;
+
+    }
+
     public URL setHost(String host) {
         return new URL(protocol, username, password, host, port, path, getParameters());
     }
@@ -327,5 +338,88 @@ public class URL implements Serializable {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    /**
+     * 将字符串解析成URL
+     * @param url
+     * @return
+     * @see URL
+     */
+    public static URL valueOf(String url) {
+
+        if (url == null || (url = url.trim()).length() == 0) {
+            throw new IllegalArgumentException("url == null");
+        }
+
+        //初始化url需要的变量
+        String protocol = null;
+        String username = null;
+        String password = null;
+        String host = null;
+        int port = 0;
+        String path = null;
+        Map<String, String> parameters = null;
+
+        int i = url.indexOf('?');
+
+        // 是否有额外参数需要解析
+        if (i >= 0) {
+
+        }
+        //开始协议格式校验
+        i = url.indexOf("://");
+        if (i >= 0) {
+            if (i == 0) {
+                throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+            }
+            protocol = url.substring(0, i);
+            url = url.substring(i + 3);
+        } else {
+            //处理文件格式协议
+            // case: file:/path/to/file.txt
+            i = url.indexOf(":/");
+            if (i >= 0) {
+                if (i == 0) {
+                    throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+                }
+                protocol = url.substring(0, i);
+                url = url.substring(i + 1);
+            }
+
+        }
+        //injvm://127.0.0.1/TestService 解析 TestService 部分
+        i = url.indexOf('/');
+        if (i >= 0) {
+            path = url.substring(i + 1);
+            url = url.substring(0, i);
+        }
+        i = url.lastIndexOf('@');
+        if (i >= 0) {
+            username = url.substring(0, i);
+            int j = username.indexOf(':');
+            if (j >= 0) {
+                password = username.substring(j + 1);
+                username = username.substring(0, j);
+            }
+            url = url.substring(i + 1);
+        }
+        i = url.lastIndexOf(':');
+        if (i >= 0 && i < url.length() - 1) {
+            if (url.lastIndexOf('%') > i) {
+                // ipv6 address with scope id
+                // e.g. fe80:0:0:0:894:aeec:f37d:23e1%en0
+                // see https://howdoesinternetwork.com/2013/ipv6-zone-id
+                // ignore
+            } else {
+                port = Integer.parseInt(url.substring(i + 1));
+                url = url.substring(0, i);
+            }
+        }
+        if (url.length() > 0) {
+            host = url;
+        }
+
+        return new URL(protocol, username, password, host, port, path, parameters);
     }
 }

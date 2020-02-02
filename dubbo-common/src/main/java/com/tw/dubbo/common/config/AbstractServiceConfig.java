@@ -3,7 +3,7 @@ package com.tw.dubbo.common.config;
 import java.util.List;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/1 16:55
  */
 public abstract class AbstractServiceConfig  extends AbstractInterfaceConfig {

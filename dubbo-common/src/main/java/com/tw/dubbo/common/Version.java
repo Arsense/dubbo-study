@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/2 2:06
  */
 public final class Version {

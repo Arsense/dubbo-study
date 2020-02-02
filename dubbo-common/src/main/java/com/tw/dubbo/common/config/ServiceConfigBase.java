@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/1/30 17:47
  */
 public abstract class ServiceConfigBase<T> extends AbstractServiceConfig {
