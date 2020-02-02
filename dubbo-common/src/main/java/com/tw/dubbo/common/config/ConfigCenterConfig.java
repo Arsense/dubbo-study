@@ -1,6 +1,14 @@
 package com.tw.dubbo.common.config;
 
 import com.tw.dubbo.common.constants.CommonConstants;
+import com.tw.dubbo.common.utils.StringUtils;
+import com.tw.dubbo.common.utils.URL;
+import com.tw.dubbo.common.utils.UrlUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.tw.dubbo.common.constants.CommonConstants.*;
 
 /**
  * @author tangwei
@@ -22,6 +30,22 @@ but it's real meaning depends on the actual Config Center you use.
      but it's real meaning depends on the actual Config Center you use.
      */
     private String group = CommonConstants.DUBBO;
+    private Boolean check = true;
+
+    public URL toUrl() {
+        Map<String, String> map = new HashMap<>();
+        appendParameters(map, this);
+        if (StringUtils.isEmpty(address)) {
+            address = ANYHOST_VALUE;
+        }
+        map.put(PATH_KEY, ConfigCenterConfig.class.getSimpleName());
+        // use 'zookeeper' as the default configcenter.
+        if (StringUtils.isEmpty(map.get(PROTOCOL_KEY))) {
+            map.put(PROTOCOL_KEY, ZOOKEEPER_PROTOCOL);
+        }
+
+        return UrlUtils.parseURL(address, map);
+    }
 
 
     private String address;

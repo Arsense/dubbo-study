@@ -1,6 +1,7 @@
 package com.tw.dubbo.common.config;
 
 import com.tw.dubbo.common.config.annotation.Parameter;
+import com.tw.dubbo.common.constants.CommonConstants;
 import com.tw.dubbo.common.utils.MethodUtils;
 import com.tw.dubbo.common.utils.StringUtils;
 import com.tw.dubbo.common.utils.URL;
@@ -35,7 +36,7 @@ public abstract class AbstractConfig implements Serializable {
 
     @Parameter(excluded = true)
     public String getPrefix() {
-        return prefix;
+        return StringUtils.isNotEmpty(prefix) ? prefix : (CommonConstants.DUBBO + "." + getTagName(this.getClass()));
     }
 
     public void setPrefix(String prefix) {

@@ -19,6 +19,8 @@ public interface CommonConstants {
 
     String LOCAL_PROTOCOL = "injvm";
     String LOCALHOST_VALUE = "127.0.0.1";
+    String ANYHOST_VALUE = "0.0.0.0";
+    String ZOOKEEPER_PROTOCOL = "zookeeper";
 
     String DUBBO_PROTOCOL = "dubbo";
 
