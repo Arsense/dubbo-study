@@ -30,6 +30,17 @@ public abstract class AbstractConfig implements Serializable {
      */
     protected Boolean isDefault;
 
+    protected String prefix;
+
+
+    @Parameter(excluded = true)
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
     /**
      * 更新配置
      */

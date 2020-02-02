@@ -10,7 +10,7 @@ import com.tw.dubbo.rpc.*;
  * @author clay
  * @date 2018/12/3 9:41
  */
-public class AbstractProtocol implements Protocol {
+public abstract class AbstractProtocol implements Protocol {
     @Override
     public int getDefaultPort() {
         return 0;

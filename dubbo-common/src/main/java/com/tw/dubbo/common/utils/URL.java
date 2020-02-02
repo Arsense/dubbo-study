@@ -46,6 +46,11 @@ public class URL implements Serializable {
     private volatile transient String parameter;
 
     private volatile transient String string;
+    private final Map<String, Map<String, String>> methodParameters ;
+
+    public Map<String, Map<String, String>> getMethodParameters() {
+        return methodParameters;
+    }
 
     public URL() {
         this.protocol = null;
@@ -55,6 +60,8 @@ public class URL implements Serializable {
         this.port = 0;
         this.path = null;
         this.parameters = null;
+        this.methodParameters = null;
+
     }
 
     public String toFullString() {
@@ -171,11 +178,13 @@ public class URL implements Serializable {
         }
         this.path = path;
         if (parameters == null) {
-            parameters = new HashMap<String, String>();
+            parameters = new HashMap<>();
         } else {
-            parameters = new HashMap<String, String>(parameters);
+            parameters = new HashMap<>(parameters);
         }
         this.parameters = Collections.unmodifiableMap(parameters);
+        this.methodParameters = new HashMap<>();
+
     }
 
     public URL(String protocol, String host, int port, String path, Map<String, String> parameters) {
@@ -200,7 +209,9 @@ public class URL implements Serializable {
 
         } else {
             i = url.indexOf("://");
-            if (i == 0) throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+            if (i == 0) {
+                throw new IllegalStateException("url missing protocol: \"" + url + "\"");
+            }
             protocol = url.substring(0, i);
             //越过 ://
             url = url.substring(i + 3);
@@ -211,7 +222,9 @@ public class URL implements Serializable {
             port = Integer.parseInt(url.substring(i + 1));
             url = url.substring(0, i);
         }
-        if (url.length() > 0) host = url;
+        if (url.length() > 0) {
+            host = url;
+        }
 
         return new URL(protocol, username, password, host, port, path, parameters);
 

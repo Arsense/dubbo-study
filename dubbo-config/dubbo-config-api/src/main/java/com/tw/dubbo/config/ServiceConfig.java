@@ -1,5 +1,7 @@
 package com.tw.dubbo.config;
 
+
+import com.tw.dubbo.common.URLBuilder;
 import com.tw.dubbo.common.bytecode.Wrapper;
 import com.tw.dubbo.common.config.*;
 import com.tw.dubbo.common.extension.ExtensionLoader;
@@ -16,6 +18,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
 
+import static com.tw.dubbo.common.constants.CommonConstants.*;
+import static com.tw.dubbo.common.utils.Constants.TIMESTAMP_KEY;
 import static com.tw.dubbo.common.utils.NetUtils.isInvalidLocalHost;
 
 /**
@@ -119,16 +123,21 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
         checkRef();
 //        generic = Boolean.FALSE.toString();
 
-        // 目前是空方法
+        // TODO 目前是空方法
         checkStubAndLocal(interfaceClass);
         ConfigValidationUtils.checkMock(interfaceClass, this);
 
 
         ConfigValidationUtils.validateServiceConfig(this);
 
+        // TODO 目前是空方法
+        appendParameters();
+
     }
 
+    public void appendParameters() {
 
+    }
 
     public List<MethodConfig>  getMethods(){
 
@@ -204,43 +213,18 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
             return;
         }
         exported = true;
-//        checkDefault();
 
-        if (provider != null) {
-            //
-            if (application == null) {
-                application = provider.getApplication();
-            }
-            if (registries == null) {
-                registries = provider.getRegistries();
-            }
-
-            if (protocols == null) {
-                protocols = provider.getProtocols();
-            }
-        }
-
-        if (interfaceName == null || interfaceName.length() == 0) {
-            throw new IllegalStateException("<dubbo:service interface=\"\" /> interface not allow null!");
-        }
-        try {
-            //三参类加载器 JVM会执行该类的静态代码段 先加载类
-            interfaceClass = Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
-        //TODO 检查基础配置是否OK
-//        检查接口的方法 不检查会怎样
-//        checkInterfaceAndMethods(interfaceClass, methods);
-//        checkRef();  检查ref 与我们的bean的interface匹配不
         doExportUrls();
 
     }
 
     private void doExportUrls() {
+        //将接口信息放到 本地缓存 也就是map中
+        // provider与service信息以后从容器类中存取
+
+
         List<URL> registryURLs = loadRegistries(true);
-        //因为可能有多个接口 所以是protocols
-        //后面只要这里check了 就不用 检查了 临时的
+
         if (protocols == null) {
             throw new RuntimeException("protocols 未初始化");
         }
@@ -257,15 +241,28 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
     private void doExportUrlsForProtocol(ProtocolConfig protocolConfig, List<URL> registryURLs) {
 
         String name = protocolConfig.getName();
+        //默认是dubbo协议
         if (name == null || name.length() == 0) {
-            name = "dubbo";
+            name = DUBBO;
         }
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("side", "provider");
-        map.put("dubbo", Version.getProtocolVersion());
-        map.put(com.tw.dubbo.common.utils.Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
 
-        //这里已经获取到了DemoService的 sayHello函数
+        //step1 关联信息解析放入dubbo中
+        Map<String, String> map = new HashMap<>();
+        map.put(SIDE_KEY, PROVIDER_SIDE);
+        //放入dubbo版本号 时间戳 pid
+        ServiceConfig.appendRuntimeParameters(map);
+
+//        AbstractConfig.appendParameters(map, getMetrics());
+        AbstractConfig.appendParameters(map, getApplication());
+//        AbstractConfig.appendParameters(map, getModule());
+        // remove 'default.' prefix for configs from ProviderConfig
+        // appendParameters(map, provider, Constants.DEFAULT_KEY);
+        AbstractConfig.appendParameters(map, provider);
+        AbstractConfig.appendParameters(map, protocolConfig);
+        AbstractConfig.appendParameters(map, this);
+
+
+        //获取类的所有方法名
         String[] methods = Wrapper.getWrapper(interfaceClass).getMethodNames();
         if (methods.length == 0) {
             logger.warn("没有找到相应的接口实现: " + interfaceClass.getName());
@@ -276,22 +273,31 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
         }
         String contextPath = null;
 
+        //初始化属性到serviceMetadata中
+//        serviceMetadata.getAttachments().putAll(map);
+
         //准备好数据可以开始请求 之前在干嘛啊 搞了那么多乱七八糟的没用的
         String host = this.findConfigedHosts(protocolConfig, registryURLs, map);
         Integer port = this.findConfigedPorts(protocolConfig, name, map);
+
         //这里构建的URL  前面构造好的数据
         URL url = new URL(name, host, port, (contextPath == null || contextPath.length() == 0 ? "" : contextPath + "/") + path, map);
+
+
+        //本地暴露接口
         exportLocal(url);
-        String scope = null;
-//        if (!"local".equalsIgnoreCase(scope)){
-//            if (registryURLs != null && !registryURLs.isEmpty()) {
-//
-//            }
-//
-//        }
 
+    }
 
+    private static void appendRuntimeParameters(Map<String, String> map) {
 
+        map.put(DUBBO_VERSION_KEY, Version.getProtocolVersion());
+        map.put(RELEASE_KEY, Version.getVersion());
+        map.put(TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
+
+        if (ConfigUtils.getPid() > 0) {
+                map.put(PID_KEY, String.valueOf(ConfigUtils.getPid()));
+        }
     }
 
     protected Class getServiceClass(T ref) {
@@ -299,13 +305,23 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
     }
 
     private void exportLocal(URL url) {
+
+        //转化url为本地格式
+        //mockprotocol2://192.168.10.1:7629/org.apache.dubbo.config.api.DemoService?anyhost=true&application=app&bind.ip=192.168.10.1&bind.port=7629&deprecated=false&dubbo=2.0.2&dynamic=true&export=true&generic=false&interface=org.apache.dubbo.config.api.DemoService&methods=getUsers,sayName,echo,getBox,throwDemoException&pid=8472&release=&side=provider&timestamp=1580612938735
+
+        //injvm://127.0.0.1/org.apache.dubbo.config.api.DemoService?anyhost=true&application=app&bind.ip=192.168.10.1&bind.port=7629&deprecated=false&dubbo=2.0.2&dynamic=true&export=true&generic=false&interface=org.apache.dubbo.config.api.DemoService&methods=getUsers,sayName,echo,getBox,throwDemoException&pid=8472&release=&side=provider&timestamp=1580612938735
+        //转换后
+
+        URL local = URLBuilder.from(url)
+                .setProtocol(LOCAL_PROTOCOL)
+                .setHost(LOCALHOST_VALUE)
+                .setPort(0)
+                .build();
+
+
         //equalsIgnoreCase 忽略大小写
         if (!"injvm".equalsIgnoreCase(url.getProtocol())) {
             //将URL的协议与IP等设置成本地
-            URL local = URL.valueOfUrl(url.toFullString())
-                    .setProtocol("injvm")
-                    .setHost("127.0.0.1")
-                    .setPort(0);
             ServiceClassContain.getInstance().pushServiceClass(getServiceClass(ref));
             //本地发布的关键代码
 //            Exporter<?> exporter = protocol.export(
@@ -313,6 +329,10 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
 //            exporters.add(exporter);
             logger.info("发布DUBBO接口 " + interfaceClass.getName() + " 道本地注册中心");
         }
+
+
+
+
     }
         protected List<URL> loadRegistries(boolean provider) {
         //把各种配置放到map 生成相应的URL类
@@ -337,7 +357,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
                 //dubbo版本
                 map.put("dubbo", Version.getProtocolVersion());
                 //时间粗
-                map.put(Constants.TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
+                map.put(TIMESTAMP_KEY, String.valueOf(System.currentTimeMillis()));
                 //拼接协议
                 if (!map.containsKey("protocol")) {
                     map.put("protocol", "dubbo");
@@ -466,9 +486,6 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
 
 
 

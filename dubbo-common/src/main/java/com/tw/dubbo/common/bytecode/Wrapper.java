@@ -26,18 +26,30 @@ public abstract class Wrapper {
      * @return
      */
     public static Wrapper getWrapper(Class<?> c) {
-        //动态类需要处理的
-//        while (ClassGenerator.isDynamicClass(c)) // can not wrapper on dynamic class.
-//            c = c.getSuperclass();
-//
-        return null;
+        //无法包装动态类。就是反射动态加载的
+        while (ClassGenerator.isDynamicClass(c)) {
+            c = c.getSuperclass();
+        }
+
+        if (c == Object.class) {
+            return null;
+        }
+
+        return WRAPPER_MAP.computeIfAbsent(c, key -> makeWrapper(key));
+
     }
 
-    //整个包装不是很明白
-    private static Wrapper makeWrapper(Class<?> rowClass) throws IllegalAccessException, InstantiationException {
-        //私有属性不出来
-        if (rowClass.isPrimitive())
+    /**
+     * 一种很复杂的包装方法
+     * @param rowClass
+     * @return
+     */
+    private static Wrapper makeWrapper(Class<?> rowClass)  {
+        //不处理私有属性
+        if (rowClass.isPrimitive()) {
             throw new IllegalArgumentException("Can not create wrapper for primitive type: " + rowClass);
+        }
+
         ClassLoader classLoader = ClassHelper.getClassLoader(rowClass);
 
         StringBuilder newMethod1 = new StringBuilder("public void setPropertyValue(Object o, String n, Object v){ ");
@@ -60,14 +72,14 @@ public abstract class Wrapper {
 
         ClassGenerator instance = ClassGenerator.newInstance(classLoader);
 
-        try{
+        try {
 
             Class<?> wc = instance.toClass();
             return (Wrapper) wc.newInstance();
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
-        }finally {
+        } finally {
 //            instance.clear();
         }
 

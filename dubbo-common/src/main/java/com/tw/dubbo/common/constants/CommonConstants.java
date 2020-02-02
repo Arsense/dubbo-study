@@ -7,9 +7,22 @@ package com.tw.dubbo.common.constants;
  * @date 2020/1/22 23:05
  */
 public interface CommonConstants {
+    String DUBBO = "dubbo";
+
+    String SIDE_KEY = "side";
+
+    String PROVIDER_SIDE = "provider";
+
+    String DUBBO_VERSION_KEY = "dubbo";
+    String PID_KEY = "pid";
+
+
+    String LOCAL_PROTOCOL = "injvm";
+    String LOCALHOST_VALUE = "127.0.0.1";
 
     String DUBBO_PROTOCOL = "dubbo";
 
+    String RELEASE_KEY = "release";
 
     String REMOVE_VALUE_PREFIX = "-";
 
