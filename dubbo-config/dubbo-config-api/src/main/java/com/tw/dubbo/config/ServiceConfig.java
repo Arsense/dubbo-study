@@ -180,7 +180,6 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
             setProtocols(provider.getProtocols());
         }
 //        convertProtocolIdsToProtocols();
-
     }
 
     /**
@@ -221,8 +220,6 @@ public class ServiceConfig<T> extends ServiceConfigBase<T>  {
     private void doExportUrls() {
         //将接口信息放到 本地缓存 也就是map中
         // provider与service信息以后从容器类中存取
-
-
         List<URL> registryURLs = loadRegistries(true);
 
         if (protocols == null) {

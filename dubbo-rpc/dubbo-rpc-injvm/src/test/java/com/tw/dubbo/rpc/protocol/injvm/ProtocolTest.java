@@ -6,12 +6,13 @@ import com.tw.dubbo.rpc.Exporter;
 import com.tw.dubbo.rpc.Invoker;
 import com.tw.dubbo.rpc.Protocol;
 import com.tw.dubbo.rpc.ProxyFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author clay
@@ -30,6 +31,11 @@ public class ProtocolTest {
         InjvmProtocol injvm = InjvmProtocol.getInjvmProtocol();
     }
 
+
+    @AfterEach
+    public void after() throws Exception {
+        int a = 1;
+    }
 
     @Test
     public void testLocalProtocol() throws Exception {

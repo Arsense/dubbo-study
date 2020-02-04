@@ -19,7 +19,7 @@ public class ExtensionLoader<T>  {
     private final Holder<Map<String, Class<?>>> cachedClasses = new Holder<>();
 
 
-    private static final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
+    private static final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<>();
 
     public ExtensionLoader(Class<T> type) {
         this.type = type;
@@ -34,13 +34,17 @@ public class ExtensionLoader<T>  {
      * @return
      */
     public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> type) {
+        //非空 是接口 含@SPI注解
         if (type == null) {
             throw new IllegalArgumentException("Extension type == null");
         }
+
         if (!type.isInterface()) {
             throw new IllegalArgumentException("Extension type(" + type + ") is not interface!");
         }
+
         ExtensionLoader<T> loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
+
         if (loader == null) {
             EXTENSION_LOADERS.putIfAbsent(type, new ExtensionLoader<T>(type));
             loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
