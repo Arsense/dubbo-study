@@ -1,10 +1,16 @@
 package com.tw.dubbo.common.extension;
 
+import com.tw.dubbo.common.extension.ext1.SimpleExt;
+import com.tw.dubbo.common.extension.ext1.impl.SimpleExtImpl1;
+import com.tw.dubbo.common.extension.support.NoSpiExt;
 import org.junit.jupiter.api.Test;
 
 import static com.tw.dubbo.common.extension.ExtensionLoader.getExtensionLoader;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -37,5 +43,30 @@ public class ExtensionLoaderTest {
         }
     }
 
+    @Test
+    public void test_getExtensionLoader_NotSpiAnnotation() throws Exception {
+        try {
+            getExtensionLoader(NoSpiExt.class);
+            fail();
+        } catch (IllegalArgumentException expected) {
+            assertThat(expected.getMessage(),
+                    allOf(containsString("org.apache.dubbo.common.extension.NoSpiExt"),
+                            containsString("is not an extension"),
+                            containsString("NOT annotated with @SPI")));
+        }
+    }
 
+
+    /**
+     * 上面全是测试异常情况 现在才是测试正常的
+     * @throws Exception
+     */
+    @Test
+    public void test_getDefaultExtension() throws Exception {
+        SimpleExt ext = getExtensionLoader(SimpleExt.class).getDefaultExtension();
+        assertThat(ext, instanceOf(SimpleExtImpl1.class));
+
+        String name = getExtensionLoader(SimpleExt.class).getDefaultExtensionName();
+        assertEquals("impl1", name);
+    }
 }
