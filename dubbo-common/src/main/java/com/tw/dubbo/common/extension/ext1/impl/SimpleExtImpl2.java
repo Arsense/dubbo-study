@@ -4,7 +4,7 @@ import com.tw.dubbo.common.extension.ext1.SimpleExt;
 import com.tw.dubbo.common.utils.URL;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/7 17:41
  */
 public class SimpleExtImpl2 implements SimpleExt {

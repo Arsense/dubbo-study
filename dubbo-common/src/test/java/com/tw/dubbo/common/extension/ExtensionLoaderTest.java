@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/5 1:17
  */
 public class ExtensionLoaderTest {
@@ -63,10 +63,13 @@ public class ExtensionLoaderTest {
      */
     @Test
     public void test_getDefaultExtension() throws Exception {
-        SimpleExt ext = getExtensionLoader(SimpleExt.class).getDefaultExtension();
+        //第一步主要是初始哈objectFactory这个参数
+        ExtensionLoader<SimpleExt> getExtensionLoader = getExtensionLoader(SimpleExt.class);
+
+        SimpleExt ext = getExtensionLoader.getDefaultExtension();
         assertThat(ext, instanceOf(SimpleExtImpl1.class));
 
-        String name = getExtensionLoader(SimpleExt.class).getDefaultExtensionName();
+        String name = getExtensionLoader.getDefaultExtensionName();
         assertEquals("impl1", name);
     }
 }
