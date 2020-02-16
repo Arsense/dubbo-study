@@ -1,6 +1,5 @@
 package com.tw.dubbo.common.extension;
 
-import com.tw.dubbo.common.extension.ext1.SimpleExt;
 import com.tw.dubbo.common.utils.ClassUtils;
 import com.tw.dubbo.common.utils.Holder;
 import com.tw.dubbo.common.utils.StringUtils;
@@ -12,9 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
@@ -49,6 +46,8 @@ public class ExtensionLoader<T>  {
      * dubbo配置SPI目录
      */
     private static final String DUBBO_DIRECTORY = "META-INF/dubbo/";
+    
+    private String cachedDefaultName;
 
     /**
      *
@@ -66,7 +65,11 @@ public class ExtensionLoader<T>  {
 
 
     private static final Pattern NAME_SEPARATOR = Pattern.compile("\\s*[,]+\\s*");
-
+    
+    private static final ConcurrentMap<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<>();
+    
+    
+    
 
     /**
      * 缓存
@@ -158,19 +161,26 @@ public class ExtensionLoader<T>  {
         }
     }
 
-    private Object injectExtension(T t) {
+    private Object injectExtension(T instance) {
         //TODO
+        if (objectFactory == null) {
+            return instance;
+        }
+
         return null;
     }
 
 
-
-
+    /**
+     * 判断缓存里有没有没有则创建相应的实例
+     * @param name
+     * @return
+     */
     public T getExtension(String name) {
         if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("Extension name == null");
         }
-
+        
         Holder<Object> holder = cachedInstances.get(name);
         if (holder == null) {
             //putIfAbsent类似于Put 不会覆盖数据
@@ -178,7 +188,43 @@ public class ExtensionLoader<T>  {
             holder = cachedInstances.get(name);
         }
         Object instance = holder.get();
+
+        if (instance == null) {
+            instance = createExtension(name);
+            holder.set(instance);
+        }
+
         return (T) instance;
+    }
+
+    private T createExtension(String name) {
+        Class<?> clazz = getExtensionClasses().get(name);
+
+        if (clazz == null) {
+            throw new RuntimeException("ddd" + name);
+
+        }
+
+        T instance = (T) EXTENSION_INSTANCES.get(clazz);
+        if (instance == null) {
+            try {
+                EXTENSION_INSTANCES.putIfAbsent(clazz, clazz.newInstance());
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            instance = (T) EXTENSION_INSTANCES.get(clazz);
+        }
+        injectExtension(instance);
+        
+        
+        initExtension(instance);
+        return instance;
+
+    }
+
+    private void initExtension(T instance) {
     }
 
 
@@ -252,6 +298,7 @@ public class ExtensionLoader<T>  {
      *
      * */
     private Map<String,Class<?>> loadExtensionClasses() {
+        cacheDefaultExtensionName();
 
         Map<String, Class<?>> extensionClasses = new HashMap<>();
         //扫描策略下的配置目录的SPI文件
@@ -262,6 +309,27 @@ public class ExtensionLoader<T>  {
 
         return extensionClasses;
 
+    }
+    /**
+     * 缓存第一个文件里配置类的名称 作为默认的
+     * extract and cache default extension name if exists
+     */
+    private void cacheDefaultExtensionName() {
+        final SPI defaultAnnotation = type.getAnnotation(SPI.class);
+        if (defaultAnnotation == null) {
+            return;
+        }
+        String value = defaultAnnotation.value();
+        if ((value = value.trim()).length() > 0) {
+            String[] names = NAME_SEPARATOR.split(value);
+            if (names.length > 1) {
+                throw new IllegalStateException("More than 1 default extension name on extension " + type.getName()
+                        + ": " + Arrays.toString(names));
+            }
+            if (names.length == 1) {
+                cachedDefaultName = names[0];
+            }
+        }
     }
 
     /**
@@ -314,6 +382,10 @@ public class ExtensionLoader<T>  {
                 line = line.trim();
                 if (line.length() > 0) {
                     try {
+                        final int ci = line.indexOf('#');
+                        if (ci >= 0) {
+                            line = line.substring(0, ci);
+                        }
                         String name = null;
                         int i = line.indexOf('=');
                         if (i > 0) {
@@ -344,18 +416,37 @@ public class ExtensionLoader<T>  {
                     type + ", class line: " + clazz.getName() + "), class "
                     + clazz.getName() + " is not subtype of interface.");
         }
-        clazz.getConstructor();
+        //处理适配的factory类
+        if (clazz.isAnnotationPresent(Adaptive.class)) {
+            cacheAdaptiveClass(clazz);
+        }
+        else{
+            clazz.getConstructor();
 
-        if (StringUtils.isNotEmpty(name)) {
-            //放到缓存变量中
-            cacheName(clazz, name);
-            //放到ExtensionClass的Map中
-            saveInExtensionClass(extensionClasses, clazz, name);
+            if (StringUtils.isNotEmpty(name)) {
+                //放到缓存变量中
+                cacheName(clazz, name);
+                //放到ExtensionClass的Map中
+                saveInExtensionClass(extensionClasses, clazz, name);
 
+            }
         }
 
 
+
+
     }
+
+    /**
+     * cache Adaptive class which is annotated with <code>Adaptive</code>
+     */
+    private void cacheAdaptiveClass(Class<?> clazz) {
+        if (cachedAdaptiveClass == null) {
+            cachedAdaptiveClass = clazz;
+        }
+
+    }
+
     /**
      * put clazz in extensionClasses
      */
@@ -384,11 +475,20 @@ public class ExtensionLoader<T>  {
 
     }
 
-    public SimpleExt getDefaultExtension() {
-        return null;
+    public T getDefaultExtension() {
+        getExtensionClasses();
+        if (StringUtils.isBlank(cachedDefaultName) || "true".equals(cachedDefaultName)) {
+            return null;
+        }
+        return getExtension(cachedDefaultName);
     }
 
     public String getDefaultExtensionName() {
         return null;
+    }
+
+    public Set<String> getSupportedExtensions() {
+        Map<String, Class<?>> clazzes = getExtensionClasses();
+        return Collections.unmodifiableSet(new TreeSet<>(clazzes.keySet()));
     }
 }

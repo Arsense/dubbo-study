@@ -44,8 +44,9 @@ public class StringUtils {
 
 
     public static int parseInteger(String str) {
-        if (!isInteger(str))
+        if (!isInteger(str)) {
             return 0;
+        }
         return Integer.parseInt(str);
     }
     public static boolean isInteger(String str) {
@@ -89,5 +90,23 @@ public class StringUtils {
         return str == null || str.isEmpty();
     }
 
+
+    /**
+     * 输入为空 或者全是空格都是 blank
+     * @param cs
+     * @return
+     */
+    public static boolean isBlank(CharSequence cs) {
+        int strLen;
+        if (cs == null || (strLen = cs.length()) == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
