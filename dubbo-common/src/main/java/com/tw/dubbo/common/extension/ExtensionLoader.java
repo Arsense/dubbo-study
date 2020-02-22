@@ -1,8 +1,6 @@
 package com.tw.dubbo.common.extension;
 
-import com.tw.dubbo.common.utils.ClassUtils;
-import com.tw.dubbo.common.utils.Holder;
-import com.tw.dubbo.common.utils.StringUtils;
+import com.tw.dubbo.common.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +46,9 @@ public class ExtensionLoader<T>  {
     private static final String DUBBO_DIRECTORY = "META-INF/dubbo/";
     
     private String cachedDefaultName;
+
+
+    private Set<Class<?>> cachedWrapperClasses;
 
     /**
      *
@@ -202,24 +203,29 @@ public class ExtensionLoader<T>  {
 
         if (clazz == null) {
             throw new RuntimeException("ddd" + name);
-
         }
 
-        T instance = (T) EXTENSION_INSTANCES.get(clazz);
-        if (instance == null) {
-            try {
-                EXTENSION_INSTANCES.putIfAbsent(clazz, clazz.newInstance());
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+        T instance = null;
+        try {
             instance = (T) EXTENSION_INSTANCES.get(clazz);
+            if (instance == null) {
+                EXTENSION_INSTANCES.putIfAbsent(clazz, clazz.newInstance());
+                instance = (T) EXTENSION_INSTANCES.get(clazz);
+            }
+            injectExtension(instance);
+            //如果接口实现有包装类 则用包装类覆盖
+            Set<Class<?>> wrapperClasses = cachedWrapperClasses;
+            if (CollectionUtils.isNotEmpty(wrapperClasses)) {
+                for (Class<?> wrapperClass : wrapperClasses) {
+                    instance = (T) injectExtension((T) wrapperClass.getConstructor(type).newInstance(instance));
+                }
+            }
+
+            initExtension(instance);
+        } catch (Throwable t) {
+            throw new IllegalStateException("Extension instance (name: " + name + ", class: " +
+                    type + ") couldn't be instantiated: " + t.getMessage(), t);
         }
-        injectExtension(instance);
-        
-        
-        initExtension(instance);
         return instance;
 
     }
@@ -419,10 +425,10 @@ public class ExtensionLoader<T>  {
         //处理适配的factory类
         if (clazz.isAnnotationPresent(Adaptive.class)) {
             cacheAdaptiveClass(clazz);
-        }
-        else{
+        } else if (isWrapperClass(clazz)) {
+            cacheWrapperClass(clazz);
+        } else {
             clazz.getConstructor();
-
             if (StringUtils.isNotEmpty(name)) {
                 //放到缓存变量中
                 cacheName(clazz, name);
@@ -437,6 +443,33 @@ public class ExtensionLoader<T>  {
 
     }
 
+
+    /**
+     * cache wrapper class
+     * <p>
+     * like: ProtocolFilterWrapper, ProtocolListenerWrapper
+     */
+    private void cacheWrapperClass(Class<?> clazz) {
+        if (cachedWrapperClasses == null) {
+            cachedWrapperClasses = new ConcurrentHashSet<>();
+        }
+        cachedWrapperClasses.add(clazz);
+    }
+
+
+    /**
+     * test if clazz is a wrapper class
+     * <p>
+     * which has Constructor with given class type as its only argument
+     */
+    private boolean isWrapperClass(Class<?> clazz) {
+        try {
+            clazz.getConstructor(type);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
     /**
      * cache Adaptive class which is annotated with <code>Adaptive</code>
      */
@@ -484,7 +517,8 @@ public class ExtensionLoader<T>  {
     }
 
     public String getDefaultExtensionName() {
-        return null;
+        getExtensionClasses();
+        return cachedDefaultName;
     }
 
     public Set<String> getSupportedExtensions() {
