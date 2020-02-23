@@ -64,6 +64,10 @@ public class URL implements Serializable {
 
     }
 
+    public URL(String protocol, String host, int port, String path) {
+        this(protocol, null, null, host, port, path, (Map<String, String>) null);
+    }
+
     public String toFullString() {
         if (full != null) {
             return full;

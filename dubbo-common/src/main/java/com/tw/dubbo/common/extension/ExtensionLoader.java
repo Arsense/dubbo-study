@@ -202,7 +202,7 @@ public class ExtensionLoader<T>  {
         Class<?> clazz = getExtensionClasses().get(name);
 
         if (clazz == null) {
-            throw new RuntimeException("ddd" + name);
+            throw new RuntimeException("属性文件没有配置请检查" + name);
         }
 
         T instance = null;
@@ -291,8 +291,16 @@ public class ExtensionLoader<T>  {
 
 
     private Map<String, Class<?>> getExtensionClasses() {
-        Map<String, Class<?>> classes = loadExtensionClasses();
-        cachedClasses.set(classes);
+        Map<String, Class<?>> classes = cachedClasses.get();
+        if (classes == null) {
+            synchronized (cachedClasses) {
+                classes = cachedClasses.get();
+                if (classes == null) {
+                    classes = loadExtensionClasses();
+                    cachedClasses.set(classes);
+                }
+            }
+        }
         return classes;
     }
 
@@ -524,5 +532,50 @@ public class ExtensionLoader<T>  {
     public Set<String> getSupportedExtensions() {
         Map<String, Class<?>> clazzes = getExtensionClasses();
         return Collections.unmodifiableSet(new TreeSet<>(clazzes.keySet()));
+    }
+
+    /**
+     * Register new extension via API
+     *
+     * @param name  extension name
+     * @param clazz extension class
+     * @throws IllegalStateException when extension with the same name has already been registered.
+     */
+    public void addExtension(String name, Class<?> clazz) {
+
+        getExtensionClasses(); // load classes
+
+        if (!type.isAssignableFrom(clazz)) {
+            throw new IllegalStateException("Input type " +
+                    clazz + " doesn't implement the Extension " + type);
+        }
+        if (clazz.isInterface()) {
+            throw new IllegalStateException("Input type " +
+                    clazz + " can't be interface!");
+        }
+
+        if (!clazz.isAnnotationPresent(Adaptive.class)) {
+            if (StringUtils.isBlank(name)) {
+                throw new IllegalStateException("Extension name is blank (Extension " + type + ")!");
+            }
+            if (cachedClasses.get().containsKey(name)) {
+                throw new IllegalStateException("Extension name " +
+                        name + " already exists (Extension " + type + ")!");
+            }
+
+            cachedNames.put(clazz, name);
+            cachedClasses.get().put(name, clazz);
+        } else {
+            if (cachedAdaptiveClass != null) {
+                throw new IllegalStateException("Adaptive Extension already exists (Extension " + type + ")!");
+            }
+
+            cachedAdaptiveClass = clazz;
+        }
+    }
+
+    public String getExtensionName(Class<?> extensionClass) {
+        getExtensionClasses();// load class
+        return cachedNames.get(extensionClass);
     }
 }
