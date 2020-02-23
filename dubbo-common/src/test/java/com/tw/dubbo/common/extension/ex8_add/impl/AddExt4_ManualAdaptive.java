@@ -6,7 +6,7 @@ import com.tw.dubbo.common.extension.ex8_add.AddExt4;
 import com.tw.dubbo.common.utils.URL;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/23 16:00
  */
 @Adaptive

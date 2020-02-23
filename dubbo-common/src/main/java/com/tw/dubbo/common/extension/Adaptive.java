@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * Provide helpful information for {@link ExtensionLoader} to inject dependency extension instance.
- * @author tangwei
+ * @author clay
  * @date 2020/2/9 22:14
  */
 @Documented

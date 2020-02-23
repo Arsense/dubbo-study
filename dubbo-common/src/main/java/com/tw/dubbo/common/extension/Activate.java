@@ -3,7 +3,7 @@ package com.tw.dubbo.common.extension;
 import java.lang.annotation.*;
 
 /**
- * @author tangwei
+ * @author clay
  * @date 2020/2/23 16:13
  */
 @Documented

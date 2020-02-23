@@ -17,8 +17,9 @@
 
 package com.tw.dubbo.common.extension.activate.impl;
 
-import org.apache.dubbo.common.extension.Activate;
-import org.apache.dubbo.common.extension.activate.ActivateExt1;
+
+import com.tw.dubbo.common.extension.Activate;
+import com.tw.dubbo.common.extension.activate.ActivateExt1;
 
 @Activate(value = {"value"}, group = {"value"})
 public class ValueActivateExtImpl implements ActivateExt1 {

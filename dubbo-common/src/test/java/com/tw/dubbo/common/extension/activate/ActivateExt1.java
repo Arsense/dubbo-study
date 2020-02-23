@@ -17,7 +17,8 @@
 
 package com.tw.dubbo.common.extension.activate;
 
-import org.apache.dubbo.common.extension.SPI;
+
+import com.tw.dubbo.common.extension.SPI;
 
 @SPI("impl1")
 public interface ActivateExt1 {

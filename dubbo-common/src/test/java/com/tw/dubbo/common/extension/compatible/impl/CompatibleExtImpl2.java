@@ -14,15 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tw.dubbo.common.extension.ext7.impl;
+package com.tw.dubbo.common.extension.compatible.impl;
 
 
-import com.tw.dubbo.common.extension.ext7.InitErrorExt;
+import com.tw.dubbo.common.extension.compatible.CompatibleExt;
 import com.tw.dubbo.common.utils.URL;
 
-public class Ext7Impl implements InitErrorExt {
+public class CompatibleExtImpl2 implements CompatibleExt {
     public String echo(URL url, String s) {
-        return "";
+        return "Ext1Impl2-echo";
+    }
+
+    public String yell(URL url, String s) {
+        return "Ext1Impl2-yell";
+    }
+
+    public String bang(URL url, int i) {
+        return "bang2";
     }
 
 }

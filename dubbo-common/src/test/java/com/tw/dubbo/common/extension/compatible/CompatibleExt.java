@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tw.dubbo.common.extension.ext7.impl;
+package com.tw.dubbo.common.extension.compatible;
 
 
-import com.tw.dubbo.common.extension.ext7.InitErrorExt;
+import com.tw.dubbo.common.extension.Adaptive;
+import com.tw.dubbo.common.extension.SPI;
 import com.tw.dubbo.common.utils.URL;
 
-public class Ext7Impl implements InitErrorExt {
-    public String echo(URL url, String s) {
-        return "";
-    }
-
+@SPI("impl1")
+public interface CompatibleExt {
+    @Adaptive
+    String echo(URL url, String s);
 }
