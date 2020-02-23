@@ -1,7 +1,10 @@
 package com.tw.dubbo.common;
 
+import com.tw.dubbo.common.utils.CollectionUtils;
+import com.tw.dubbo.common.utils.StringUtils;
 import com.tw.dubbo.common.utils.URL;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 /**
@@ -16,10 +19,14 @@ public class URLBuilder {
 
     private String password;
 
-    // by default, host to registry
+    /**
+     *  by default, host to registry
+     */
     private String host;
 
-    // by default, port to registry
+    /**
+     * by default, port to registry
+     */
     private int port;
 
     private String path;
@@ -79,9 +86,68 @@ public class URLBuilder {
                 methodParameters);
     }
 
-    public URL build() {
+    public URLBuilder setAddress(String address) {
+        int i = address.lastIndexOf(':');
+        String host;
+        int port = this.port;
+        if (i >= 0) {
+            host = address.substring(0, i);
+            port = Integer.parseInt(address.substring(i + 1));
+        } else {
+            host = address;
+        }
+        this.host = host;
+        this.port = port;
+        return this;
+    }
 
-        return new URL();
+    public URLBuilder clearParameters() {
+        parameters.clear();
+        return this;
+    }
+
+    public URLBuilder addParameter(String key, int value) {
+        return addParameter(key, String.valueOf(value));
+    }
+
+    public URLBuilder addParameter(String key, String value) {
+        if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value)) {
+            return this;
+        }
+
+        parameters.put(key, value);
+        return this;
+    }
+
+    public URL build() {
+        if (StringUtils.isEmpty(username) && StringUtils.isNotEmpty(password)) {
+            throw new IllegalArgumentException("Invalid url, password without username!");
+        }
+        if (CollectionUtils.isEmptyMap(methodParameters)) {
+            return new URL(protocol, username, password, host, port, path, parameters);
+        } else {
+            return new URL(protocol, username, password, host, port, path, parameters, methodParameters);
+        }
+    }
+
+    public URLBuilder addParameterIfAbsent(String key, String value) {
+        if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value)) {
+            return this;
+        }
+        if (hasParameter(key)) {
+            return this;
+        }
+        parameters.put(key, value);
+        return this;
+    }
+
+    public boolean hasParameter(String key) {
+        String value = getParameter(key);
+        return StringUtils.isNotEmpty(value);
+    }
+
+    public String getParameter(String key) {
+        return parameters.get(key);
     }
 
     public URLBuilder setProtocol(String protocol) {
@@ -115,7 +181,22 @@ public class URLBuilder {
     }
 
 
+    public URLBuilder removeParameters(Collection<String> keys) {
+        if (CollectionUtils.isEmpty(keys)) {
+            return this;
+        }
+        return removeParameters(keys.toArray(new String[0]));
+    }
 
+    public URLBuilder removeParameters(String... keys) {
+        if (keys == null || keys.length == 0) {
+            return this;
+        }
+        for (String key : keys) {
+            parameters.remove(key);
+        }
+        return this;
+    }
 
     public String getUsername() {
         return username;
@@ -144,9 +225,12 @@ public class URLBuilder {
         return path;
     }
 
-    public void setPath(String path) {
+    public URLBuilder setPath(String path) {
         this.path = path;
+        return this;
     }
+
+
 
     public Map<String, String> getParameters() {
         return parameters;

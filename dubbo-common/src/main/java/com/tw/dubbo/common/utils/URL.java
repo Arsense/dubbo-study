@@ -64,7 +64,7 @@ public class URL implements Serializable {
 
     }
 
-    public URL(String protocol, String host, int port, String path) {
+    public URL(String protocol, String host, int port, String path, String protocol1) {
         this(protocol, null, null, host, port, path, (Map<String, String>) null);
     }
 
@@ -175,18 +175,37 @@ public class URL implements Serializable {
         return new InetSocketAddress(host, port);
     }
 
+    /**
+     * 含有methodParameters的构造方法
+     * @param protocol
+     * @param username
+     * @param password
+     * @param host
+     * @param port
+     * @param path
+     * @param parameters
+     * @param methodParameters
+     */
+    public URL(String protocol,
+               String username,
+               String password,
+               String host,
+               int port,
+               String path,
+               Map<String, String> parameters,
+               Map<String, Map<String, String>> methodParameters) {
 
-
-    public URL(String protocol, String username, String password, String host, int port, String path, Map<String, String> parameters) {
-        if ((username == null || username.length() == 0)
-                && password != null && password.length() > 0) {
+        if (StringUtils.isEmpty(username)
+                && StringUtils.isNotEmpty(password)) {
             throw new IllegalArgumentException("Invalid url, password without username!");
         }
         this.protocol = protocol;
         this.username = username;
         this.password = password;
         this.host = host;
-        this.port = (port < 0 ? 0 : port);
+        this.port = Math.max(port, 0);
+//        this.address = getAddress(this.host, this.port);
+
         // trim the beginning "/"
         while (path != null && path.startsWith("/")) {
             path = path.substring(1);
@@ -198,9 +217,14 @@ public class URL implements Serializable {
             parameters = new HashMap<>(parameters);
         }
         this.parameters = Collections.unmodifiableMap(parameters);
-        this.methodParameters = new HashMap<>();
+        this.methodParameters = Collections.unmodifiableMap(methodParameters);
+    }
+
+    public URL(String protocol, String username, String password, String host, int port, String path, Map<String, String> parameters) {
+        this(protocol, username, password, host, port, path, parameters, toMethodParameters(parameters));
 
     }
+
 
     public URL(String protocol, String host, int port, String path, Map<String, String> parameters) {
         this(protocol, null, null, host, port, path, parameters);
@@ -265,6 +289,16 @@ public class URL implements Serializable {
         }
         return new URL(protocol, username, password, host, port, path, map);
     }
+
+
+    public static Map<String, Map<String, String>> toMethodParameters(Map<String, String> parameters) {
+
+        Map<String, Map<String, String>> methodParameters = new HashMap<>();
+
+        return methodParameters;
+    }
+
+
 
     public String getAddress() {
         return  host + ":" + port;
@@ -390,7 +424,23 @@ public class URL implements Serializable {
 
         // 是否有额外参数需要解析
         if (i >= 0) {
-
+            //根据&分成数组解析
+            String[] parts = url.substring(i + 1).split("&");
+            parameters = new HashMap<>();
+            for (String part : parts) {
+                //去空格
+                part = part.trim();
+                if (part.length() > 0) {
+                    int j = part.indexOf('=');
+                    if (j >= 0) {
+                        parameters.put(part.substring(0, j), part.substring(j + 1));
+                    } else {
+                        parameters.put(part, part);
+                    }
+                }
+            }
+            //url去除后面？get 请求参数
+            url = url.substring(0, i);
         }
         //开始协议格式校验
         i = url.indexOf("://");
@@ -446,5 +496,14 @@ public class URL implements Serializable {
         }
 
         return new URL(protocol, username, password, host, port, path, parameters);
+    }
+
+    @Override
+    public String toString() {
+        if (string != null) {
+            return string;
+        }
+        // no show username and password
+        return string = buildString(false, true);
     }
 }
