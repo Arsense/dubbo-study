@@ -1,5 +1,6 @@
 package com.tw.dubbo.common.extension;
 
+import com.tw.dubbo.common.extension.support.ActivateComparator;
 import com.tw.dubbo.common.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,12 +8,15 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
+
+import static com.tw.dubbo.common.constants.CommonConstants.COMMA_SPLIT_PATTERN;
+import static com.tw.dubbo.common.constants.CommonConstants.DEFAULT_KEY;
+import static com.tw.dubbo.common.constants.CommonConstants.REMOVE_VALUE_PREFIX;
 
 /**
  * @author clay
@@ -23,6 +27,7 @@ public class ExtensionLoader<T>  {
 
     private static final Logger logger = LoggerFactory.getLogger(ExtensionLoader.class);
 
+    private final Map<String, Object> cachedActivates = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<String, Holder<Object>> cachedInstances = new ConcurrentHashMap<>();
 
@@ -68,9 +73,20 @@ public class ExtensionLoader<T>  {
     private static final Pattern NAME_SEPARATOR = Pattern.compile("\\s*[,]+\\s*");
     
     private static final ConcurrentMap<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<>();
-    
-    
-    
+
+
+    /**
+     * Get the extension by specified name if found, or {@link #getDefaultExtension() returns the default one}
+     *
+     * @param name the name of extension
+     * @return non-null
+     */
+    public T getOrDefaultExtension(String name) {
+        return containsExtension(name)  ? getExtension(name) : getDefaultExtension();
+    }
+    private boolean containsExtension(String name) {
+        return getExtensionClasses().containsKey(name);
+    }
 
     /**
      * 缓存
@@ -232,7 +248,142 @@ public class ExtensionLoader<T>  {
 
     private void initExtension(T instance) {
     }
+    /**
+     * This is equivalent to {@code getActivateExtension(url, key, null)}
+     *
+     * @param url url
+     * @param key url parameter key which used to get extension point names
+     * @return extension list which are activated.
+     * @see #getActivateExtension(URL, String, String)
+     */
+    public List<T> getActivateExtension(URL url, String key) {
+        return getActivateExtension(url, key, null);
+    }
 
+    /**
+     * This is equivalent to {@code getActivateExtension(url, values, null)}
+     *
+     * @param url    url
+     * @param values extension point names
+     * @return extension list which are activated
+     * @see #getActivateExtension(URL, String[], String)
+     */
+    public List<T> getActivateExtension(URL url, String[] values) {
+        return getActivateExtension(url, values, null);
+    }
+
+    /**
+     * This is equivalent to {@code getActivateExtension(url, url.getParameter(key).split(","), null)}
+     *
+     * @param url   url
+     * @param key   url parameter key which used to get extension point names
+     * @param group group
+     * @return extension list which are activated.
+     * @see #getActivateExtension(URL, String[], String)
+     */
+    public List<T> getActivateExtension(URL url, String key, String group) {
+        String value = url.getParameter(key);
+        return getActivateExtension(url, StringUtils.isEmpty(value) ? null : COMMA_SPLIT_PATTERN.split(value), group);
+    }
+
+    /**
+     * Get activate extensions.
+     *
+     * @param url    url
+     * @param values extension point names
+     * @param group  group
+     * @return extension list which are activated
+     * @see com.tw.dubbo.common.extension.Activate
+     */
+    public List<T> getActivateExtension(URL url, String[] values, String group) {
+        List<T> exts = new ArrayList<>();
+        List<String> names = values == null ? new ArrayList<>(0) : Arrays.asList(values);
+        if (!names.contains(REMOVE_VALUE_PREFIX + DEFAULT_KEY)) {
+            getExtensionClasses();
+            for (Map.Entry<String, Object> entry : cachedActivates.entrySet()) {
+                String name = entry.getKey();
+                Object activate = entry.getValue();
+
+                String[] activateGroup, activateValue;
+
+                if (activate instanceof Activate) {
+                    activateGroup = ((Activate) activate).group();
+                    activateValue = ((Activate) activate).value();
+                } else if (activate instanceof com.tw.dubbo.common.extension.Activate) {
+                    activateGroup = ((com.tw.dubbo.common.extension.Activate) activate).group();
+                    activateValue = ((com.tw.dubbo.common.extension.Activate) activate).value();
+                } else {
+                    continue;
+                }
+                if (isMatchGroup(group, activateGroup)
+                        && !names.contains(name)
+                        && !names.contains(REMOVE_VALUE_PREFIX + name)
+                        && isActive(activateValue, url)) {
+                    exts.add(getExtension(name));
+                }
+            }
+            exts.sort(ActivateComparator.COMPARATOR);
+        }
+        List<T> usrs = new ArrayList<>();
+        for (int i = 0; i < names.size(); i++) {
+            String name = names.get(i);
+            if (!name.startsWith(REMOVE_VALUE_PREFIX)
+                    && !names.contains(REMOVE_VALUE_PREFIX + name)) {
+                if (DEFAULT_KEY.equals(name)) {
+                    if (!usrs.isEmpty()) {
+                        exts.addAll(0, usrs);
+                        usrs.clear();
+                    }
+                } else {
+                    usrs.add(getExtension(name));
+                }
+            }
+        }
+        if (!usrs.isEmpty()) {
+            exts.addAll(usrs);
+        }
+        return exts;
+    }
+
+
+    private boolean isActive(String[] keys, URL url) {
+        if (keys.length == 0) {
+            return true;
+        }
+        for (String key : keys) {
+            // @Active(value="key1:value1, key2:value2")
+            String keyValue = null;
+            if (key.contains(":")) {
+                String[] arr = key.split(":");
+                key = arr[0];
+                keyValue = arr[1];
+            }
+
+            for (Map.Entry<String, String> entry : url.getParameters().entrySet()) {
+                String k = entry.getKey();
+                String v = entry.getValue();
+                if ((k.equals(key) || k.endsWith("." + key))
+                        && ((keyValue != null && keyValue.equals(v)) || (keyValue == null && ConfigUtils.isNotEmpty(v)))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isMatchGroup(String group, String[] groups) {
+        if (StringUtils.isEmpty(group)) {
+            return true;
+        }
+        if (groups != null && groups.length > 0) {
+            for (String g : groups) {
+                if (group.equals(g)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public boolean hasExtension(String name) {
         if (name == null || name.length() == 0) {
@@ -360,7 +511,7 @@ public class ExtensionLoader<T>  {
         String fileName = directory + type;
 
         try {
-            Enumeration<URL> urls = null;
+            Enumeration<java.net.URL> urls = null;
             ClassLoader classLoader = findClassLoader();
 
             //获取类的相对路径
@@ -577,5 +728,49 @@ public class ExtensionLoader<T>  {
     public String getExtensionName(Class<?> extensionClass) {
         getExtensionClasses();// load class
         return cachedNames.get(extensionClass);
+    }
+
+
+    /**
+     * Replace the existing extension via API
+     *
+     * @param name  extension name
+     * @param clazz extension class
+     * @throws IllegalStateException when extension to be placed doesn't exist
+     * @deprecated not recommended any longer, and use only when test
+     */
+    @Deprecated
+    public void replaceExtension(String name, Class<?> clazz) {
+        getExtensionClasses(); // load classes
+
+        if (!type.isAssignableFrom(clazz)) {
+            throw new IllegalStateException("Input type " +
+                    clazz + " doesn't implement Extension " + type);
+        }
+        if (clazz.isInterface()) {
+            throw new IllegalStateException("Input type " +
+                    clazz + " can't be interface!");
+        }
+
+        if (!clazz.isAnnotationPresent(Adaptive.class)) {
+            if (StringUtils.isBlank(name)) {
+                throw new IllegalStateException("Extension name is blank (Extension " + type + ")!");
+            }
+            if (!cachedClasses.get().containsKey(name)) {
+                throw new IllegalStateException("Extension name " +
+                        name + " doesn't exist (Extension " + type + ")!");
+            }
+
+            cachedNames.put(clazz, name);
+            cachedClasses.get().put(name, clazz);
+            cachedInstances.remove(name);
+        } else {
+            if (cachedAdaptiveClass == null) {
+                throw new IllegalStateException("Adaptive Extension doesn't exist (Extension " + type + ")!");
+            }
+
+            cachedAdaptiveClass = clazz;
+            cachedAdaptiveInstance.set(null);
+        }
     }
 }

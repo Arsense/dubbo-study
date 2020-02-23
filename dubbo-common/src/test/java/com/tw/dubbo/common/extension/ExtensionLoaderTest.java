@@ -1,24 +1,35 @@
 package com.tw.dubbo.common.extension;
 
+import com.tw.dubbo.common.extension.activate.ActivateExt1;
+import com.tw.dubbo.common.extension.activate.impl.*;
 import com.tw.dubbo.common.extension.ex8_add.AddExt1;
 import com.tw.dubbo.common.extension.ex8_add.AddExt2;
-import com.tw.dubbo.common.extension.ex8_add.impl.AddExt1_ManualAdd1;
-import com.tw.dubbo.common.extension.ex8_add.impl.AddExt2_ManualAdaptive;
+import com.tw.dubbo.common.extension.ex8_add.AddExt3;
+import com.tw.dubbo.common.extension.ex8_add.AddExt4;
+import com.tw.dubbo.common.extension.ex8_add.impl.*;
 import com.tw.dubbo.common.extension.ext1.SimpleExt;
 import com.tw.dubbo.common.extension.ext1.impl.SimpleExtImpl1;
 import com.tw.dubbo.common.extension.ext1.impl.SimpleExtImpl2;
+import com.tw.dubbo.common.extension.ext10_multi_names.Ext10MultiNames;
 import com.tw.dubbo.common.extension.ext6_wrap.WrappedExt;
 import com.tw.dubbo.common.extension.ext6_wrap.impl.Ext5Wrapper1;
 import com.tw.dubbo.common.extension.ext6_wrap.impl.Ext5Wrapper2;
+import com.tw.dubbo.common.extension.ext7.InitErrorExt;
 import com.tw.dubbo.common.extension.ext9_empty.Ext9Empty;
 import com.tw.dubbo.common.extension.ext9_empty.impl.Ext9EmptyImpl;
+import com.tw.dubbo.common.extension.injection.InjectExt;
+import com.tw.dubbo.common.extension.injection.impl.InjectExtImpl;
 import com.tw.dubbo.common.extension.support.NoSpiExt;
 import com.tw.dubbo.common.utils.URL;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import static com.tw.dubbo.common.constants.CommonConstants.GROUP_KEY;
 import static com.tw.dubbo.common.extension.ExtensionLoader.getExtensionLoader;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -256,192 +267,194 @@ public class ExtensionLoaderTest {
         AddExt2 adaptive = loader.getAdaptiveExtension();
         assertTrue(adaptive instanceof AddExt2_ManualAdaptive);
     }
-//
-//    @Test
-//    public void test_AddExtension_Adaptive_ExceptionWhenExistedAdaptive() throws Exception {
-//        ExtensionLoader<AddExt1> loader = getExtensionLoader(AddExt1.class);
-//
-//        loader.getAdaptiveExtension();
-//
-//        try {
-//            loader.addExtension(null, AddExt1_ManualAdaptive.class);
-//            fail();
-//        } catch (IllegalStateException expected) {
-//            assertThat(expected.getMessage(), containsString("Adaptive Extension already exists (Extension interface org.apache.dubbo.common.extension.ext8_add.AddExt1)!"));
-//        }
-//    }
-//
-//    @Test
-//    public void test_replaceExtension() throws Exception {
-//        try {
-//            getExtensionLoader(AddExt1.class).getExtension("Manual2");
-//            fail();
-//        } catch (IllegalStateException expected) {
-//            assertThat(expected.getMessage(), containsString("No such extension org.apache.dubbo.common.extension.ext8_add.AddExt1 by name Manual"));
-//        }
-//
-//        {
-//            AddExt1 ext = getExtensionLoader(AddExt1.class).getExtension("impl1");
-//
-//            assertThat(ext, instanceOf(AddExt1Impl1.class));
-//            assertEquals("impl1", getExtensionLoader(AddExt1.class).getExtensionName(AddExt1Impl1.class));
-//        }
-//        {
-//            getExtensionLoader(AddExt1.class).replaceExtension("impl1", AddExt1_ManualAdd2.class);
-//            AddExt1 ext = getExtensionLoader(AddExt1.class).getExtension("impl1");
-//
-//            assertThat(ext, instanceOf(AddExt1_ManualAdd2.class));
-//            assertEquals("impl1", getExtensionLoader(AddExt1.class).getExtensionName(AddExt1_ManualAdd2.class));
-//        }
-//    }
 
-//    @Test
-//    public void test_replaceExtension_Adaptive() throws Exception {
-//        ExtensionLoader<AddExt3> loader = getExtensionLoader(AddExt3.class);
-//
-//        AddExt3 adaptive = loader.getAdaptiveExtension();
-//        assertFalse(adaptive instanceof AddExt3_ManualAdaptive);
-//
-//        loader.replaceExtension(null, AddExt3_ManualAdaptive.class);
-//
-//        adaptive = loader.getAdaptiveExtension();
-//        assertTrue(adaptive instanceof AddExt3_ManualAdaptive);
-//    }
-//
-//    @Test
-//    public void test_replaceExtension_ExceptionWhenNotExistedExtension() throws Exception {
-//        AddExt1 ext = getExtensionLoader(AddExt1.class).getExtension("impl1");
-//
-//        try {
-//            getExtensionLoader(AddExt1.class).replaceExtension("NotExistedExtension", AddExt1_ManualAdd1.class);
-//            fail();
-//        } catch (IllegalStateException expected) {
-//            assertThat(expected.getMessage(), containsString("Extension name NotExistedExtension doesn't exist (Extension interface org.apache.dubbo.common.extension.ext8_add.AddExt1)"));
-//        }
-//    }
-//
-//    @Test
-//    public void test_replaceExtension_Adaptive_ExceptionWhenNotExistedExtension() throws Exception {
-//        ExtensionLoader<AddExt4> loader = getExtensionLoader(AddExt4.class);
-//
-//        try {
-//            loader.replaceExtension(null, AddExt4_ManualAdaptive.class);
-//            fail();
-//        } catch (IllegalStateException expected) {
-//            assertThat(expected.getMessage(), containsString("Adaptive Extension doesn't exist (Extension interface org.apache.dubbo.common.extension.ext8_add.AddExt4)"));
-//        }
-//    }
-//
-//    @Test
-//    public void test_InitError() throws Exception {
-//        ExtensionLoader<InitErrorExt> loader = getExtensionLoader(InitErrorExt.class);
-//
-//        loader.getExtension("ok");
-//
-//        try {
-//            loader.getExtension("error");
-//            fail();
-//        } catch (IllegalStateException expected) {
-//            assertThat(expected.getMessage(), containsString("Failed to load extension class (interface: interface org.apache.dubbo.common.extension.ext7.InitErrorExt"));
-//            assertThat(expected.getCause(), instanceOf(ExceptionInInitializerError.class));
-//        }
-//    }
-//
-//    @Test
-//    public void testLoadActivateExtension() throws Exception {
-//        // test default
-//        URL url = URL.valueOf("test://localhost/test");
-//        List<ActivateExt1> list = getExtensionLoader(ActivateExt1.class)
-//                .getActivateExtension(url, new String[]{}, "default_group");
-//        Assertions.assertEquals(1, list.size());
-//        Assertions.assertSame(list.get(0).getClass(), ActivateExt1Impl1.class);
-//
-//        // test group
-//        url = url.addParameter(GROUP_KEY, "group1");
-//        list = getExtensionLoader(ActivateExt1.class)
-//                .getActivateExtension(url, new String[]{}, "group1");
-//        Assertions.assertEquals(1, list.size());
-//        Assertions.assertSame(list.get(0).getClass(), GroupActivateExtImpl.class);
-//
-//        // test old @Activate group
-//        url = url.addParameter(GROUP_KEY, "old_group");
-//        list = getExtensionLoader(ActivateExt1.class)
-//                .getActivateExtension(url, new String[]{}, "old_group");
-//        Assertions.assertEquals(2, list.size());
-//        Assertions.assertTrue(list.get(0).getClass() == OldActivateExt1Impl2.class
-//                || list.get(0).getClass() == OldActivateExt1Impl3.class);
-//
-//        // test value
-//        url = url.removeParameter(GROUP_KEY);
-//        url = url.addParameter(GROUP_KEY, "value");
-//        url = url.addParameter("value", "value");
-//        list = getExtensionLoader(ActivateExt1.class)
-//                .getActivateExtension(url, new String[]{}, "value");
-//        Assertions.assertEquals(1, list.size());
-//        Assertions.assertSame(list.get(0).getClass(), ValueActivateExtImpl.class);
-//
-//        // test order
-//        url = URL.valueOf("test://localhost/test");
-//        url = url.addParameter(GROUP_KEY, "order");
-//        list = getExtensionLoader(ActivateExt1.class)
-//                .getActivateExtension(url, new String[]{}, "order");
-//        Assertions.assertEquals(2, list.size());
-//        Assertions.assertSame(list.get(0).getClass(), OrderActivateExtImpl1.class);
-//        Assertions.assertSame(list.get(1).getClass(), OrderActivateExtImpl2.class);
-//    }
-//
-//    @Test
-//    public void testLoadDefaultActivateExtension() throws Exception {
-//        // test default
-//        URL url = URL.valueOf("test://localhost/test?ext=order1,default");
-//        List<ActivateExt1> list = getExtensionLoader(ActivateExt1.class)
-//                .getActivateExtension(url, "ext", "default_group");
-//        Assertions.assertEquals(2, list.size());
-//        Assertions.assertSame(list.get(0).getClass(), OrderActivateExtImpl1.class);
-//        Assertions.assertSame(list.get(1).getClass(), ActivateExt1Impl1.class);
-//
-//        url = URL.valueOf("test://localhost/test?ext=default,order1");
-//        list = getExtensionLoader(ActivateExt1.class)
-//                .getActivateExtension(url, "ext", "default_group");
-//        Assertions.assertEquals(2, list.size());
-//        Assertions.assertSame(list.get(0).getClass(), ActivateExt1Impl1.class);
-//        Assertions.assertSame(list.get(1).getClass(), OrderActivateExtImpl1.class);
-//    }
-//
-//    @Test
-//    public void testInjectExtension() {
-//        // test default
-//        InjectExt injectExt = getExtensionLoader(InjectExt.class).getExtension("injection");
-//        InjectExtImpl injectExtImpl = (InjectExtImpl) injectExt;
-//        Assertions.assertNotNull(injectExtImpl.getSimpleExt());
-//        Assertions.assertNull(injectExtImpl.getSimpleExt1());
-//        Assertions.assertNull(injectExtImpl.getGenericType());
-//    }
-//
-//    @Test
-//    void testMultiNames() {
-//        Ext10MultiNames ext10MultiNames = getExtensionLoader(Ext10MultiNames.class).getExtension("impl");
-//        Assertions.assertNotNull(ext10MultiNames);
-//        ext10MultiNames = getExtensionLoader(Ext10MultiNames.class).getExtension("implMultiName");
-//        Assertions.assertNotNull(ext10MultiNames);
-//        Assertions.assertThrows(
-//                IllegalStateException.class,
-//                () -> getExtensionLoader(Ext10MultiNames.class).getExtension("impl,implMultiName")
-//        );
-//    }
-//
-//    @Test
-//    public void testGetOrDefaultExtension() {
-//        ExtensionLoader<InjectExt> loader = getExtensionLoader(InjectExt.class);
-//        InjectExt injectExt = loader.getOrDefaultExtension("non-exists");
-//        assertEquals(InjectExtImpl.class, injectExt.getClass());
-//        assertEquals(InjectExtImpl.class, loader.getOrDefaultExtension("injection").getClass());
-//    }
-//
-//    @Test
-//    public void testGetSupported() {
-//        ExtensionLoader<InjectExt> loader = getExtensionLoader(InjectExt.class);
-//        assertEquals(1, loader.getSupportedExtensions().size());
-//        assertEquals(Collections.singleton("injection"), loader.getSupportedExtensions());
-//    }
+    @Test
+    public void test_AddExtension_Adaptive_ExceptionWhenExistedAdaptive() throws Exception {
+        ExtensionLoader<AddExt1> loader = getExtensionLoader(AddExt1.class);
+
+        loader.getAdaptiveExtension();
+
+        try {
+            loader.addExtension(null, AddExt1_ManualAdaptive.class);
+            fail();
+        } catch (IllegalStateException expected) {
+            assertThat(expected.getMessage(), containsString("Adaptive Extension already exists (Extension interface org.apache.dubbo.common.extension.ext8_add.AddExt1)!"));
+        }
+
+
+    }
+
+    @Test
+    public void test_replaceExtension() throws Exception {
+        try {
+            getExtensionLoader(AddExt1.class).getExtension("Manual2");
+            fail();
+        } catch (IllegalStateException expected) {
+            assertThat(expected.getMessage(), containsString("No such extension org.apache.dubbo.common.extension.ext8_add.AddExt1 by name Manual"));
+        }
+
+        {
+            AddExt1 ext = getExtensionLoader(AddExt1.class).getExtension("impl1");
+
+            assertThat(ext, instanceOf(AddExt1Impl1.class));
+            assertEquals("impl1", getExtensionLoader(AddExt1.class).getExtensionName(AddExt1Impl1.class));
+        }
+        {
+            getExtensionLoader(AddExt1.class).replaceExtension("impl1", AddExt1_ManualAdd2.class);
+            AddExt1 ext = getExtensionLoader(AddExt1.class).getExtension("impl1");
+
+            assertThat(ext, instanceOf(AddExt1_ManualAdd2.class));
+            assertEquals("impl1", getExtensionLoader(AddExt1.class).getExtensionName(AddExt1_ManualAdd2.class));
+        }
+    }
+
+    @Test
+    public void test_replaceExtension_Adaptive() throws Exception {
+        ExtensionLoader<AddExt3> loader = getExtensionLoader(AddExt3.class);
+
+        AddExt3 adaptive = loader.getAdaptiveExtension();
+        assertFalse(adaptive instanceof AddExt3_ManualAdaptive);
+
+        loader.replaceExtension(null, AddExt3_ManualAdaptive.class);
+
+        adaptive = loader.getAdaptiveExtension();
+        assertTrue(adaptive instanceof AddExt3_ManualAdaptive);
+    }
+
+    @Test
+    public void test_replaceExtension_ExceptionWhenNotExistedExtension() throws Exception {
+        AddExt1 ext = getExtensionLoader(AddExt1.class).getExtension("impl1");
+
+        try {
+            getExtensionLoader(AddExt1.class).replaceExtension("NotExistedExtension", AddExt1_ManualAdd1.class);
+            fail();
+        } catch (IllegalStateException expected) {
+            assertThat(expected.getMessage(), containsString("Extension name NotExistedExtension doesn't exist (Extension interface org.apache.dubbo.common.extension.ext8_add.AddExt1)"));
+        }
+    }
+
+    @Test
+    public void test_replaceExtension_Adaptive_ExceptionWhenNotExistedExtension() throws Exception {
+        ExtensionLoader<AddExt4> loader = getExtensionLoader(AddExt4.class);
+
+        try {
+            loader.replaceExtension(null, AddExt4_ManualAdaptive.class);
+            fail();
+        } catch (IllegalStateException expected) {
+            assertThat(expected.getMessage(), containsString("Adaptive Extension doesn't exist (Extension interface org.apache.dubbo.common.extension.ext8_add.AddExt4)"));
+        }
+    }
+
+    @Test
+    public void test_InitError() throws Exception {
+        ExtensionLoader<InitErrorExt> loader = getExtensionLoader(InitErrorExt.class);
+
+        loader.getExtension("ok");
+
+        try {
+            loader.getExtension("error");
+            fail();
+        } catch (IllegalStateException expected) {
+            assertThat(expected.getMessage(), containsString("Failed to load extension class (interface: interface org.apache.dubbo.common.extension.ext7.InitErrorExt"));
+            assertThat(expected.getCause(), instanceOf(ExceptionInInitializerError.class));
+        }
+    }
+
+    @Test
+    public void testLoadActivateExtension() throws Exception {
+        // test default
+        URL url = URL.valueOf("test://localhost/test");
+        List<ActivateExt1> list = getExtensionLoader(ActivateExt1.class)
+                .getActivateExtension(url, new String[]{}, "default_group");
+        Assertions.assertEquals(1, list.size());
+        Assertions.assertSame(list.get(0).getClass(), ActivateExt1Impl1.class);
+
+        // test group
+        url = url.addParameter(GROUP_KEY, "group1");
+        list = getExtensionLoader(ActivateExt1.class)
+                .getActivateExtension(url, new String[]{}, "group1");
+        Assertions.assertEquals(1, list.size());
+        Assertions.assertSame(list.get(0).getClass(), GroupActivateExtImpl.class);
+
+        // test old @Activate group
+        url = url.addParameter(GROUP_KEY, "old_group");
+        list = getExtensionLoader(ActivateExt1.class)
+                .getActivateExtension(url, new String[]{}, "old_group");
+        Assertions.assertEquals(2, list.size());
+        Assertions.assertTrue(list.get(0).getClass() == OldActivateExt1Impl2.class
+                || list.get(0).getClass() == OldActivateExt1Impl3.class);
+
+        // test value
+        url = url.removeParameter(GROUP_KEY);
+        url = url.addParameter(GROUP_KEY, "value");
+        url = url.addParameter("value", "value");
+        list = getExtensionLoader(ActivateExt1.class)
+                .getActivateExtension(url, new String[]{}, "value");
+        Assertions.assertEquals(1, list.size());
+        Assertions.assertSame(list.get(0).getClass(), ValueActivateExtImpl.class);
+
+        // test order
+        url = URL.valueOf("test://localhost/test");
+        url = url.addParameter(GROUP_KEY, "order");
+        list = getExtensionLoader(ActivateExt1.class)
+                .getActivateExtension(url, new String[]{}, "order");
+        Assertions.assertEquals(2, list.size());
+        Assertions.assertSame(list.get(0).getClass(), OrderActivateExtImpl1.class);
+        Assertions.assertSame(list.get(1).getClass(), OrderActivateExtImpl2.class);
+    }
+
+    @Test
+    public void testLoadDefaultActivateExtension() throws Exception {
+        // test default
+        URL url = URL.valueOf("test://localhost/test?ext=order1,default");
+        List<ActivateExt1> list = getExtensionLoader(ActivateExt1.class)
+                .getActivateExtension(url, "ext", "default_group");
+        Assertions.assertEquals(2, list.size());
+        Assertions.assertSame(list.get(0).getClass(), OrderActivateExtImpl1.class);
+        Assertions.assertSame(list.get(1).getClass(), ActivateExt1Impl1.class);
+
+        url = URL.valueOf("test://localhost/test?ext=default,order1");
+        list = getExtensionLoader(ActivateExt1.class)
+                .getActivateExtension(url, "ext", "default_group");
+        Assertions.assertEquals(2, list.size());
+        Assertions.assertSame(list.get(0).getClass(), ActivateExt1Impl1.class);
+        Assertions.assertSame(list.get(1).getClass(), OrderActivateExtImpl1.class);
+    }
+
+    @Test
+    public void testInjectExtension() {
+        // test default
+        InjectExt injectExt = getExtensionLoader(InjectExt.class).getExtension("injection");
+        InjectExtImpl injectExtImpl = (InjectExtImpl) injectExt;
+        Assertions.assertNotNull(injectExtImpl.getSimpleExt());
+        Assertions.assertNull(injectExtImpl.getSimpleExt1());
+        Assertions.assertNull(injectExtImpl.getGenericType());
+    }
+
+    @Test
+    void testMultiNames() {
+        Ext10MultiNames ext10MultiNames = getExtensionLoader(Ext10MultiNames.class).getExtension("impl");
+        Assertions.assertNotNull(ext10MultiNames);
+        ext10MultiNames = getExtensionLoader(Ext10MultiNames.class).getExtension("implMultiName");
+        Assertions.assertNotNull(ext10MultiNames);
+        Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> getExtensionLoader(Ext10MultiNames.class).getExtension("impl,implMultiName")
+        );
+    }
+
+    @Test
+    public void testGetOrDefaultExtension() {
+        ExtensionLoader<InjectExt> loader = getExtensionLoader(InjectExt.class);
+        InjectExt injectExt = loader.getOrDefaultExtension("non-exists");
+        assertEquals(InjectExtImpl.class, injectExt.getClass());
+        assertEquals(InjectExtImpl.class, loader.getOrDefaultExtension("injection").getClass());
+    }
+
+    @Test
+    public void testGetSupported() {
+        ExtensionLoader<InjectExt> loader = getExtensionLoader(InjectExt.class);
+        assertEquals(1, loader.getSupportedExtensions().size());
+        assertEquals(Collections.singleton("injection"), loader.getSupportedExtensions());
+    }
 }

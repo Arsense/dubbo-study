@@ -1,5 +1,7 @@
 package com.tw.dubbo.common.constants;
 
+import java.util.regex.Pattern;
+
 /**
  *
  * why interface 有什么好处呢
@@ -10,6 +12,7 @@ public interface CommonConstants {
     String DUBBO = "dubbo";
 
     String SIDE_KEY = "side";
+    String REMOVE_VALUE_PREFIX = "-";
 
     String PROVIDER_SIDE = "provider";
 
@@ -26,7 +29,7 @@ public interface CommonConstants {
 
     String RELEASE_KEY = "release";
 
-    String REMOVE_VALUE_PREFIX = "-";
+    Pattern COMMA_SPLIT_PATTERN = Pattern.compile("\\s*[,]+\\s*");
 
     String DEFAULT_KEY = "default";
 
